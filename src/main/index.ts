@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+import loadDevtool from 'electron-load-devtool';
 import path from 'path';
 import url from 'url';
 
@@ -23,6 +24,12 @@ function createWindow(): void {
 
 app.on('ready', () => {
   createWindow();
+
+  if (process.env.NODE_ENV === 'development') {
+    loadDevtool(loadDevtool.REACT_DEVELOPER_TOOLS);
+    loadDevtool(loadDevtool.REDUX_DEVTOOLS);
+    window!.webContents.openDevTools();
+  }
 });
 
 app.on('window-all-closed', () => {
