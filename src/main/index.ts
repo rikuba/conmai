@@ -20,6 +20,10 @@ function createWindow(): void {
 
   window.on('closed', () => {
     window = null;
+
+    if (subWindow !== null) {
+      subWindow.close();
+    }
   });
 }
 
@@ -52,12 +56,11 @@ ipcMain.on('open-subwindow-request', (e) => {
   }
 
   subWindow = new BrowserWindow({
-    parent: window!,
     width: 800,
     height: 400,
     transparent: true,
     frame: false,
-    resizable: false,
+    resizable: false, // TODO: should false because break transparency on some platforms
     alwaysOnTop: true,
   });
 
