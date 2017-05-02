@@ -7,9 +7,10 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
+    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "./src/renderer/**/*"
+    "./src/**/*"
   ]
 }

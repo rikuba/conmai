@@ -37,15 +37,15 @@ const main = (env, common) => {
   return Object.assign({}, common, config);
 };
 
-const renderer = (env, common) => {
-  const pageDir = (baseDir, page) => path.join(baseDir, 'renderer', 'pages', page);
+const forPage = (page) => (env, common) => {
+  const pageDir = (baseDir) => path.join(baseDir, 'renderer', 'pages', page);
   const extractCSS = new ExtractTextPlugin('[name].css');
   
   const config = {
-    context: pageDir(srcDir, 'index'),
-    entry: { 'index': './index' },
+    context: pageDir(srcDir),
+    entry: { [page]: `./${page}` },
     output: {
-      path: pageDir(distDir, 'index'),
+      path: pageDir(distDir),
       filename: '[name].js',
     },
     module: {
@@ -74,8 +74,8 @@ const renderer = (env, common) => {
         'process.env.NODE_ENV': JSON.stringify(env),
       }),
       new HtmlPlugin({
-        filename: 'index.html',
-        template: './index.html',
+        filename: `${page}.html`,
+        template: `./${page}.html`,
       }),
       extractCSS,
     ],
@@ -86,6 +86,10 @@ const renderer = (env, common) => {
   }
 
   return Object.assign({}, common, config);
+};
+
+const renderer = (env, common) => {
+  return ['index', 'sub'].map((page) => forPage(page)(env, common));
 };
 
 module.exports = (env) => {
