@@ -2,7 +2,7 @@ import React from 'react';
 
 import Post, { PostProps } from '../post/post';
 
-import css from './thread.css';
+import './thread.css';
 
 export interface ThreadProps {
   title: string;
@@ -17,8 +17,8 @@ export default class ThreadComponent extends React.Component<ThreadProps, any> {
     } = this.props;
 
     return (
-      <div className={css.thread}>
-        <h1 className={css.threadTitle}>{title}</h1>
+      <div className="thread">
+        <h1 className="thread-title">{title}</h1>
         {posts.map((post, i) => {
           return <Post key={i} {...post} />;
         })}

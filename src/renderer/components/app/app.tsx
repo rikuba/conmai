@@ -8,7 +8,7 @@ import { State } from '../../reducers';
 import ToolbarComponent from '../toolbar/toolbar';
 import ThreadComponent, { ThreadProps } from '../thread/thread';
 
-import css from './app.css';
+import './app.css';
 
 interface AppProps {
   thread: ThreadProps;
@@ -27,7 +27,7 @@ class AppComponent extends React.Component<AppProps, any> {
   render() {
     const { thread } = this.props;
     return (
-      <div className={css.application}>
+      <div className="application">
         <ToolbarComponent onUrlEnter={this.handleUrlEnter}></ToolbarComponent>
         <ThreadComponent {...thread} />
       </div>

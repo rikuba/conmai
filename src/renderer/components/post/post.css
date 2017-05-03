@@ -1,42 +1,30 @@
-.post {
-  
-}
-
-.number,
-.mail,
-.date {
+.post-number,
+.post-mail,
+.post-date {
   margin-right: 8px;
 }
 
-.number {
-
-}
-
-.name {
+.post-name {
   color: green;
   font-weight: bold;
 }
 
-.mail {
-
-}
-
-.mail::before {
+.post-mail::before {
   content: '[';
 }
 
-.mail::after {
+.post-mail::after {
   content: ']';
 }
 
-.date::before {
+.post-date::before {
   content: '投稿日:';
 }
 
-.id::before {
+.post-id::before {
   content: 'ID:';
 }
 
-.message {
+.post-message {
   margin-left: 2em;
 }

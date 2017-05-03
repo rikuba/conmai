@@ -1,6 +1,6 @@
 import React from 'react';
 
-import css from './post.css';
+import './post.css';
 
 export interface PostProps {
   number: number;
@@ -23,15 +23,15 @@ export default class PostComponent extends React.Component<PostProps, any> {
     } = this.props;
 
     return (
-      <article className={css.post}>
+      <article className="post">
         <header>
-          <span className={css.number}>{number}</span>
-          <span className={css.name}>{name}</span>
-          <span className={css.mail}>{mail}</span>
-          <span className={css.date}>{date}</span>
-          <span className={css.id}>{id}</span>
+          <span className="post-number">{number}</span>
+          <span className="post-name">{name}</span>
+          <span className="post-mail">{mail}</span>
+          <span className="post-date">{date}</span>
+          <span className="post-id">{id}</span>
         </header>
-        <p className={css.message}>{message}</p>
+        <p className="post-message">{message}</p>
       </article>
     );
   }

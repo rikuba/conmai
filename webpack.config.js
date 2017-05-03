@@ -59,8 +59,6 @@ const forPage = (page) => (env, common) => {
             use: {
               loader: 'css-loader',
               options: {
-                camelCase: true,
-                modules: true,
                 sourceMap: true,
               },
             },
