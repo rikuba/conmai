@@ -33,7 +33,7 @@
   content: '投稿日:';
 }
 
-.id {
+.id::before {
   content: 'ID:';
 }
 
