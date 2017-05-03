@@ -33,10 +33,12 @@ export function openThread(url: string) {
       type: 'THREAD_OPEN',
       url,
     });
+    
     dispatch<ThreadFetchRequest>({
       type: 'THREAD_FETCH_REQUEST',
       url,
     });
+    
     return fetchThread(url)
       .then((thread) => {
         dispatch<ThreadFetchSuccess>({
