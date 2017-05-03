@@ -1,0 +1,10 @@
+.toolbar {
+  flex: content;
+  
+  display: flex;
+  flex-direction: row;
+}
+
+.url-input {
+  flex: 1;
+}

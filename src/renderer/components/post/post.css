@@ -1,0 +1,42 @@
+.post {
+  
+}
+
+.number,
+.mail,
+.date {
+  margin-right: 8px;
+}
+
+.number {
+
+}
+
+.name {
+  color: green;
+  font-weight: bold;
+}
+
+.mail {
+
+}
+
+.mail::before {
+  content: '[';
+}
+
+.mail::after {
+  content: ']';
+}
+
+.date::before {
+  content: '投稿日:';
+}
+
+.id {
+  content: 'ID:';
+}
+
+.message {
+  margin-left: 2em;
+}
