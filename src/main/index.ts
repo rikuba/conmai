@@ -60,7 +60,7 @@ ipcMain.on('open-subwindow-request', (e) => {
     height: 400,
     transparent: true,
     frame: false,
-    resizable: false, // TODO: should false because break transparency on some platforms
+    resizable: false, // TODO: should be false because break transparency on some platforms
     alwaysOnTop: true,
   });
 
