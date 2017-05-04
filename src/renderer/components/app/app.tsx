@@ -11,7 +11,7 @@ import ThreadComponent, { ThreadProps } from '../thread/thread';
 import './app.css';
 
 interface AppProps {
-  thread: ThreadProps;
+  thread: ThreadProps | null;
   openThread: (url: string) => void;
 }
 
@@ -29,23 +29,21 @@ class AppComponent extends React.Component<AppProps, any> {
     return (
       <div className="application">
         <ToolbarComponent onUrlEnter={this.handleUrlEnter}></ToolbarComponent>
-        <ThreadComponent {...thread} />
+        {
+          thread != null ?
+            <ThreadComponent {...thread} /> :
+            <div></div>
+        }
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: State): Partial<AppProps> => {
-  const {
-    title = '',
-    posts = [],
-  } = state.threads[0] || {};
+  const thread = state.threads[0] || null;
 
   return {
-    thread: {
-      title,
-      posts,
-    }
+    thread,
   };
 };
 

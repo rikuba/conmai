@@ -12,8 +12,8 @@ export interface ThreadProps {
 export default class ThreadComponent extends React.Component<ThreadProps, any> {
   render() {
     const {
-      title = '',
-      posts = [],
+      title,
+      posts,
     } = this.props;
 
     return (
