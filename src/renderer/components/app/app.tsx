@@ -4,14 +4,14 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { openThread } from '../../actions';
-import { State } from '../../reducers';
+import { State, Thread } from '../../reducers';
 import ToolbarComponent from '../toolbar/toolbar';
-import ThreadComponent, { ThreadProps } from '../thread/thread';
+import ThreadComponent from '../thread/thread';
 
 import './app.css';
 
 interface AppProps {
-  thread: ThreadProps | null;
+  thread: Thread | null;
   openThread: (url: string) => void;
 }
 

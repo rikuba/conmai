@@ -1,37 +1,21 @@
 import React from 'react';
 
+import { Post } from '../../reducers';
+
 import './post.css';
 
-export interface PostProps {
-  number: number;
-  name: string;
-  mail: string;
-  date: string;
-  message: string;
-  id: string;
-}
-
-export default class PostComponent extends React.Component<PostProps, any> {
+export default class PostComponent extends React.Component<Post, any> {
   render() {
-    const {
-      number,
-      name,
-      mail,
-      date,
-      message,
-      id,
-    } = this.props;
-
     return (
       <article className="post">
         <header>
-          <span className="post-number">{number}</span>
-          <span className="post-name">{name}</span>
-          <span className="post-mail">{mail}</span>
-          <span className="post-date">{date}</span>
-          <span className="post-id">{id}</span>
+          <span className="post-number">{this.props.number}</span>
+          <span className="post-name">{this.props.name}</span>
+          <span className="post-mail">{this.props.mail}</span>
+          <span className="post-date">{this.props.date}</span>
+          <span className="post-id">{this.props.id}</span>
         </header>
-        <p className="post-message">{message}</p>
+        <p className="post-message">{this.props.message}</p>
       </article>
     );
   }

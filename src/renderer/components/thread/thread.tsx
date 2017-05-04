@@ -1,15 +1,11 @@
 import React from 'react';
 
-import Post, { PostProps } from '../post/post';
+import PostComponent from '../post/post';
+import { Thread } from '../../reducers';
 
 import './thread.css';
 
-export interface ThreadProps {
-  title: string;
-  posts: PostProps[];
-}
-
-export default class ThreadComponent extends React.Component<ThreadProps, any> {
+export default class ThreadComponent extends React.Component<Thread, any> {
   render() {
     const {
       title,
@@ -20,7 +16,7 @@ export default class ThreadComponent extends React.Component<ThreadProps, any> {
       <div className="thread">
         <h1 className="thread-title">{title}</h1>
         {posts.map((post, i) => {
-          return <Post key={i} {...post} />;
+          return <PostComponent key={i} {...post} />;
         })}
       </div>
     );

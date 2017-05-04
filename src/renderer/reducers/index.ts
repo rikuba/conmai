@@ -1,27 +1,19 @@
 import { combineReducers } from 'redux';
 
+import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
 import { Action } from '../actions';
 
 export interface State {
   threads: Thread[];
 }
 
-interface Thread {
+export interface Thread extends ThreadResponse {
   isFetching: boolean;
   error: Error | null;
   url: string;
-  title: string;
-  posts: Post[];
 }
 
-interface Post {
-  number: number;
-  name: string;
-  mail: string;
-  date: string;
-  message: string;
-  id: string;
-}
+export { Post };
 
 function threads(state: Thread[] = [], action: Action) {
   switch (action.type) {
