@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
-import { Action } from '../actions';
+import { Action, ThreadOpen } from '../actions';
 
 export interface State {
   threads: Thread[];
@@ -20,7 +20,7 @@ function threads(state: Thread[] = [], action: Action) {
     case 'THREAD_OPEN':
       return [
         ...state,
-        thread(void 0, action),
+        createThread(action),
       ];
 
     case 'THREAD_FETCH_REQUEST':
@@ -41,17 +41,18 @@ function threads(state: Thread[] = [], action: Action) {
   }
 }
 
-function thread(state: Thread | undefined, action: Action): Thread {
-  switch (action.type) {
-    case 'THREAD_OPEN':
-      return {
-        isFetching: false,
-        error: null,
-        url: action.url,
-        title: '',
-        posts: [],
-      };
+function createThread({ url }: { url: string }): Thread {
+  return {
+    isFetching: false,
+    error: null,
+    url,
+    title: '',
+    posts: [],
+  };
+}
 
+function thread(state: Thread, action: Action): Thread {
+  switch (action.type) {
     case 'THREAD_FETCH_REQUEST':
     case 'THREAD_UPDATE_REQUEST':
       return {
@@ -74,7 +75,7 @@ function thread(state: Thread | undefined, action: Action): Thread {
       return {
         ...state,
         isFetching: false,
-        posts: state!.posts.concat(posts),
+        posts: state.posts.concat(posts),
       };
 
     case 'THREAD_FETCH_FAILURE':
@@ -86,7 +87,7 @@ function thread(state: Thread | undefined, action: Action): Thread {
       };
 
     default:
-      return state!;
+      return state;
   }
 }
 

@@ -12,7 +12,7 @@ export type Action =
   ThreadUpdateSuccess |
   ThreadUpdateFailure;
 
-interface ThreadOpen {
+export interface ThreadOpen {
   type: 'THREAD_OPEN';
   url: string;
 }
