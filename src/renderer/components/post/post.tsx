@@ -24,7 +24,7 @@ export default class PostComponent extends React.Component<Post, any> {
 function processMessage(message: string): ReactNode[] {
   const nodes: ReactNode[] = [];
 
-  const re_tags = /<a href="([^"]*)" target="_blank">([^<]+)<\/a>|<(br)>/g;
+  const re_tags = /<a href="([^"]*)" target="_blank">([^<]*)<\/a>|<(br)>/g;
   let key = 0;
   let match: RegExpExecArray | null = null;
   let lastIndex = 0;
