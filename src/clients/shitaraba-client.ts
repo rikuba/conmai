@@ -96,7 +96,7 @@ function parseThreadRaw(text: string): Thread {
       name: t[1],
       mail: t[2],
       date: t[3],
-      message: t[4],
+      message: sanitize(t[4]),
       id: t[6],
     };
   });
@@ -104,4 +104,9 @@ function parseThreadRaw(text: string): Thread {
     title,
     posts,
   };
+}
+
+function sanitize(html: string): string {
+  const tagsRegex = /<a href="[^"]*" target="_blank">[^<]*<\/a>|<br>|(<[^<]*>)/g;
+  return html.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
 }
