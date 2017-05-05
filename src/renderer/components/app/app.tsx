@@ -11,16 +11,16 @@ import ThreadComponent from '../thread/thread';
 import './app.css';
 
 interface AppProps {
-  thread: Thread | null;
+  threads: Thread[];
   openThread: (url: string) => void;
   updateThread: (url: string) => void;
 }
 
 const mapStateToProps = (state: State): Partial<AppProps> => {
-  const thread = state.threads[0] || null;
+  const { threads } = state;
 
   return {
-    thread,
+    threads,
   };
 };
 
@@ -43,7 +43,9 @@ class AppComponent extends React.Component<AppProps, any> {
   };
 
   render() {
-    const { thread } = this.props;
+    const { threads } = this.props;
+    const thread = threads[0];
+
     return (
       <div className="application">
         <ToolbarComponent
@@ -51,7 +53,7 @@ class AppComponent extends React.Component<AppProps, any> {
           requestUpdate={this.requestUpdate}>
         </ToolbarComponent>
         {
-          thread != null ?
+          thread ?
             <ThreadComponent {...thread} /> :
             <div></div>
         }
