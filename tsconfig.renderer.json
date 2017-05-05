@@ -15,6 +15,7 @@
     "src/**/*"
   ],
   "exclude": [
-    "src/**/*.play.ts"
+    "src/**/*.play.ts",
+    "src/main/**/*"
   ]
 }

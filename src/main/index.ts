@@ -12,6 +12,8 @@ function createWindow(): void {
     height: 600,
   });
 
+  // window.loadURL(`http://localhost:8080/index/index.html`);
+
   window.loadURL(url.format({
     pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index', 'index.html'),
     protocol: 'file:',

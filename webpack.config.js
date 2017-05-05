@@ -6,12 +6,6 @@ const HtmlPlugin = require('html-webpack-plugin');
 const srcDir = path.join(__dirname, 'src');
 const distDir = path.join(__dirname, 'dist');
 
-const tsRule = {
-  test: /\.[jt]sx?$/,
-  include: srcDir,
-  use: 'awesome-typescript-loader',
-};
-
 const main = (env, common) => {
   const config = {
     context: path.join(srcDir, 'main'),
@@ -21,7 +15,20 @@ const main = (env, common) => {
       filename: '[name].js',
     },
     module: {
-      rules: [tsRule],
+      rules: [
+        {
+          test: /\.[jt]sx?$/,
+          include: srcDir,
+          use: [
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: 'tsconfig.main.json',
+              },
+            },
+          ],
+        },
+      ],
     },
     target: 'electron-main',
     node: {
@@ -39,30 +46,33 @@ const main = (env, common) => {
 
 const forPage = (page) => (env, common) => {
   const pageDir = (baseDir) => path.join(baseDir, 'renderer', 'pages', page);
-  const extractCSS = new ExtractTextPlugin('[name].css');
   
   const config = {
     context: pageDir(srcDir),
-    entry: { [page]: `./${page}` },
+    entry: {
+      [page]: [
+        'react-hot-loader/patch',
+        `./${page}`,
+      ],
+    },
     output: {
       path: pageDir(distDir),
       filename: '[name].js',
     },
     module: {
       rules: [
-        tsRule,
         {
-          test: /\.css$/,
+          test: /\.[jt]sx?$/,
           include: srcDir,
-          use: extractCSS.extract({
-            fallback: 'style-loader',
-            use: {
-              loader: 'css-loader',
+          use: [
+            'react-hot-loader/webpack',
+            {
+              loader: 'awesome-typescript-loader',
               options: {
-                sourceMap: true,
+                configFileName: 'tsconfig.renderer.json',
               },
             },
-          }),
+          ],
         },
       ],
     },
@@ -75,10 +85,49 @@ const forPage = (page) => (env, common) => {
         filename: `${page}.html`,
         template: `./${page}.html`,
       }),
-      extractCSS,
     ],
   };
 
+  // Handle CSS
+  if (env === 'development') {
+    config.module.rules.push(
+      {
+        test: /\.css$/,
+        include: srcDir,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      }
+    );
+  } else {
+    const extractCSS = new ExtractTextPlugin('[name].css');
+    config.module.rules.push(
+      {
+        test: /\.css$/,
+        include: srcDir,
+        use: extractCSS.extract({
+          fallback: 'style-loader',
+          use: {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        }),
+      }
+    );
+    config.plugins.push(
+      extractCSS
+    );
+  }
+
+  // Make more debuggable
   if (env === 'development') {
     config.plugins.push(new webpack.NamedModulesPlugin());
   }
@@ -87,7 +136,11 @@ const forPage = (page) => (env, common) => {
 };
 
 const renderer = (env, common) => {
-  return ['index', 'sub'].map((page) => forPage(page)(env, common));
+  const pages = ['sub'];
+  if (env !== 'development') {
+    pages.push('index');
+  }
+  return pages.map((page) => forPage(page)(env, common));
 };
 
 module.exports = (env) => {
