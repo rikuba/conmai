@@ -25,8 +25,8 @@ const mapStateToProps = (state: State): Partial<AppProps> => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
-  openThread: (url: string) => dispatch(openThread(url)),
-  updateThread: (url: string) => dispatch(updateThread(url)),
+  openThread: (url: string) => void dispatch(openThread(url)),
+  updateThread: (url: string) => void dispatch(updateThread(url)),
 });
 
 class AppComponent extends React.Component<AppProps, any> {
