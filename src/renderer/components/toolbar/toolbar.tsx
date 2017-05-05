@@ -29,7 +29,10 @@ export default class ToolbarComponent extends React.Component<ToolbarProps, any>
       <div className="toolbar">
         <button onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
         <form onSubmit={this.handleUrlSubmit} className="url-form">
-          <input type="text" className="url-input" placeholder="URLを入力します" ref={(node) => this.urlInput = node} defaultValue="http://jbbs.shitaraba.net/bbs/read.cgi/computer/42660/1462262759/" />
+          <input type="text" className="url-input"
+            placeholder="URLを入力します"
+            defaultValue="http://jbbs.shitaraba.net/bbs/read.cgi/computer/42660/1462262759/"
+            ref={(node) => this.urlInput = node} />
           <button type="submit">開く</button>
         </form>
         <button onClick={this.handleUpdateButtonClick}>更新</button>
