@@ -2,8 +2,10 @@
   flex: 1;
   overflow: auto;
   padding: 8px;
+  font-family: "MS PGothic", sans-serif;
 }
 
 .thread-title {
   font-size: 150%;
+  font-family: Meiryo, sans-serif;
 }
