@@ -12,7 +12,9 @@ interface ToolbarProps {
 export default class ToolbarComponent extends React.Component<ToolbarProps, any> {
   private urlInput: HTMLInputElement;
 
-  handleOpenButtonClick = (e) => {
+  handleUrlSubmit = (e) => {
+    e.preventDefault();
+
     const url = this.urlInput.value;
     this.props.onUrlEnter(url);
   };
@@ -26,10 +28,11 @@ export default class ToolbarComponent extends React.Component<ToolbarProps, any>
     return (
       <div className="toolbar">
         <button onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
-        <input type="text" className="url-input" ref={(node) => this.urlInput = node} defaultValue="http://jbbs.shitaraba.net/bbs/read.cgi/computer/42660/1462262759/" />
-        <button onClick={this.handleOpenButtonClick}>開く</button>
+        <form onSubmit={this.handleUrlSubmit} className="url-form">
+          <input type="text" className="url-input" placeholder="URLを入力します" ref={(node) => this.urlInput = node} defaultValue="http://jbbs.shitaraba.net/bbs/read.cgi/computer/42660/1462262759/" />
+          <button type="submit">開く</button>
+        </form>
         <button onClick={this.handleUpdateButtonClick}>更新</button>
-        <label><input type="checkbox"/>自動更新</label>
       </div>
     );
   }

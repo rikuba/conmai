@@ -3,6 +3,33 @@
   
   display: flex;
   flex-direction: row;
+
+  -webkit-user-select: none;
+  user-select: none;
+
+  padding: 4px 0;
+  border-bottom: 1px solid #b6b6b6;
+
+  font-size: 14px;
+}
+
+.toolbar > * {
+  margin: 0 2px;
+}
+
+.toolbar > *:first-child {
+  margin-left: 4px;
+}
+
+.toolbar > *:last-child {
+  margin-right: 4px;
+}
+
+.url-form {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
 }
 
 .url-input {
