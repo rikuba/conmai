@@ -21,6 +21,8 @@ export default class PostComponent extends React.Component<Post, any> {
   }
 }
 
-const setInnerHTML = (html: string) => (element: HTMLElement): void => {
-  element.innerHTML = html;
+const setInnerHTML = (html: string) => (element: HTMLElement | null): void => {
+  if (element) {
+    element.innerHTML = html;
+  }
 };
