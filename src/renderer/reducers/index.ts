@@ -26,6 +26,9 @@ function threads(state: Thread[] = [], action: Action) {
     case 'THREAD_FETCH_REQUEST':
     case 'THREAD_FETCH_SUCCESS':
     case 'THREAD_FETCH_FAILURE':
+    case 'THREAD_UPDATE_REQUEST':
+    case 'THREAD_UPDATE_SUCCESS':
+    case 'THREAD_UPDATE_FAILURE':
       return state.map((t) => {
         if (t.url !== action.url) {
           return t;
@@ -50,6 +53,7 @@ function thread(state: Thread | undefined, action: Action): Thread {
       };
 
     case 'THREAD_FETCH_REQUEST':
+    case 'THREAD_UPDATE_REQUEST':
       return {
         ...state,
         isFetching: true,
@@ -57,7 +61,7 @@ function thread(state: Thread | undefined, action: Action): Thread {
       };
 
     case 'THREAD_FETCH_SUCCESS':
-      const { title, posts } = action.thread;
+      var { title, posts } = action.thread;
       return {
         ...state,
         isFetching: false,
@@ -65,7 +69,16 @@ function thread(state: Thread | undefined, action: Action): Thread {
         posts,
       };
 
+    case 'THREAD_UPDATE_SUCCESS':
+      var { posts } = action.thread;
+      return {
+        ...state,
+        isFetching: false,
+        posts: state!.posts.concat(posts),
+      };
+
     case 'THREAD_FETCH_FAILURE':
+    case 'THREAD_UPDATE_FAILURE':
       return {
         ...state,
         isFetching: false,

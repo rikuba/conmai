@@ -3,7 +3,7 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { openThread } from '../../actions';
+import { openThread, updateThread } from '../../actions';
 import { State, Thread } from '../../reducers';
 import ToolbarComponent from '../toolbar/toolbar';
 import ThreadComponent from '../thread/thread';
@@ -13,6 +13,7 @@ import './app.css';
 interface AppProps {
   thread: Thread | null;
   openThread: (url: string) => void;
+  updateThread: (url: string) => void;
 }
 
 class AppComponent extends React.Component<AppProps, any> {
@@ -24,11 +25,18 @@ class AppComponent extends React.Component<AppProps, any> {
     this.props.openThread(url);
   };
 
+  requestUpdate = (url: string) => {
+    this.props.updateThread(url);
+  };
+
   render() {
     const { thread } = this.props;
     return (
       <div className="application">
-        <ToolbarComponent onUrlEnter={this.handleUrlEnter}></ToolbarComponent>
+        <ToolbarComponent
+          onUrlEnter={this.handleUrlEnter}
+          requestUpdate={this.requestUpdate}>
+        </ToolbarComponent>
         {
           thread != null ?
             <ThreadComponent {...thread} /> :
@@ -49,6 +57,7 @@ const mapStateToProps = (state: State): Partial<AppProps> => {
 
 const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
   openThread: (url: string) => dispatch(openThread(url)),
+  updateThread: (url: string) => dispatch(updateThread(url)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);

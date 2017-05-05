@@ -6,6 +6,7 @@ import './toolbar.css';
 
 interface ToolbarProps {
   onUrlEnter: (url: string) => void;
+  requestUpdate: (url: string) => void;
 }
 
 export default class ToolbarComponent extends React.Component<ToolbarProps, any> {
@@ -16,13 +17,18 @@ export default class ToolbarComponent extends React.Component<ToolbarProps, any>
     this.props.onUrlEnter(url);
   };
 
+  handleUpdateButtonClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    const url = this.urlInput.value;
+    this.props.requestUpdate(url);
+  };
+
   render() {
     return (
       <div className="toolbar">
         <button onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
-        <input type="text" className="url-input" ref={(node) => this.urlInput = node} />
+        <input type="text" className="url-input" ref={(node) => this.urlInput = node} defaultValue="http://jbbs.shitaraba.net/bbs/read.cgi/computer/42660/1462262759/" />
         <button onClick={this.handleOpenButtonClick}>開く</button>
-        <button>更新</button>
+        <button onClick={this.handleUpdateButtonClick}>更新</button>
       </div>
     );
   }
