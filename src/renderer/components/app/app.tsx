@@ -16,6 +16,19 @@ interface AppProps {
   updateThread: (url: string) => void;
 }
 
+const mapStateToProps = (state: State): Partial<AppProps> => {
+  const thread = state.threads[0] || null;
+
+  return {
+    thread,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
+  openThread: (url: string) => dispatch(openThread(url)),
+  updateThread: (url: string) => dispatch(updateThread(url)),
+});
+
 class AppComponent extends React.Component<AppProps, any> {
   handleClickOpenSubWindowButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     ipcRenderer.send('open-subwindow-request');
@@ -46,18 +59,5 @@ class AppComponent extends React.Component<AppProps, any> {
     );
   }
 }
-
-const mapStateToProps = (state: State): Partial<AppProps> => {
-  const thread = state.threads[0] || null;
-
-  return {
-    thread,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
-  openThread: (url: string) => dispatch(openThread(url)),
-  updateThread: (url: string) => dispatch(updateThread(url)),
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
