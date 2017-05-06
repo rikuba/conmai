@@ -4,6 +4,7 @@ import { Thread, fetchThread } from '../../clients/shitaraba-client';
 import { State } from '../reducers';
 
 export type Action =
+  ThreadSelect |
   ThreadOpen |
   ThreadFetchRequest |
   ThreadFetchSuccess |
@@ -11,6 +12,11 @@ export type Action =
   ThreadUpdateRequest |
   ThreadUpdateSuccess |
   ThreadUpdateFailure;
+
+interface ThreadSelect {
+  type: 'THREAD_SELECT';
+  url: string;
+}
 
 export interface ThreadOpen {
   type: 'THREAD_OPEN';
@@ -35,7 +41,18 @@ interface ThreadFetchFailure {
 }
 
 export function openThread(url: string) {
-  return (dispatch: Dispatch<State>) => {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const state = getState();
+
+    const thread = state.threads.find((thread) => thread.url === url);
+    if (thread) {
+      dispatch<ThreadSelect>({
+        type: 'THREAD_SELECT',
+        url,
+      });
+      return Promise.resolve();
+    }
+
     dispatch<ThreadOpen>({
       type: 'THREAD_OPEN',
       url,
@@ -83,19 +100,27 @@ interface ThreadUpdateFailure {
 
 export function updateThread(url: string) {
   return (dispatch: Dispatch<State>, getState: () => State) => {
+    const state = getState();
+
+    const thread = state.threads.find((thread) => thread.url === url);
+    if (!thread) {
+      console.error(`Thread to update not found: ${url}`);
+      return;
+    }
+    if (thread.isFetching) {
+      console.info(`Fetch action cancelled because the thread is fetching now`);
+      return;
+    }
+
+    const lastPost = thread.posts[thread.posts.length - 1];
+    const from = lastPost ? lastPost.number + 1 : 1;
+
     dispatch<ThreadUpdateRequest>({
       type: 'THREAD_UPDATE_REQUEST',
       url,
     });
 
-    const thread = getState().threads.find((thread) => thread.url === url);
-    if (!thread) {
-      // TODO: throw Error
-      return;
-    }
-    const lastPost = thread.posts[thread.posts.length - 1];
-
-    fetchThread(url, { from: lastPost.number + 1 })
+    fetchThread(url, { from })
       .then((thread) => {
         dispatch<ThreadUpdateSuccess>({
           type: 'THREAD_UPDATE_SUCCESS',
