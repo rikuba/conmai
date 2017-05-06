@@ -104,12 +104,11 @@ export function updateThread(url: string) {
 
     const thread = state.threads.find((thread) => thread.url === url);
     if (!thread) {
-      console.error(`Thread to update not found: ${url}`);
-      return;
+      return Promise.reject(new Error(`Thread to update not found: ${url}`));
     }
     if (thread.isFetching) {
       console.info(`Fetch action cancelled because the thread is fetching now`);
-      return;
+      return Promise.resolve();
     }
 
     const lastPost = thread.posts[thread.posts.length - 1];
@@ -120,7 +119,7 @@ export function updateThread(url: string) {
       url,
     });
 
-    fetchThread(url, { from })
+    return fetchThread(url, { from })
       .then((thread) => {
         dispatch<ThreadUpdateSuccess>({
           type: 'THREAD_UPDATE_SUCCESS',

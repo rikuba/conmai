@@ -8,17 +8,17 @@ import { openThread, updateThread } from '../../actions';
 
 import './toolbar.css';
 
-interface ToolbarProps {
-  openThread: (url: string) => void;
-  updateThread: (url: string) => void;
+interface DispatchProps {
+  openThread: (url: string) => Promise<void>;
+  updateThread: (url: string) => Promise<void>;
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<ToolbarProps> => ({
-  openThread: (url: string) => void dispatch(openThread(url)),
-  updateThread: (url: string) => void dispatch(updateThread(url)),
+const mapDispatchToProps = (dispatch: Dispatch<State>): DispatchProps => ({
+  openThread: (url: string) => dispatch(openThread(url)),
+  updateThread: (url: string) => dispatch(updateThread(url)),
 });
 
-class ToolbarComponent extends React.Component<ToolbarProps, any> {
+class ToolbarComponent extends React.Component<DispatchProps, any> {
   private urlInput: HTMLInputElement;
 
   handleUrlSubmit = (e: any) => {

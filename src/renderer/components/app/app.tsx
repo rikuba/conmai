@@ -10,11 +10,11 @@ import ThreadComponent from '../thread/thread';
 
 import './app.css';
 
-interface AppProps {
+interface StateProps {
   threads: Thread[];
 }
 
-const mapStateToProps = (state: State): Partial<AppProps> => {
+const mapStateToProps = (state: State): StateProps => {
   const { threads } = state;
 
   return {
@@ -22,7 +22,7 @@ const mapStateToProps = (state: State): Partial<AppProps> => {
   };
 };
 
-class AppComponent extends React.Component<AppProps, any> {
+class AppComponent extends React.Component<StateProps, any> {
   handleClickOpenSubWindowButton = (e: any) => {
     ipcRenderer.send('open-subwindow-request');
   };
