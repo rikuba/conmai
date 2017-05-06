@@ -12,8 +12,6 @@ import './app.css';
 
 interface AppProps {
   threads: Thread[];
-  openThread: (url: string) => void;
-  updateThread: (url: string) => void;
 }
 
 const mapStateToProps = (state: State): Partial<AppProps> => {
@@ -24,22 +22,9 @@ const mapStateToProps = (state: State): Partial<AppProps> => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
-  openThread: (url: string) => void dispatch(openThread(url)),
-  updateThread: (url: string) => void dispatch(updateThread(url)),
-});
-
 class AppComponent extends React.Component<AppProps, any> {
   handleClickOpenSubWindowButton = (e: any) => {
     ipcRenderer.send('open-subwindow-request');
-  };
-
-  handleUrlEnter = (url: string) => {
-    this.props.openThread(url);
-  };
-
-  requestUpdate = (url: string) => {
-    this.props.updateThread(url);
   };
 
   render() {
@@ -48,10 +33,7 @@ class AppComponent extends React.Component<AppProps, any> {
 
     return (
       <div className="application">
-        <ToolbarComponent
-          onUrlEnter={this.handleUrlEnter}
-          requestUpdate={this.requestUpdate}>
-        </ToolbarComponent>
+        <ToolbarComponent />
         {
           thread ?
             <ThreadComponent {...thread} /> :
@@ -62,4 +44,4 @@ class AppComponent extends React.Component<AppProps, any> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+export default connect(mapStateToProps)(AppComponent);

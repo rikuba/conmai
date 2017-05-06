@@ -1,27 +1,36 @@
 import { ipcRenderer } from 'electron';
-
 import React from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+
+import { State } from '../../reducers';
+import { openThread, updateThread } from '../../actions';
 
 import './toolbar.css';
 
 interface ToolbarProps {
-  onUrlEnter: (url: string) => void;
-  requestUpdate: (url: string) => void;
+  openThread: (url: string) => void;
+  updateThread: (url: string) => void;
 }
 
-export default class ToolbarComponent extends React.Component<ToolbarProps, any> {
+const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<ToolbarProps> => ({
+  openThread: (url: string) => void dispatch(openThread(url)),
+  updateThread: (url: string) => void dispatch(updateThread(url)),
+});
+
+class ToolbarComponent extends React.Component<ToolbarProps, any> {
   private urlInput: HTMLInputElement;
 
   handleUrlSubmit = (e: any) => {
     e.preventDefault();
 
     const url = this.urlInput.value;
-    this.props.onUrlEnter(url);
+    this.props.openThread(url);
   };
 
   handleUpdateButtonClick = (e: any) => {
     const url = this.urlInput.value;
-    this.props.requestUpdate(url);
+    this.props.updateThread(url);
   };
 
   render() {
@@ -40,3 +49,5 @@ export default class ToolbarComponent extends React.Component<ToolbarProps, any>
     );
   }
 }
+
+export default connect(null, mapDispatchToProps)(ToolbarComponent);
