@@ -12,14 +12,14 @@ interface ToolbarProps {
 export default class ToolbarComponent extends React.Component<ToolbarProps, any> {
   private urlInput: HTMLInputElement;
 
-  handleUrlSubmit = (e) => {
+  handleUrlSubmit = (e: any) => {
     e.preventDefault();
 
     const url = this.urlInput.value;
     this.props.onUrlEnter(url);
   };
 
-  handleUpdateButtonClick = (e) => {
+  handleUpdateButtonClick = (e: any) => {
     const url = this.urlInput.value;
     this.props.requestUpdate(url);
   };

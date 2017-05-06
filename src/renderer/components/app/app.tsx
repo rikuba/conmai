@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch: Dispatch<State>): Partial<AppProps> => ({
 });
 
 class AppComponent extends React.Component<AppProps, any> {
-  handleClickOpenSubWindowButton = (e) => {
+  handleClickOpenSubWindowButton = (e: any) => {
     ipcRenderer.send('open-subwindow-request');
   };
 
