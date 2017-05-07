@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
-import { Action, ThreadOpen } from '../actions';
+import { Action } from '../actions';
 
 export interface State {
   threads: Thread[];
