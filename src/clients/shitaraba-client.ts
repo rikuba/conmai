@@ -39,13 +39,10 @@ export function fetchThread(url: string, range?: PostsRange) {
   if (range) {
     if (range.last != null) {
       finalUrl += `l${range.last}`;
-    } else {
-      if (range.from != null) {
-        finalUrl += range.from;
-      }
-      if (range.to != null) {
-        finalUrl += `-${range.to}`;
-      }
+    } else if (range.from != null || range.to != null) {
+      const from = range.from || '';
+      const to = range.to || '';
+      finalUrl += `${from}-${to}`;
     }
   }
 
