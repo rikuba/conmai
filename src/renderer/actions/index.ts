@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { Thread, fetchThread } from '../../clients/shitaraba-client';
-import { State } from '../reducers';
+import { State, getSelectedThread } from '../reducers';
 
 export type Action =
   ThreadSelect |
@@ -96,6 +96,16 @@ interface ThreadUpdateFailure {
   type: 'THREAD_UPDATE_FAILURE';
   url: string;
   error: Error;
+}
+
+export function updateSelectedThread() {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const thread = getSelectedThread(getState());
+    if (!thread) {
+      return Promise.reject(new Error(`No thread selected`));
+    }
+    return updateThread(thread.url)(dispatch, getState);
+  };
 }
 
 export function updateThread(url: string) {

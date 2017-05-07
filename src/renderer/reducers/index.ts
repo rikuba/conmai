@@ -94,3 +94,12 @@ function thread(state: Thread, action: Action): Thread {
 export default combineReducers({
   threads,
 });
+
+export function getSelectedThread(state: State): Thread | undefined {
+  // Temporary implementation
+  return state.threads[0];
+}
+
+export function getThread(state: State, url: string) {
+  return state.threads.find((thread) => thread.url === url);
+}

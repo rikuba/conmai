@@ -4,18 +4,18 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { State } from '../../reducers';
-import { openThread, updateThread } from '../../actions';
+import { openThread, updateSelectedThread } from '../../actions';
 
 import './toolbar.css';
 
 interface DispatchProps {
   openThread: (url: string) => Promise<void>;
-  updateThread: (url: string) => Promise<void>;
+  updateSelectedThread: () => Promise<void>;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<State>): DispatchProps => ({
   openThread: (url: string) => dispatch(openThread(url)),
-  updateThread: (url: string) => dispatch(updateThread(url)),
+  updateSelectedThread: () => dispatch(updateSelectedThread()),
 });
 
 class ToolbarComponent extends React.Component<DispatchProps, any> {
@@ -29,8 +29,7 @@ class ToolbarComponent extends React.Component<DispatchProps, any> {
   };
 
   handleUpdateButtonClick = (e: any) => {
-    const url = this.urlInput.value;
-    this.props.updateThread(url);
+    this.props.updateSelectedThread();
   };
 
   render() {
