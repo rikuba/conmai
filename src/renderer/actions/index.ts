@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { Thread, fetchThread } from '../../clients/shitaraba-client';
-import { State, getSelectedThread } from '../reducers';
+import { State, getSelectedThread, getThread } from '../reducers';
 
 export type Action =
   ThreadSelect |
@@ -18,7 +18,14 @@ interface ThreadSelect {
   url: string;
 }
 
-export interface ThreadOpen {
+export function selectThread(url: string): ThreadSelect {
+  return {
+    type: 'THREAD_SELECT',
+    url,
+  };
+}
+
+interface ThreadOpen {
   type: 'THREAD_OPEN';
   url: string;
 }
@@ -42,14 +49,10 @@ interface ThreadFetchFailure {
 
 export function openThread(url: string) {
   return (dispatch: Dispatch<State>, getState: () => State) => {
-    const state = getState();
+    const thread = getThread(getState(), url);
 
-    const thread = state.threads.find((thread) => thread.url === url);
     if (thread) {
-      dispatch<ThreadSelect>({
-        type: 'THREAD_SELECT',
-        url,
-      });
+      dispatch(selectThread(url));
       return Promise.resolve();
     }
 
