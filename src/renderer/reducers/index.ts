@@ -4,7 +4,15 @@ import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
 import { Action } from '../actions';
 
 export interface State {
-  threads: Thread[];
+  threads: Threads;
+}
+
+export interface Threads {
+  byUrl: {
+    [url: string]: Thread;
+  };
+  all: string[];
+  selected: string;
 }
 
 export interface Thread extends ThreadResponse {
@@ -15,13 +23,13 @@ export interface Thread extends ThreadResponse {
 
 export { Post };
 
-function threads(state: Thread[] = [], action: Action) {
+function byUrl(state: Threads['byUrl'] = {}, action: Action) {
   switch (action.type) {
     case 'THREAD_OPEN':
-      return [
+      return {
         ...state,
-        createThread(action),
-      ];
+        [action.url]: createThread(action),
+      };
 
     case 'THREAD_FETCH_REQUEST':
     case 'THREAD_FETCH_SUCCESS':
@@ -29,12 +37,34 @@ function threads(state: Thread[] = [], action: Action) {
     case 'THREAD_UPDATE_REQUEST':
     case 'THREAD_UPDATE_SUCCESS':
     case 'THREAD_UPDATE_FAILURE':
-      return state.map((t) => {
-        if (t.url !== action.url) {
-          return t;
-        }
-        return thread(t, action);
-      });
+      return {
+        ...state,
+        [action.url]: thread(state[action.url], action),
+      };
+
+    default:
+      return state;
+  }
+}
+
+function all(state: string[] = [], action: Action) {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return [
+        ...state,
+        action.url,
+      ];
+
+    default:
+      return state;
+  }
+}
+
+function selected(state: string = '', action: Action) {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+    case 'THREAD_SELECT':
+      return action.url;
 
     default:
       return state;
@@ -91,15 +121,20 @@ function thread(state: Thread, action: Action): Thread {
   }
 }
 
+const threads = combineReducers({
+  byUrl,
+  selected,
+});
+
 export default combineReducers({
   threads,
 });
 
 export function getSelectedThread(state: State): Thread | undefined {
-  // Temporary implementation
-  return state.threads[0];
+  const url = state.threads.selected;
+  return state.threads.byUrl[url];
 }
 
 export function getThread(state: State, url: string) {
-  return state.threads.find((thread) => thread.url === url);
+  return state.threads.byUrl[url];
 }

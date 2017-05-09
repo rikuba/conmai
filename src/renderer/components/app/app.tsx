@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { openThread, updateThread } from '../../actions';
-import { State, Thread } from '../../reducers';
+import { State, Thread, getSelectedThread } from '../../reducers';
 import ToolbarComponent from '../toolbar/toolbar';
 import ThreadComponent from '../thread/thread';
 
@@ -13,14 +13,14 @@ import './app.css';
 type Props = StateProps;
 
 interface StateProps {
-  threads: Thread[];
+  thread: Thread | undefined;
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  const { threads } = state;
+  const thread = getSelectedThread(state);
 
   return {
-    threads,
+    thread,
   };
 };
 
@@ -30,8 +30,7 @@ class AppComponent extends React.Component<Props, any> {
   };
 
   render() {
-    const { threads } = this.props;
-    const thread = threads[0];
+    const { thread } = this.props;
 
     return (
       <div className="application">

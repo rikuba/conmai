@@ -113,9 +113,7 @@ export function updateSelectedThread() {
 
 export function updateThread(url: string) {
   return (dispatch: Dispatch<State>, getState: () => State) => {
-    const state = getState();
-
-    const thread = state.threads.find((thread) => thread.url === url);
+    const thread = getThread(getState(), url);
     if (!thread) {
       return Promise.reject(new Error(`Thread to update not found: ${url}`));
     }
