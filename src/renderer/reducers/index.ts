@@ -14,7 +14,7 @@ export {
   Thread,
 };
 
-export default combineReducers({
+export default combineReducers<State>({
   threads,
 });
 

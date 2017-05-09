@@ -11,7 +11,7 @@ export interface Threads {
   selected: string;
 }
 
-export default combineReducers({
+export default combineReducers<Threads>({
   byUrl,
   all,
   selected,
