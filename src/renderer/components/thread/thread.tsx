@@ -11,9 +11,9 @@ export default class ThreadComponent extends React.Component<Thread, any> {
 
     return (
       <div className="thread">
-        {posts.map((post, i) => {
-          return <PostComponent key={i} {...post} />;
-        })}
+        {posts.map((post) => (
+          <PostComponent key={post.number} {...post} />
+        ))}
       </div>
     );
   }
