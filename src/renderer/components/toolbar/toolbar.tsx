@@ -92,6 +92,9 @@ class ToolbarComponent extends React.Component<Props, { url: string }> {
   };
 
   render() {
+    const { selectedThread } = this.props;
+    const updateButtonDisabled = selectedThread ? selectedThread.isFetching : false;
+
     return (
       <div className="toolbar">
         <button onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
@@ -104,7 +107,9 @@ class ToolbarComponent extends React.Component<Props, { url: string }> {
             onContextMenu={this.handleUrlInputContextMenu} />
           <button type="submit">開く</button>
         </form>
-        <button onClick={this.handleUpdateButtonClick}>更新</button>
+        <button
+          disabled={updateButtonDisabled}
+          onClick={this.handleUpdateButtonClick}>更新</button>
       </div>
     );
   }
