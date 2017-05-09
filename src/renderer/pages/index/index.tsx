@@ -19,7 +19,7 @@ const render = () => {
     </AppContainer>,
     document.getElementById('root')
   );
-}
+};
 
 render();
 
