@@ -12,7 +12,9 @@ export default class ThreadComponent extends React.Component<Thread, any> {
   componentDidUpdate() {
     const { newPostNumber } = this.props;
     if (newPostNumber !== this.lastNewPostNumber) {
-      this.scrollToNewPost();
+      if (newPostNumber > 1) {
+        this.scrollToNewPost();
+      }
       this.lastNewPostNumber = newPostNumber;
     }
   }
