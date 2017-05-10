@@ -30,7 +30,7 @@ const mapDispatchToProps = {
 
 class ToolbarComponent extends React.Component<Props, { url: string }> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
-    { role: 'undo', label: '取消' },
+    { role: 'undo', label: '元に戻す' },
     { type: 'separator' },
     { role: 'cut', label: '切り取り' },
     { role: 'copy', label: 'コピー' },
@@ -42,9 +42,13 @@ class ToolbarComponent extends React.Component<Props, { url: string }> {
         this.props.openThread(text);
       },
     },
+    { role: 'delete', label: '削除', visible: false },
     { type: 'separator' },
     { role: 'selectall', label: 'すべて選択' },
   ]);
+
+  private urlInputDeleteMenuItem = this.urlInputContextMenu.items
+    .find((item) => item.role === 'delete')!;
 
   state = {
     url: '',
@@ -77,6 +81,9 @@ class ToolbarComponent extends React.Component<Props, { url: string }> {
 
   handleUrlInputContextMenu = (e: any) => {
     e.preventDefault();
+
+    const input: HTMLInputElement = e.currentTarget;
+    this.urlInputDeleteMenuItem.visible = input.selectionStart !== input.selectionEnd;
     this.urlInputContextMenu.popup(remote.getCurrentWindow());
   };
 
