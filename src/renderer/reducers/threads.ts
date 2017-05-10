@@ -26,6 +26,8 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action) {
     case 'THREAD_UPDATE_REQUEST':
     case 'THREAD_UPDATE_SUCCESS':
     case 'THREAD_UPDATE_FAILURE':
+    case 'THREAD_UPDATE_SCHEDULE':
+    case 'THREAD_UPDATE_WAIT_TICK':
       return {
         ...state,
         [action.url]: thread(state[action.url], action),

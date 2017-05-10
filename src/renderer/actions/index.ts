@@ -1,17 +1,23 @@
 import { Dispatch } from 'redux';
 
 import { Thread, fetchThread } from '../../clients/shitaraba-client';
-import { State, getSelectedThread, getThread } from '../reducers';
+import { State, getUpdateIntervalPreference, getSelectedThread, getThread } from '../reducers';
 
 export type Action =
   ThreadSelect |
   ThreadOpen |
+
   ThreadFetchRequest |
   ThreadFetchSuccess |
   ThreadFetchFailure |
+
   ThreadUpdateRequest |
   ThreadUpdateSuccess |
-  ThreadUpdateFailure;
+  ThreadUpdateFailure |
+  
+  ThreadUpdateSchedule |
+  ThreadUpdateWaitTick |
+  ThreadUpdateScheduleCancel;
 
 export interface ThreadSelect {
   type: 'THREAD_SELECT';
@@ -80,6 +86,9 @@ export function openThread(url: string) {
           url,
           error,
         });
+      })
+      .then(() => {
+        dispatch(scheduleUpdateThread(url));
       });
   };
 }
@@ -107,7 +116,7 @@ export function updateSelectedThread() {
     if (!thread) {
       return Promise.reject(new Error(`No thread selected`));
     }
-    return updateThread(thread.url)(dispatch, getState);
+    return dispatch(updateThread(thread.url));
   };
 }
 
@@ -145,5 +154,63 @@ export function updateThread(url: string) {
           error,
         });
       });
+  };
+}
+
+export interface ThreadUpdateSchedule {
+  type: 'THREAD_UPDATE_SCHEDULE';
+  url: string;
+  timerId: any;
+}
+
+export interface ThreadUpdateWaitTick {
+  type: 'THREAD_UPDATE_WAIT_TICK';
+  url: string;
+}
+
+export interface ThreadUpdateScheduleCancel {
+  type: 'THREAD_UPDATE_SCHEDULE_CANCEL';
+  url: string;
+}
+
+export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
+  return {
+    type: 'THREAD_UPDATE_WAIT_TICK',
+    url,
+  };
+}
+
+export function scheduleUpdateThread(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const timerId = setInterval(() => {
+      dispatch(tickUpdateThreadWait(url));
+
+      const interval = getUpdateIntervalPreference(getState());
+      const wait = getThread(getState(), url).updateWait;
+      if (wait >= interval) {
+        clearInterval(timerId);
+        dispatch(updateThread(url)).then(() => {
+          dispatch(scheduleUpdateThread(url));
+        });
+      }
+    }, 1000);
+
+    dispatch<ThreadUpdateSchedule>({
+      type: 'THREAD_UPDATE_SCHEDULE',
+      url,
+      timerId,
+    });
+  };
+}
+
+export function cancelScheduledUpdateThread(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const thread = getThread(getState(), url);
+    clearInterval(thread.updateTimerId);
+    
+    dispatch<ThreadUpdateScheduleCancel>({
+      type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
+      url,
+    });
   };
 }
