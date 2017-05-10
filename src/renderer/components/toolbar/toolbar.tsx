@@ -11,7 +11,7 @@ import './toolbar.css';
 type Props = StateProps & DispatchProps;
 
 interface StateProps {
-  selectedThread: Thread;
+  selectedThread: Thread | undefined;
 }
 
 interface DispatchProps {
@@ -19,14 +19,14 @@ interface DispatchProps {
   updateSelectedThread: () => Promise<void>;
 }
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: State): StateProps => ({
   selectedThread: getSelectedThread(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<State>): DispatchProps => ({
-  openThread: (url: string) => dispatch(openThread(url)),
-  updateSelectedThread: () => dispatch(updateSelectedThread()),
-});
+const mapDispatchToProps = {
+  openThread,
+  updateSelectedThread,
+};
 
 class ToolbarComponent extends React.Component<Props, { url: string }> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
