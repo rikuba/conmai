@@ -13,7 +13,7 @@ export type Action =
   ThreadUpdateSuccess |
   ThreadUpdateFailure;
 
-interface ThreadSelect {
+export interface ThreadSelect {
   type: 'THREAD_SELECT';
   url: string;
 }
@@ -25,23 +25,23 @@ export function selectThread(url: string): ThreadSelect {
   };
 }
 
-interface ThreadOpen {
+export interface ThreadOpen {
   type: 'THREAD_OPEN';
   url: string;
 }
 
-interface ThreadFetchRequest {
+export interface ThreadFetchRequest {
   type: 'THREAD_FETCH_REQUEST';
   url: string;
 }
 
-interface ThreadFetchSuccess {
+export interface ThreadFetchSuccess {
   type: 'THREAD_FETCH_SUCCESS';
   url: string;
   thread: Thread;
 }
 
-interface ThreadFetchFailure {
+export interface ThreadFetchFailure {
   type: 'THREAD_FETCH_FAILURE';
   url: string;
   error: Error;
@@ -84,18 +84,18 @@ export function openThread(url: string) {
   };
 }
 
-interface ThreadUpdateRequest {
+export interface ThreadUpdateRequest {
   type: 'THREAD_UPDATE_REQUEST';
   url: string;
 }
 
-interface ThreadUpdateSuccess {
+export interface ThreadUpdateSuccess {
   type: 'THREAD_UPDATE_SUCCESS';
   url: string;
   thread: Thread;
 }
 
-interface ThreadUpdateFailure {
+export interface ThreadUpdateFailure {
   type: 'THREAD_UPDATE_FAILURE';
   url: string;
   error: Error;
