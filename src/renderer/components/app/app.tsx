@@ -37,7 +37,7 @@ class AppComponent extends React.Component<Props, any> {
         <ToolbarComponent />
         {
           thread ?
-            <ThreadComponent {...thread} /> :
+            <ThreadComponent key={thread.url} {...thread} /> :
             <div></div>
         }
       </div>
