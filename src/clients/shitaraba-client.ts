@@ -93,7 +93,7 @@ function parseThreadRaw(text: string): Thread {
       name: t[1],
       mail: t[2],
       date: t[3],
-      message: sanitize(t[4]),
+      message: sanitizeMessage(t[4]),
       id: t[6],
     };
   });
@@ -103,7 +103,12 @@ function parseThreadRaw(text: string): Thread {
   };
 }
 
-function sanitize(html: string): string {
+function sanitizeName(name: string): string {
+  const tagsRegex = /<font color=""><\/font>|(<[^<]*>)/g;
+  return name.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
+}
+
+function sanitizeMessage(message: string): string {
   const tagsRegex = /<a href="[^"]*" target="_blank">[^<]*<\/a>|<br>|(<[^<]*>)/g;
-  return html.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
+  return message.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
 }

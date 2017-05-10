@@ -17,7 +17,7 @@ export default class PostComponent extends React.Component<Props, any> {
         data-is-new={this.props.isNew}>
         <header className="post-header">
           <span className="post-number">{this.props.number}</span>
-          <span className="post-name">{this.props.name}</span>
+          <span className="post-name" ref={setInnerHTML(this.props.name)}></span>
           <span className="post-mail">{this.props.mail}</span>
           <span className="post-date">{this.props.date}</span>
           <span className="post-id">{this.props.id}</span>
