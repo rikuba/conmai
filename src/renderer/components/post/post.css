@@ -1,3 +1,7 @@
+.post.new .post-number {
+  font-weight: bold;
+}
+
 .post-number,
 .post-mail,
 .post-date {
@@ -18,10 +22,10 @@
 }
 
 .post-date::before {
-  content: '投稿日:';
+  content: '投稿日：';
 }
 
-.post-id::before {
+.post-id:not(:empty)::before {
   content: 'ID:';
 }
 

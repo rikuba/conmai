@@ -4,11 +4,17 @@ import { Post } from '../../reducers';
 
 import './post.css';
 
-export default class PostComponent extends React.Component<Post, any> {
+interface Props extends Post {
+  isNew: boolean;
+}
+
+export default class PostComponent extends React.Component<Props, any> {
   render() {
     return (
-      <article className="post">
-        <header>
+      <article
+        className={`post ${this.props.isNew ? 'new' : ''}`}
+        data-number={this.props.number}>
+        <header className="post-header">
           <span className="post-number">{this.props.number}</span>
           <span className="post-name">{this.props.name}</span>
           <span className="post-mail">{this.props.mail}</span>
