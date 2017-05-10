@@ -16,13 +16,9 @@ interface StateProps {
   thread: Thread | undefined;
 }
 
-const mapStateToProps = (state: State): StateProps => {
-  const thread = getSelectedThread(state);
-
-  return {
-    thread,
-  };
-};
+const mapStateToProps = (state: State): StateProps => ({
+  thread: getSelectedThread(state),
+});
 
 class AppComponent extends React.Component<Props, any> {
   handleClickOpenSubWindowButton = (e: any) => {
