@@ -1,4 +1,4 @@
-.post.new .post-number {
+.post[data-is-new="true"] .post-number {
   font-weight: bold;
 }
 

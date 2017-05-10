@@ -20,7 +20,7 @@ export default class ThreadComponent extends React.Component<Thread, any> {
   }
 
   scrollToNewPost() {
-    const newPost = ReactDOM.findDOMNode(this).querySelector('.post.new');
+    const newPost = ReactDOM.findDOMNode(this).querySelector('.post[data-is-new="true"]');
     if (newPost) {
       newPost.scrollIntoView();
     }

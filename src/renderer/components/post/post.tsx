@@ -12,8 +12,9 @@ export default class PostComponent extends React.Component<Props, any> {
   render() {
     return (
       <article
-        className={`post ${this.props.isNew ? 'new' : ''}`}
-        data-number={this.props.number}>
+        className="post"
+        data-number={this.props.number}
+        data-is-new={this.props.isNew}>
         <header className="post-header">
           <span className="post-number">{this.props.number}</span>
           <span className="post-name">{this.props.name}</span>
