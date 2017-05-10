@@ -2,28 +2,28 @@ import { combineReducers } from 'redux';
 
 import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
 import { Action } from '../actions';
-import preference, { Preference } from './preference';
+import preferences, { Preferences } from './preferences';
 import threads, { Threads } from './threads';
 import { Thread } from './thread';
 
 export interface State {
-  preference: Preference;
+  preferences: Preferences;
   threads: Threads;
 }
 
 export {
-  Preference,
+  Preferences,
   Post,
   Thread,
 };
 
 export default combineReducers<State>({
-  preference,
+  preferences,
   threads,
 });
 
 export function getUpdateIntervalPreference(state: State): number {
-  return state.preference.updateInterval;
+  return state.preferences.updateInterval;
 }
 
 export function getSelectedThread(state: State): Thread | undefined {

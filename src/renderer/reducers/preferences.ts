@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import { Action } from '../actions';
 
-export interface Preference {
+export interface Preferences {
   updateInterval: number;
 }
 
