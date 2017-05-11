@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import PostComponent from '../post/post';
+import PostsComponent from '../posts/posts';
 import { Thread } from '../../reducers';
 
 import './thread.css';
@@ -50,9 +50,7 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
 
     return (
       <div className="thread" data-is-selected={isSelected}>
-        {posts.map((post) => (
-          <PostComponent key={post.number} isNew={isNew(post.number)} {...post} />
-        ))}
+        <PostsComponent posts={posts} newPostNumber={newPostNumber} />
       </div>
     );
   }
