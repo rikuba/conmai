@@ -28,7 +28,7 @@ const mapDispatchToProps = {
   updateSelectedThread,
 };
 
-class ToolbarComponent extends React.PureComponent<Props, { url: string }> {
+class ToolbarComponent extends React.PureComponent<Props, { url: string, lastSelectedThread: string }> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
     { role: 'undo', label: '元に戻す' },
     { type: 'separator' },
@@ -52,24 +52,27 @@ class ToolbarComponent extends React.PureComponent<Props, { url: string }> {
 
   state = {
     url: '',
+    lastSelectedThread: '',
   };
 
-  setStateFromProps(props: Props) {
-    const { selectedThread } = props;
-    if (selectedThread) {
+  componentWillReceiveProps(nextProps: Props) {
+    const { selectedThread } = nextProps;
+    if (selectedThread && selectedThread.url !== this.state.lastSelectedThread) {
       this.setState({
         url: selectedThread.url,
+        lastSelectedThread: selectedThread.url,
       });
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.setStateFromProps(nextProps);
-  }
-
   handleUrlInputKeydown = (e: any) => {
     if (e.key === 'Escape') {
-      this.setStateFromProps(this.props);
+      const { selectedThread } = this.props;
+      if (selectedThread) {
+        this.setState({
+          url: selectedThread.url,
+        });
+      }
     }
   };
 
