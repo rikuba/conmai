@@ -26,7 +26,7 @@ const mapStateToProps = (state: State): StateProps => {
   };
 };
 
-class StatusbarComponent extends React.Component<Props, {}> {
+class StatusbarComponent extends React.PureComponent<Props, {}> {
   render() {
     const { isFething, interval, wait } = this.props;
     const remain = interval - wait;

@@ -28,7 +28,7 @@ const mapDispatchToProps = {
   updateSelectedThread,
 };
 
-class ToolbarComponent extends React.Component<Props, { url: string }> {
+class ToolbarComponent extends React.PureComponent<Props, { url: string }> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
     { role: 'undo', label: '元に戻す' },
     { type: 'separator' },

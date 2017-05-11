@@ -8,7 +8,7 @@ interface Props extends Post {
   isNew: boolean;
 }
 
-export default class PostComponent extends React.Component<Props, any> {
+export default class PostComponent extends React.PureComponent<Props, any> {
   render() {
     return (
       <article

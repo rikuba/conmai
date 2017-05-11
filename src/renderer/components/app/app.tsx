@@ -24,7 +24,7 @@ const mapStateToProps = (state: State): StateProps => ({
   selectedThread: getSelectedThread(state),
 });
 
-class AppComponent extends React.Component<Props, any> {
+class AppComponent extends React.PureComponent<Props, any> {
   handleClickOpenSubWindowButton = (e: any) => {
     ipcRenderer.send('open-subwindow-request');
   };

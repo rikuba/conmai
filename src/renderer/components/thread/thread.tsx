@@ -12,7 +12,7 @@ interface OwnProps {
   isSelected: boolean;
 }
 
-export default class ThreadComponent extends React.Component<Props, any> {
+export default class ThreadComponent extends React.PureComponent<Props, any> {
   private lastNewPostNumber = 0;
   private isScrolledToTheEnd = true;
 
