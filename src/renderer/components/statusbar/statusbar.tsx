@@ -1,14 +1,32 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { State, getSelectedThread, getUpdateIntervalPreference } from '../../reducers';
 
 import './statusbar.css';
 
-interface Props {
+type Props = StateProps;
+
+interface StateProps {
   isFething: boolean;
   interval: number;
   wait: number;
 }
 
-export default class StatusbarComponent extends React.Component<Props, {}> {
+const mapStateToProps = (state: State): StateProps => {
+  const thread = getSelectedThread(state);
+  const interval = getUpdateIntervalPreference(state);
+  const isFething = thread ? thread.isFetching : false;
+  const wait = thread ? thread.updateWait : 0;
+
+  return {
+    isFething,
+    interval,
+    wait,
+  };
+};
+
+class StatusbarComponent extends React.Component<Props, {}> {
   render() {
     const { isFething, interval, wait } = this.props;
     const remain = interval - wait;
@@ -24,3 +42,5 @@ export default class StatusbarComponent extends React.Component<Props, {}> {
     );
   }
 }
+
+export default connect<StateProps, {}, {}>(mapStateToProps)(StatusbarComponent);
