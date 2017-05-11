@@ -4,8 +4,9 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { openThread, updateThread } from '../../actions';
-import { State, Thread, getSelectedThread } from '../../reducers';
+import { State, Thread, getAllThreads, getSelectedThread } from '../../reducers';
 import ToolbarComponent from '../toolbar/toolbar';
+import TabbarComponent from '../tabbar/tabbar';
 import ThreadComponent from '../thread/thread';
 import StatusbarComponent from '../statusbar/statusbar';
 
@@ -14,11 +15,13 @@ import './app.css';
 type Props = StateProps;
 
 interface StateProps {
-  thread: Thread | undefined;
+  allThreads: Thread[];
+  selectedThread: Thread | undefined;
 }
 
 const mapStateToProps = (state: State): StateProps => ({
-  thread: getSelectedThread(state),
+  allThreads: getAllThreads(state),
+  selectedThread: getSelectedThread(state),
 });
 
 class AppComponent extends React.Component<Props, any> {
@@ -27,14 +30,22 @@ class AppComponent extends React.Component<Props, any> {
   };
 
   render() {
-    const { thread } = this.props;
+    const { allThreads, selectedThread } = this.props;
+    const threadsView = allThreads.map((thread) => (
+      <ThreadComponent key={thread.url} {...thread} 
+        isSelected={thread === selectedThread} />
+    ));
+    if (threadsView.length === 0) {
+      threadsView.push(<div className="thread"></div>);
+    }
 
     return (
       <div className="application">
         <ToolbarComponent />
-        {thread ?
-          <ThreadComponent key={thread.url} {...thread} /> :
-          <div className="thread"></div>}
+        <TabbarComponent />
+        <div className="thread-container">
+          {threadsView}
+        </div>
         <StatusbarComponent />
       </div>
     );

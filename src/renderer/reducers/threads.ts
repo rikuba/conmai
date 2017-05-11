@@ -8,16 +8,16 @@ export interface Threads {
     [url: string]: Thread;
   };
   all: string[];
-  selected: string;
+  selectOrder: string[];
 }
 
 export default combineReducers<Threads>({
   byUrl,
   all,
-  selected,
+  selectOrder,
 });
 
-function byUrl(state: Threads['byUrl'] = {}, action: Action) {
+function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
     case 'THREAD_FETCH_REQUEST':
@@ -33,12 +33,17 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action) {
         [action.url]: thread(state[action.url], action),
       };
 
+    case 'THREAD_CLOSE':
+      const nextState = { ...state };
+      delete nextState[action.url];
+      return nextState;
+
     default:
       return state;
   }
 }
 
-function all(state: string[] = [], action: Action) {
+function all(state: Threads['all'] = [], action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
       return [
@@ -46,16 +51,24 @@ function all(state: string[] = [], action: Action) {
         action.url,
       ];
 
+    case 'THREAD_CLOSE':
+      return state.filter((url) => url !== action.url);
+
     default:
       return state;
   }
 }
 
-function selected(state: string = '', action: Action) {
+function selectOrder(state: Threads['selectOrder'] = [], action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
+      return [action.url].concat(state);
+
     case 'THREAD_SELECT':
-      return action.url;
+      return [action.url].concat(state.filter((url) => url !== action.url));
+
+    case 'THREAD_CLOSE':
+      return state.filter((url) => url !== action.url);
 
     default:
       return state;

@@ -6,6 +6,7 @@ import { State, getUpdateIntervalPreference, getSelectedThread, getThread } from
 export type Action =
   ThreadSelect |
   ThreadOpen |
+  ThreadClose |
 
   ThreadFetchRequest |
   ThreadFetchSuccess |
@@ -210,6 +211,23 @@ export function cancelScheduledUpdateThread(url: string) {
     
     dispatch<ThreadUpdateScheduleCancel>({
       type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
+      url,
+    });
+  };
+}
+
+interface ThreadClose {
+  type: 'THREAD_CLOSE';
+  url: string;
+}
+
+export function closeThread(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const thread = getThread(getState(), url);
+    clearInterval(thread.updateTimerId);
+
+    dispatch<ThreadClose>({
+      type: 'THREAD_CLOSE',
       url,
     });
   };

@@ -6,12 +6,22 @@ import { Thread } from '../../reducers';
 
 import './thread.css';
 
-export default class ThreadComponent extends React.Component<Thread, any> {
+type Props = Thread & OwnProps;
+
+interface OwnProps {
+  isSelected: boolean;
+}
+
+export default class ThreadComponent extends React.Component<Props, any> {
   private lastNewPostNumber = 0;
   private isScrolledToTheEnd = true;
 
-  constructor(props: Thread) {
-    super(props);
+  componentDidMount() {
+    ReactDOM.findDOMNode(this).addEventListener('scroll', this.handleScroll, { passive: true } as any);
+  }
+
+  componentWillUnmount() {
+    ReactDOM.findDOMNode(this).removeEventListener('scroll', this.handleScroll, { passive: true } as any);
   }
 
   componentDidUpdate() {
@@ -35,11 +45,11 @@ export default class ThreadComponent extends React.Component<Thread, any> {
   };
 
   render() {
-    const { posts, newPostNumber } = this.props;
+    const { posts, newPostNumber, isSelected } = this.props;
     const isNew = (number: number) => number >= newPostNumber;
 
     return (
-      <div className="thread" onScroll={this.handleScroll}>
+      <div className="thread" data-is-selected={isSelected}>
         {posts.map((post) => (
           <PostComponent key={post.number} isNew={isNew(post.number)} {...post} />
         ))}

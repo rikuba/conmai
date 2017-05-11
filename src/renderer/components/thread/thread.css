@@ -1,8 +1,16 @@
 .thread {
-  flex: 1;
-  overflow: auto;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   padding: 8px;
+  overflow: auto;
+  background: #eee;
   font-family: "MS PGothic", sans-serif;
+}
+
+.thread[data-is-selected="true"] {
+  z-index: 1;
 }
 
 .thread-title {
