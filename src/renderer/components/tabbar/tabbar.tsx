@@ -45,6 +45,8 @@ class TabComponent extends React.PureComponent<Thread & {
   onTabSelect: (url: string) => void;
   onTabClose: (url: string) => void;
 }, {}> {
+  private middleButtonPressed = false;
+
   handleTabClick = (e: any) => {
     const { url } = this.props;
 
@@ -56,9 +58,30 @@ class TabComponent extends React.PureComponent<Thread & {
     this.props.onTabSelect(url);
   };
 
+  handleMouseDown = (e: any) => {
+    if (e.button === 1) {
+      this.middleButtonPressed = true;
+    }
+  };
+
+  handleMouseOut = (e: any) => {
+    this.middleButtonPressed = false;
+  };
+
+  handleMouseUp = (e: any) => {
+    if (e.button === 1 && this.middleButtonPressed) {
+      this.props.onTabClose(this.props.url);
+      this.middleButtonPressed = false;
+    }
+  };
+
   render() {
     return (
-      <div className="tab" aria-selected={this.props.isSelected} onClick={this.handleTabClick}>
+      <div className="tab" aria-selected={this.props.isSelected}
+        onClick={this.handleTabClick}
+        onMouseDown={this.handleMouseDown}
+        onMouseOut={this.handleMouseOut}
+        onMouseUp={this.handleMouseUp}>
         <span className="tab-label">{this.props.title}</span>
         <span className="tab-close-button">×</span>
       </div>
