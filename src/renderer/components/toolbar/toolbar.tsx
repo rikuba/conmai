@@ -57,7 +57,12 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
 
   componentWillReceiveProps(nextProps: Props) {
     const { selectedThread } = nextProps;
-    if (selectedThread && selectedThread.url !== this.state.lastSelectedThread) {
+    if (!selectedThread) {
+      this.setState({
+        url: '',
+        lastSelectedThread: '',
+      });
+    } else if (selectedThread.url !== this.state.lastSelectedThread) {
       this.setState({
         url: selectedThread.url,
         lastSelectedThread: selectedThread.url,
