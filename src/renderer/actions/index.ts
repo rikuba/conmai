@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 
-import { Thread, fetchThread } from '../../clients/shitaraba-client';
+import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
 import { State, getUpdateIntervalPreference, getSelectedThread, getThread } from '../reducers';
 
 export type Action =
@@ -54,8 +54,13 @@ export interface ThreadFetchFailure {
   error: Error;
 }
 
-export function openThread(url: string) {
+export function openThread(inputUrl: string) {
   return (dispatch: Dispatch<State>, getState: () => State) => {
+    const url = canonicalizeUrl(inputUrl);
+    if (!url) {
+      throw new Error(`Unknown URL: ${inputUrl}`);
+    }
+
     const thread = getThread(getState(), url);
 
     if (thread) {
