@@ -78,6 +78,7 @@ class TabComponent extends React.PureComponent<Thread & {
   render() {
     return (
       <div className="tab" aria-selected={this.props.isSelected}
+        title={this.props.title}
         onClick={this.handleTabClick}
         onMouseDown={this.handleMouseDown}
         onMouseOut={this.handleMouseOut}

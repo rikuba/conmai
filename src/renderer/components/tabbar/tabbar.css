@@ -29,6 +29,15 @@
   background: #eee;
 }
 
+.tab-label {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
 .tab-close-button {
   display: inline-block;
   border-radius: 16px;
