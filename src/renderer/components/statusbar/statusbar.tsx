@@ -30,9 +30,9 @@ class StatusbarComponent extends React.PureComponent<Props, {}> {
   render() {
     const { isFething, interval, wait } = this.props;
     const remain = interval - wait;
-    let remainView: React.ReactChild | React.ReactChild[] = remain;
+    let remainView: React.ReactChild = remain;
     if (interval >= 10 && remain < 10) {
-      remainView = [<span style={{ color: 'transparent' }}>0</span>, remain];
+      remainView = <span><span style={{ color: 'transparent' }}>0</span>{remain}</span>;
     }
 
     return (

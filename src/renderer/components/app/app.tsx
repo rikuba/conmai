@@ -36,7 +36,7 @@ class AppComponent extends React.PureComponent<Props, any> {
         isSelected={thread === selectedThread} />
     ));
     if (threadsView.length === 0) {
-      threadsView.push(<div className="thread"></div>);
+      threadsView.push(<div className="thread" key=""></div>);
     }
 
     return (
