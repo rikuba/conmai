@@ -102,13 +102,8 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
     this.props.openThread(url);
   };
 
-  handleUpdateButtonClick = (e: any) => {
-    this.props.updateSelectedThread();
-  };
-
   render() {
     const { selectedThread } = this.props;
-    const updateButtonDisabled = selectedThread ? selectedThread.isFetching : false;
 
     return (
       <div className="toolbar">
@@ -122,9 +117,6 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
             onContextMenu={this.handleUrlInputContextMenu} />
           <button type="submit">開く</button>
         </form>
-        <button
-          disabled={updateButtonDisabled}
-          onClick={this.handleUpdateButtonClick}>更新</button>
       </div>
     );
   }
