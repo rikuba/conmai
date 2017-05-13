@@ -25,12 +25,14 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
 
   componentDidUpdate() {
     const { newPostNumber } = this.props;
-    if (newPostNumber && newPostNumber > 1 && this.isScrolledToTheEnd) {
-      this.scrollToNewPost();
+    if (newPostNumber &&
+      (newPostNumber === 1 || (newPostNumber > 1 && this.isScrolledToTheEnd))
+    ) {
+      this.scrollToTheEnd();
     }
   }
 
-  scrollToNewPost() {
+  scrollToTheEnd() {
     const elm = ReactDOM.findDOMNode(this);
     elm.scrollTop = elm.scrollHeight - elm.clientHeight;
   }
