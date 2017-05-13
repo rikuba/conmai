@@ -8,11 +8,9 @@ let subWindow: Electron.BrowserWindow | null = null;
 
 function createWindow(): void {
   window = new BrowserWindow({
-    width: 800,
+    width: 600,
     height: 600,
   });
-
-  // window.loadURL(`http://localhost:8080/index/index.html`);
 
   window.loadURL(url.format({
     pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index', 'index.html'),
@@ -58,7 +56,7 @@ ipcMain.on('open-subwindow-request', (e) => {
   }
 
   subWindow = new BrowserWindow({
-    width: 800,
+    width: 600,
     height: 400,
     transparent: true,
     frame: false,
