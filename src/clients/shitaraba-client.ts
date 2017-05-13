@@ -69,10 +69,10 @@ function fetchThreadRaw(url: string): Promise<string> {
         });
         resolve(text);
       });
+    });
 
-      res.on('error', (error) => {
-        reject(error);
-      });
+    req.on('error', (error) => {
+      reject(error);
     });
 
     req.end();
