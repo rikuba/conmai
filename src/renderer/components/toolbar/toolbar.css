@@ -34,4 +34,9 @@
 
 .url-input {
   flex: 1;
+  margin-right: -1px;
+}
+
+.url-input:focus {
+  z-index: 1;
 }
