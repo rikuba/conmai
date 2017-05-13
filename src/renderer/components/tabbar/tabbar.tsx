@@ -76,6 +76,10 @@ class TabComponent extends React.PureComponent<Thread & {
   };
 
   render() {
+    const iconNode = this.props.icon ?
+      <img className="tab-icon" src={this.props.icon} /> :
+      <span className="tab-icon empty-icon"></span>;
+
     return (
       <div className="tab" aria-selected={this.props.isSelected}
         title={this.props.title}
@@ -83,6 +87,7 @@ class TabComponent extends React.PureComponent<Thread & {
         onMouseDown={this.handleMouseDown}
         onMouseOut={this.handleMouseOut}
         onMouseUp={this.handleMouseUp}>
+        {iconNode}
         <span className="tab-label">{this.props.title}</span>
         <span className="tab-close-button">×</span>
       </div>

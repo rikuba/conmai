@@ -1,3 +1,4 @@
+import URL from 'url';
 import { Dispatch } from 'redux';
 
 import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
@@ -35,6 +36,7 @@ export function selectThread(url: string): ThreadSelect {
 export interface ThreadOpen {
   type: 'THREAD_OPEN';
   url: string;
+  icon: string | null;
 }
 
 export interface ThreadFetchRequest {
@@ -68,9 +70,13 @@ export function openThread(inputUrl: string) {
       return Promise.resolve();
     }
 
+    const urlData = URL.parse(url);
+    const icon = `${urlData.protocol}//${urlData.hostname}/favicon.ico`;
+
     dispatch<ThreadOpen>({
       type: 'THREAD_OPEN',
       url,
+      icon,
     });
     
     dispatch<ThreadFetchRequest>({

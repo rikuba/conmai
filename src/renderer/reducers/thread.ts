@@ -5,6 +5,7 @@ export interface Thread extends ThreadResponse {
   isFetching: boolean;
   error: Error | null;
   url: string;
+  icon: string | null;
   newPostNumber: number | null;
   updateWait: number;
   updateTimerId: number;
@@ -17,6 +18,7 @@ export function thread(state: Thread, action: Action): Thread {
         isFetching: false,
         error: null,
         url: action.url,
+        icon: action.icon,
         title: '',
         posts: [],
         newPostNumber: null,
