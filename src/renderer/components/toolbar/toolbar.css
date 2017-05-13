@@ -35,6 +35,8 @@
 .url-input {
   flex: 1;
   margin-right: -1px;
+  font-family: "Meiryo UI", sans-serif;
+  font-size: 90%;
 }
 
 .url-input:focus {

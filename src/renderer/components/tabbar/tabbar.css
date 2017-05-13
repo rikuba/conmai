@@ -44,7 +44,7 @@
 .tab-label {
   display: inline-block;
   white-space: nowrap;
-  margin: 0 2px;
+  margin: 0 4px;
   max-width: 10em;
   overflow: hidden;
   text-overflow: ellipsis;
