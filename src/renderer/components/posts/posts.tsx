@@ -5,13 +5,15 @@ import PostComponent from '../post/post';
 
 interface Props {
   posts: Post[];
-  newPostNumber: number;
+  newPostNumber: number | null;
 }
 
 export default class PostsComponent extends React.PureComponent<Props, {}> {
   render() {
     const { posts, newPostNumber } = this.props;
-    const isNew = (number: number) => number >= newPostNumber;
+    const isNew = newPostNumber ?
+      (number: number) => number >= newPostNumber :
+      (number: number) => false;
 
     return (
       <div className="posts">

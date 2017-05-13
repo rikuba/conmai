@@ -5,7 +5,7 @@ export interface Thread extends ThreadResponse {
   isFetching: boolean;
   error: Error | null;
   url: string;
-  newPostNumber: number;
+  newPostNumber: number | null;
   updateWait: number;
   updateTimerId: number;
 }
@@ -19,8 +19,8 @@ export function thread(state: Thread, action: Action): Thread {
         url: action.url,
         title: '',
         posts: [],
-        newPostNumber: NaN,
-        updateWait: NaN,
+        newPostNumber: null,
+        updateWait: 0,
         updateTimerId: 0,
       };
 
@@ -44,11 +44,12 @@ export function thread(state: Thread, action: Action): Thread {
 
     case 'THREAD_UPDATE_SUCCESS':
       var { posts } = action.thread;
+      var nextPosts = posts.length > 0 ? state.posts.concat(posts) : state.posts;
       return {
         ...state,
         isFetching: false,
-        posts: state.posts.concat(posts),
-        newPostNumber: posts[0] ? posts[0].number : NaN,
+        posts: nextPosts,
+        newPostNumber: posts[0] ? posts[0].number : null,
       };
 
     case 'THREAD_FETCH_FAILURE':

@@ -16,21 +16,15 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
   private lastNewPostNumber = 0;
   private isScrolledToTheEnd = true;
 
-  componentDidMount() {
-    ReactDOM.findDOMNode(this).addEventListener('scroll', this.handleScroll, { passive: true } as any);
-  }
-
-  componentWillUnmount() {
-    ReactDOM.findDOMNode(this).removeEventListener('scroll', this.handleScroll, { passive: true } as any);
+  componentWillReceiveProps(nextProps: Readonly<Props>) {
+    const elm = ReactDOM.findDOMNode(this);
+    this.isScrolledToTheEnd = elm.scrollTop >= elm.scrollHeight - elm.clientHeight - 10;
   }
 
   componentDidUpdate() {
     const { newPostNumber } = this.props;
-    if (newPostNumber !== this.lastNewPostNumber) {
-      if (newPostNumber > 1 && this.isScrolledToTheEnd) {
-        this.scrollToNewPost();
-      }
-      this.lastNewPostNumber = newPostNumber;
+    if (newPostNumber && newPostNumber > 1 && this.isScrolledToTheEnd) {
+      this.scrollToNewPost();
     }
   }
 
@@ -39,14 +33,8 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
     elm.scrollTop = elm.scrollHeight - elm.clientHeight;
   }
 
-  handleScroll = (e: any) => {
-    const elm: HTMLDivElement = e.currentTarget;
-    this.isScrolledToTheEnd = elm.scrollTop >= elm.scrollHeight - elm.clientHeight - 10;
-  };
-
   render() {
     const { posts, newPostNumber, isSelected } = this.props;
-    const isNew = (number: number) => number >= newPostNumber;
 
     return (
       <div className="thread" data-is-selected={isSelected}>
