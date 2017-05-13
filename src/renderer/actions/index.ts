@@ -84,7 +84,7 @@ export function openThread(inputUrl: string) {
       url,
     });
     
-    return fetchThread(url)
+    return fetchThread(url, { last: 1000 })
       .then((thread) => {
         dispatch<ThreadFetchSuccess>({
           type: 'THREAD_FETCH_SUCCESS',
