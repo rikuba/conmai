@@ -32,8 +32,10 @@ class AppComponent extends React.PureComponent<Props, any> {
   render() {
     const { allThreads, selectedThread } = this.props;
     const threadsView = allThreads.map((thread) => (
-      <ThreadComponent key={thread.url} {...thread} 
-        isSelected={thread === selectedThread} />
+      <ThreadComponent key={thread.url}
+        isSelected={thread === selectedThread}
+        newPostNumber={thread.newPostNumber}
+        posts={thread.posts} />
     ));
     if (threadsView.length === 0) {
       threadsView.push(<div className="thread" key=""></div>);

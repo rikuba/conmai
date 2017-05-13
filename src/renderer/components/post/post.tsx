@@ -4,25 +4,27 @@ import { Post } from '../../reducers';
 
 import './post.css';
 
-interface Props extends Post {
+interface Props {
   isNew: boolean;
+  post: Post;
 }
 
 export default class PostComponent extends React.PureComponent<Props, any> {
   render() {
+    const { isNew, post } = this.props;
     return (
       <article
         className="post"
-        data-number={this.props.number}
-        data-is-new={this.props.isNew}>
+        data-number={post.number}
+        data-is-new={isNew}>
         <header className="post-header">
-          <span className="post-number">{this.props.number}</span>
-          <span className="post-name" ref={setInnerHTML(this.props.name)}></span>
-          <span className="post-mail">{this.props.mail}</span>
-          <span className="post-date">{this.props.date}</span>
-          <span className="post-id">{this.props.id}</span>
+          <span className="post-number">{post.number}</span>
+          <span className="post-name" ref={setInnerHTML(post.name)}></span>
+          <span className="post-mail">{post.mail}</span>
+          <span className="post-date">{post.date}</span>
+          <span className="post-id">{post.id}</span>
         </header>
-        <p className="post-message" ref={setInnerHTML(this.props.message)}></p>
+        <p className="post-message" ref={setInnerHTML(post.message)}></p>
       </article>
     );
   }

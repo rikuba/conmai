@@ -26,7 +26,10 @@ const mapDispatchToProps = {
 class TabbarComponent extends React.PureComponent<Props, {}> {
   render() {
     const tabs = this.props.allThreads.map((thread) => (
-      <TabComponent key={thread.url} {...thread}
+      <TabComponent key={thread.url}
+        url={thread.url}
+        icon={thread.icon}
+        title={thread.title}
         isSelected={thread === this.props.selectedThread}
         onTabSelect={this.props.selectThread}
         onTabClose={this.props.closeThread} />
@@ -40,7 +43,10 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-class TabComponent extends React.PureComponent<Thread & {
+class TabComponent extends React.PureComponent<{
+  url: Thread['url'];
+  icon: Thread['icon'];
+  title: Thread['title'];
   isSelected: boolean;
   onTabSelect: (url: string) => void;
   onTabClose: (url: string) => void;

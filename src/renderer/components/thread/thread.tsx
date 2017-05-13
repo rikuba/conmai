@@ -6,9 +6,11 @@ import { Thread } from '../../reducers';
 
 import './thread.css';
 
-type Props = Thread & OwnProps;
+type Props = OwnProps;
 
 interface OwnProps {
+  newPostNumber: Thread['newPostNumber'];
+  posts: Thread['posts'];
   isSelected: boolean;
 }
 
@@ -16,7 +18,7 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
   private lastNewPostNumber = 0;
   private isScrolledToTheEnd = true;
 
-  componentWillReceiveProps(nextProps: Readonly<Props>) {
+  componentWillUpdate() {
     const elm = ReactDOM.findDOMNode(this);
     this.isScrolledToTheEnd = elm.scrollTop >= elm.scrollHeight - elm.clientHeight - 10;
   }

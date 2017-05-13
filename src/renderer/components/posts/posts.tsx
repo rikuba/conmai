@@ -18,7 +18,7 @@ export default class PostsComponent extends React.PureComponent<Props, {}> {
     return (
       <div className="posts">
         {posts.map((post) => (
-          <PostComponent key={post.number} isNew={isNew(post.number)} {...post} />
+          <PostComponent key={post.number} isNew={isNew(post.number)} post={post} />
         ))}
       </div>
     );
