@@ -65,7 +65,8 @@ function selectOrder(state: Threads['selectOrder'] = [], action: Action): typeof
       return [action.url].concat(state);
 
     case 'THREAD_SELECT':
-      return [action.url].concat(state.filter((url) => url !== action.url));
+      return state[0] === action.url ? state :
+        [action.url].concat(state.filter((url) => url !== action.url));
 
     case 'THREAD_CLOSE':
       return state.filter((url) => url !== action.url);

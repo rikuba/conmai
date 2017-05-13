@@ -26,10 +26,17 @@ export interface ThreadSelect {
   url: string;
 }
 
-export function selectThread(url: string): ThreadSelect {
-  return {
-    type: 'THREAD_SELECT',
-    url,
+export function selectThread(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const selectedThread = getSelectedThread(getState());
+    if (selectedThread && selectedThread.url === url) {
+      return;
+    }
+
+    dispatch<ThreadSelect>({
+      type: 'THREAD_SELECT',
+      url,
+    });
   };
 }
 
