@@ -15,7 +15,6 @@ interface OwnProps {
 }
 
 export default class ThreadComponent extends React.PureComponent<Props, any> {
-  private lastNewPostNumber = 0;
   private isScrolledToTheEnd = true;
 
   componentWillUpdate() {
