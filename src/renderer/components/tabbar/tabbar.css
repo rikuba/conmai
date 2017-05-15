@@ -33,7 +33,7 @@
 .tab-icon {
   width: 16px;
   height: 16px;
-  vertical-align: text-bottom;
+  vertical-align: middle;
 }
 
 .tab-icon.empty-icon {
@@ -48,7 +48,7 @@
   max-width: 10em;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 
 .tab-close-button {
@@ -58,6 +58,7 @@
   height: 16px;
   line-height: 16px;
   text-align: center;
+  vertical-align: middle;
 }
 
 .tab-close-button:hover {
