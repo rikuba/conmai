@@ -91,24 +91,26 @@ export function openThread(inputUrl: string) {
       url,
     });
     
-    return fetchThread(url, { last: 1000 })
-      .then((thread) => {
+    return fetchThread(url, { last: 1000 }).then(
+      (thread) => {
         dispatch<ThreadFetchSuccess>({
           type: 'THREAD_FETCH_SUCCESS',
           url,
           thread,
         });
-      })
-      .catch((error) => {
+      },
+      (error) => {
         dispatch<ThreadFetchFailure>({
           type: 'THREAD_FETCH_FAILURE',
           url,
           error,
         });
-      })
-      .then(() => {
+      }
+    ).then(
+      () => {
         dispatch(scheduleUpdateThread(url));
-      });
+      }
+    );
   };
 }
 
@@ -158,21 +160,22 @@ export function updateThread(url: string) {
       url,
     });
 
-    return fetchThread(url, { from })
-      .then((thread) => {
+    return fetchThread(url, { from }).then(
+      (thread) => {
         dispatch<ThreadUpdateSuccess>({
           type: 'THREAD_UPDATE_SUCCESS',
           url,
           thread,
         });
-      })
-      .catch((error) => {
+      },
+      (error) => {
         dispatch<ThreadUpdateFailure>({
           type: 'THREAD_UPDATE_FAILURE',
           url,
           error,
         });
-      });
+      }
+    );
   };
 }
 
