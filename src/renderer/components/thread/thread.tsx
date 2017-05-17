@@ -40,7 +40,7 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
     const { posts, newPostNumber, isSelected } = this.props;
 
     return (
-      <div className="thread" data-is-selected={isSelected}>
+      <div role="tabpanel" className="thread" aria-hidden={String(!isSelected)}>
         <PostsComponent posts={posts} newPostNumber={newPostNumber} />
       </div>
     );

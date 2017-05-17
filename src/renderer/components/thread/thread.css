@@ -9,8 +9,8 @@
   font-family: "MS PGothic", sans-serif;
 }
 
-.thread[data-is-selected="true"] {
-  z-index: 1;
+.thread[aria-hidden="true"] {
+  z-index: -1;
 }
 
 .thread-title {

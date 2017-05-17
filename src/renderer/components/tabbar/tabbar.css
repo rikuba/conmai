@@ -30,6 +30,11 @@
   background: #eee;
 }
 
+.tab:active,
+.tab:focus {
+  outline: none;
+}
+
 .tab-icon {
   width: 16px;
   height: 16px;

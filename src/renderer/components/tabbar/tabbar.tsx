@@ -36,7 +36,7 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
     ));
 
     return (
-      <div className="tabbar">
+      <div role="tablist" className="tabbar">
         {tabs}
       </div>
     );
@@ -87,7 +87,8 @@ class TabComponent extends React.PureComponent<{
       <span className="tab-icon empty-icon"></span>;
 
     return (
-      <div className="tab" aria-selected={this.props.isSelected}
+      <div role="tab" className="tab"
+        aria-selected={this.props.isSelected}
         title={this.props.title}
         onClick={this.handleTabClick}
         onMouseDown={this.handleMouseDown}
