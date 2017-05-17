@@ -5,6 +5,10 @@
   background: #f0f0f0;
   font-size: 80%;
   text-align: right;
+
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .status-text {
