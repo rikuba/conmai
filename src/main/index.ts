@@ -56,6 +56,8 @@ ipcMain.on('open-subwindow-request', (e) => {
   }
 
   subWindow = new BrowserWindow({
+    x: 1620,
+    y: 80,
     width: 600,
     height: 400,
     transparent: true,
@@ -78,5 +80,11 @@ ipcMain.on('open-subwindow-request', (e) => {
 
   if (process.env.NODE_ENV === 'development') {
     subWindow.webContents.openDevTools();
+  }
+});
+
+ipcMain.on('new-posts', (e, newPosts) => {
+  if (subWindow) {
+    subWindow.webContents.send('new-posts', newPosts);
   }
 });
