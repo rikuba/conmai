@@ -2,8 +2,8 @@ import { remote } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import PostsComponent from '../posts/posts';
-import { Thread } from '../../reducers';
+import { Thread } from '../reducers';
+import PostsComponent from './posts';
 
 import './thread.css';
 

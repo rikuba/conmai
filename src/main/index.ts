@@ -13,7 +13,7 @@ function createWindow(): void {
   });
 
   window.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index', 'index.html'),
+    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index.html'),
     protocol: 'file:',
     slashes: true,
   }));
@@ -69,7 +69,7 @@ ipcMain.on('open-subwindow-request', (e) => {
   subWindow.setIgnoreMouseEvents(true);
 
   subWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'sub', 'sub.html'),
+    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'sub.html'),
     protocol: 'file:',
     slashes: true,
   }));

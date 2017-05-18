@@ -3,8 +3,8 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { State, Thread, getSelectedThread } from '../../reducers';
-import { openThread, updateSelectedThread } from '../../actions';
+import { State, Thread, getSelectedThread } from '../reducers';
+import { openThread, updateSelectedThread } from '../actions';
 
 import './toolbar.css';
 

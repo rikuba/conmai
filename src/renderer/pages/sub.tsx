@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 
-import { Post } from '../../reducers';
+import { Post } from '../reducers';
 
 import './sub.css';
 

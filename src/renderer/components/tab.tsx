@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Thread } from '../../reducers';
+import { Thread } from '../reducers';
 
 import './tab.css';
 

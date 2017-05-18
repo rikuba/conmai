@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, getSelectedThread, getUpdateIntervalPreference } from '../../reducers';
+import { State, getSelectedThread, getUpdateIntervalPreference } from '../reducers';
 
 import './statusbar.css';
 

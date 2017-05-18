@@ -45,7 +45,7 @@ const main = (env, common) => {
 };
 
 const forPage = (page) => (env, common) => {
-  const pageDir = (baseDir) => path.join(baseDir, 'renderer', 'pages', page);
+  const pageDir = (baseDir) => path.join(baseDir, 'renderer', 'pages');
   
   const config = {
     context: pageDir(srcDir),

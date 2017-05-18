@@ -3,12 +3,12 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { openThread, updateThread } from '../../actions';
-import { State, Thread, getAllThreads, getSelectedThread } from '../../reducers';
-import ToolbarComponent from '../toolbar/toolbar';
-import TabbarComponent from '../tabbar/tabbar';
-import ThreadComponent from '../thread/thread';
-import StatusbarComponent from '../statusbar/statusbar';
+import { openThread, updateThread } from '../actions';
+import { State, Thread, getAllThreads, getSelectedThread } from '../reducers';
+import ToolbarComponent from './toolbar';
+import TabbarComponent from './tabbar';
+import ThreadComponent from './thread';
+import StatusbarComponent from './statusbar';
 
 import './app.css';
 

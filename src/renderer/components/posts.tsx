@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron';
 import React, { ReactElement, ReactNode } from 'react';
 
-import { Post } from '../../reducers';
-import PostComponent from '../post/post';
+import { Post } from '../reducers';
+import PostComponent from './post';
 
 interface Props {
   posts: Post[];

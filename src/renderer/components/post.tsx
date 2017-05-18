@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 
-import { Post } from '../../reducers';
+import { Post } from '../reducers';
 
 import './post.css';
 

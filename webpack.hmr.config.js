@@ -14,9 +14,9 @@ const forPage = (page) => {
     context: pageDir(srcDir),
 
     entry: {
-      [`${page}/${page}`]: [
+      [`${page}`]: [
         'react-hot-loader/patch',
-        `./${page}/${page}`,
+        `./${page}`,
       ],
     },
 
@@ -78,8 +78,8 @@ const forPage = (page) => {
       }),
       new CheckerPlugin(),
       new HtmlPlugin({
-        filename: `${page}/${page}.html`,
-        template: `./${page}/${page}.html`,
+        filename: `${page}.html`,
+        template: `./${page}.html`,
         alwaysWriteToDisk: true,
       }),
       new HtmlHarddiskPlugin(),

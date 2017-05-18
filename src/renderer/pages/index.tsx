@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
-import App from '../../components/app/app';
-import configureStore from '../../store';
+import App from '../components/app';
+import configureStore from '../store';
 
 import './index.css';
 
@@ -24,5 +24,5 @@ const render = () => {
 render();
 
 if (module.hot) {
-  module.hot.accept('../../components/app/app', render);
+  module.hot.accept('../components/app', render);
 }

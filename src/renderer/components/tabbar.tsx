@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread, getAllThreads, getSelectedThread } from '../../reducers';
-import { selectThread, closeThread } from '../../actions';
-import TabComponent from '../tab/tab';
+import { State, Thread, getAllThreads, getSelectedThread } from '../reducers';
+import { selectThread, closeThread } from '../actions';
+import TabComponent from './tab';
 
 import './tabbar.css';
 
