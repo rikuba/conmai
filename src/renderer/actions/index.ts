@@ -2,7 +2,7 @@ import URL from 'url';
 import { Dispatch } from 'redux';
 
 import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
-import { State, getUpdateIntervalPreference, getSelectedThread, getThread } from '../reducers';
+import { State, getUpdateIntervalPreference, getSelectedThread, getThread, getAllThreads } from '../reducers';
 
 export type Action =
   ThreadSelect |
@@ -251,5 +251,13 @@ export function closeThread(url: string) {
       type: 'THREAD_CLOSE',
       url,
     });
+  };
+}
+
+export function closeAllOtherThreads(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    getAllThreads(getState())
+      .filter((thread) => thread.url !== url)
+      .forEach((thread) => dispatch(closeThread(thread.url)));
   };
 }

@@ -1,3 +1,4 @@
+import { remote } from 'electron';
 import React from 'react';
 
 import { Thread } from '../reducers';
@@ -11,8 +12,24 @@ export default class TabComponent extends React.PureComponent<{
   isSelected: boolean;
   onTabSelect: (url: string) => void;
   onTabClose: (url: string) => void;
+  onTabCloseOthers: (url: string) => void;
 }, {}> {
   private middleButtonPressed = false;
+
+  private contextMenu = remote.Menu.buildFromTemplate([
+    {
+      label: 'タブを閉じる',
+      click: (menuItem, browserWindow, event) => {
+        this.props.onTabClose(this.props.url);
+      },
+    },
+    {
+      label: '他のタブをすべて閉じる',
+      click: (menuItem, browserWindow, event) => {
+        this.props.onTabCloseOthers(this.props.url);
+      },
+    },
+  ]);
 
   handleTabClick = (e: any) => {
     const { url } = this.props;
@@ -42,6 +59,12 @@ export default class TabComponent extends React.PureComponent<{
     }
   };
 
+  handleContextMenu = (e: any) => {
+    e.preventDefault();
+
+    this.contextMenu.popup(remote.getCurrentWindow());
+  };
+
   render() {
     const iconNode = this.props.icon ?
       <img className="tab-icon" src={this.props.icon} /> :
@@ -54,7 +77,8 @@ export default class TabComponent extends React.PureComponent<{
         onClick={this.handleTabClick}
         onMouseDown={this.handleMouseDown}
         onMouseOut={this.handleMouseOut}
-        onMouseUp={this.handleMouseUp}>
+        onMouseUp={this.handleMouseUp}
+        onContextMenu={this.handleContextMenu}>
         {iconNode}
         <span className="tab-label">{this.props.title}</span>
         <span className="tab-close-button">×</span>

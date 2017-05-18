@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { State, Thread, getAllThreads, getSelectedThread } from '../reducers';
-import { selectThread, closeThread } from '../actions';
+import { selectThread, closeThread, closeAllOtherThreads } from '../actions';
 import TabComponent from './tab';
 
 import './tabbar.css';
@@ -22,6 +22,7 @@ const mapStateToProps = (state: State): StateProps => ({
 const mapDispatchToProps = {
   selectThread,
   closeThread,
+  closeAllOtherThreads,
 };
 
 class TabbarComponent extends React.PureComponent<Props, {}> {
@@ -33,7 +34,8 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
         title={thread.title}
         isSelected={thread === this.props.selectedThread}
         onTabSelect={this.props.selectThread}
-        onTabClose={this.props.closeThread} />
+        onTabClose={this.props.closeThread}
+        onTabCloseOthers={this.props.closeAllOtherThreads} />
     ));
 
     return (
