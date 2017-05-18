@@ -30,6 +30,7 @@ const main = (env, common) => {
         },
       ],
     },
+    devtool: 'source-map',
     target: 'electron-main',
     node: {
       __dirname: false,
@@ -76,6 +77,7 @@ const forPage = (page) => (env, common) => {
         },
       ],
     },
+    devtool: env === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
     target: 'electron-renderer',
     plugins: [
       new webpack.DefinePlugin({
@@ -148,7 +150,6 @@ module.exports = (env) => {
     resolve: {
       extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
     },
-    devtool: env === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
   };
 
   return [].concat(
