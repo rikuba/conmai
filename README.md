@@ -16,6 +16,7 @@
 ## 起動する
 
 ```
+$ npm install
 $ npm run build
 $ npm start
 ```
@@ -25,6 +26,7 @@ $ npm start
 HMRが有効。
 
 ```
+$ npm install
 $ npm run dev
 $ npm start
 ```
