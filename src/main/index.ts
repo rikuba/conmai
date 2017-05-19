@@ -13,6 +13,8 @@ function createWindow(): void {
     height: 600,
   });
 
+  window.webContents.on('new-window', handleNewWindow);
+
   window.loadURL(url.format({
     pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index.html'),
     protocol: 'file:',
@@ -27,6 +29,11 @@ function createWindow(): void {
     }
   });
 }
+
+const handleNewWindow = (e: any, url: string) => {
+  e.preventDefault();
+  // TODO: process url
+};
 
 app.on('ready', () => {
   createWindow();
@@ -65,6 +72,8 @@ ipcMain.on('open-subwindow-request', (e) => {
     resizable: false, // TODO: should be false because break transparency on some platforms
     alwaysOnTop: true,
   });
+
+  subWindow.on('new-window', handleNewWindow);
 
   subWindow.setIgnoreMouseEvents(ignoreMouseEvents = true);
 
