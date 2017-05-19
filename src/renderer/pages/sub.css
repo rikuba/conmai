@@ -1,5 +1,51 @@
 body {
   margin: 0;
-  background: rgba(0, 0, 0, 0);
+  overflow: hidden;
+
+  background: transparent;
   color: #fff;
+
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+
+  /* 文字色 */
+  --foreground: #36FF36;
+  
+  /* 縁取りの色 */
+  --stroke-color: #002b60;
+  
+  /* 影の色、ずらし幅、ぼかし幅 */
+  --shadow-color: #003a84;
+  --shadow-offset: 2px;
+  --shadow-blur: 2px;
+}
+
+.sub {
+  margin: 0;
+
+  color: var(--foreground);
+  font-family: "游ゴシック", "ＭＳ Ｐゴシック", sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  word-wrap: break-word;
+  line-height: 1.2;
+  text-shadow: 
+    -1px -1px 0px var(--stroke-color), /* 左上 */
+    -1px  0px 0px var(--stroke-color), /* 左 */
+    -1px  1px 0px var(--stroke-color), /* 左下 */
+     0px  1px 0px var(--stroke-color), /* 下 */
+     1px  1px 0px var(--stroke-color), /* 右下 */
+     1px  0px 0px var(--stroke-color), /* 右 */
+     1px -1px 0px var(--stroke-color), /* 右上 */
+     0px -1px 0px var(--stroke-color), /* 上 */
+     
+    calc(-1 * var(--shadow-offset)) calc(-1 * var(--shadow-offset)) var(--shadow-blur) var(--shadow-color), /* 左上 */
+    calc(-1 * var(--shadow-offset))  0px var(--shadow-blur) var(--shadow-color), /* 左 */
+    calc(-1 * var(--shadow-offset))  var(--shadow-offset) var(--shadow-blur) var(--shadow-color), /* 左下 */
+    0px  var(--shadow-offset) var(--shadow-blur) var(--shadow-color), /* 下 */
+    var(--shadow-offset)  var(--shadow-offset) var(--shadow-blur) var(--shadow-color), /* 右下 */
+    var(--shadow-offset)  0px var(--shadow-blur) var(--shadow-color), /* 右 */
+    var(--shadow-offset) calc(-1 * var(--shadow-offset)) var(--shadow-blur) var(--shadow-color), /* 右上 */
+    0px calc(-1 * var(--shadow-offset)) var(--shadow-blur) var(--shadow-color); /* 上 */
 }
