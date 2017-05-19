@@ -1,5 +1,4 @@
 import { ipcRenderer } from 'electron';
-import React from 'react';
 import debounce from 'lodash.debounce';
 
 import { Post } from '../reducers';

@@ -1,6 +1,5 @@
 import { clipboard, ipcRenderer, remote } from 'electron';
 import React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { State, Thread, getSelectedThread } from '../reducers';
@@ -103,11 +102,10 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
   };
 
   render() {
-    const { selectedThread } = this.props;
-
     return (
       <div className="toolbar">
-        <button onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
+        <button className="open-subwindow-button"
+          onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
         <form onSubmit={this.handleUrlSubmit} className="url-form">
           <input type="text" className="url-input"
             placeholder="URLを入力します"

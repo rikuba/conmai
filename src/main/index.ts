@@ -1,11 +1,10 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import loadDevtool from 'electron-load-devtool';
 import path from 'path';
 import url from 'url';
 
 let window: Electron.BrowserWindow | null = null;
 let subWindow: Electron.BrowserWindow | null = null;
-let ignoreMouseEvents = false;
 
 function createWindow(): void {
   window = new BrowserWindow({
@@ -75,7 +74,7 @@ ipcMain.on('open-subwindow-request', (e) => {
 
   subWindow.on('new-window', handleNewWindow);
 
-  subWindow.setIgnoreMouseEvents(ignoreMouseEvents = true);
+  subWindow.setIgnoreMouseEvents(true);
 
   subWindow.loadURL(url.format({
     pathname: path.join(__dirname, '..', 'renderer', 'pages', 'sub.html'),

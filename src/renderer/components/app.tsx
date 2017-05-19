@@ -1,9 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { openThread, updateThread } from '../actions';
 import { State, Thread, getAllThreads, getSelectedThread } from '../reducers';
 import ToolbarComponent from './toolbar';
 import TabbarComponent from './tabbar';

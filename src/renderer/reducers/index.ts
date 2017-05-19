@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
-import { Action } from '../actions';
+import { Post } from '../../clients/shitaraba-client';
 import preferences, { Preferences } from './preferences';
 import threads, { Threads } from './threads';
 import { Thread } from './thread';
