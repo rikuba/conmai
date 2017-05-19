@@ -12,7 +12,30 @@ body {
 
   -webkit-app-region: drag;
   cursor: default;
+}
 
+.active body {
+  background: rgba(0, 0, 0, 0.333);
+}
+
+.sub.my-comment {
+  /* 文字色 */
+  --foreground: #ff0;
+  
+  /* 縁取りの色 */
+  --stroke-color: #005628;
+  
+  /* 影の色、ずらし幅、ぼかし幅 */
+  --shadow-color: #006b33;
+  --shadow-offset: 2px;
+  --shadow-blur: 1px;
+}
+
+html:not(.active) .sub.my-comment:empty {
+  display: none;
+}
+
+.sub.post-comment {
   /* 文字色 */
   --foreground: #36FF36;
   
@@ -25,11 +48,9 @@ body {
   --shadow-blur: 2px;
 }
 
-.active body {
-  background: rgba(0, 0, 0, 0.333);
-}
-
 .sub {
+  -webkit-app-region: no-drag;
+
   margin: 0;
 
   color: var(--foreground);

@@ -1,12 +1,13 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
+import debounce from 'lodash.debounce';
 
 import { Post } from '../reducers';
 
 import './sub.css';
 
 const posts: Post[] = [];
-let defaultMessage = '';
+let myComment = localStorage.getItem('my-comment') || '';
 let startTime: number;
 let timerId: any;
 
@@ -29,13 +30,23 @@ function showPost() {
   timerId = setTimeout(showPost, 10 * 1000 / (posts.length + 1));
 }
 
+const myCommentElement = document.querySelector('.my-comment') as HTMLDivElement;
+myCommentElement.textContent = myComment;
+
+const handleInput = debounce((e: any) => {
+  localStorage.setItem('my-comment', myCommentElement.textContent!);
+}, 2000);
+myCommentElement.addEventListener('input', handleInput);
+
 function render(post?: Post): void {
-  document.querySelector('h1')!.innerHTML = post ? post.message : defaultMessage;
+  document.querySelector('.post-comment')!.innerHTML = post ? post.message : '';
 }
 
 window.addEventListener('focus', (e) => {
   document.documentElement.classList.add('active');
   ipcRenderer.send('set-subwindow-is-ignore-mouse-events', false);
+
+  myCommentElement.focus();
 });
 
 window.addEventListener('blur', (e) => {
