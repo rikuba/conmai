@@ -90,7 +90,7 @@ function parseThreadRaw(text: string): Thread {
     }
     return {
       number,
-      name: t[1],
+      name: sanitizeName(t[1]),
       mail: t[2],
       date: t[3],
       message: sanitizeMessage(t[4]),
