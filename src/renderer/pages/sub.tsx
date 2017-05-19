@@ -32,3 +32,13 @@ function showPost() {
 function render(post?: Post): void {
   document.querySelector('h1')!.innerHTML = post ? post.message : defaultMessage;
 }
+
+window.addEventListener('focus', (e) => {
+  document.documentElement.classList.add('active');
+  ipcRenderer.send('set-subwindow-is-ignore-mouse-events', false);
+});
+
+window.addEventListener('blur', (e) => {
+  document.documentElement.classList.remove('active');
+  ipcRenderer.send('set-subwindow-is-ignore-mouse-events', true);
+});
