@@ -179,6 +179,31 @@ export function updateThread(url: string) {
   };
 }
 
+interface ThreadClose {
+  type: 'THREAD_CLOSE';
+  url: string;
+}
+
+export function closeThread(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    const thread = getThread(getState(), url);
+    clearInterval(thread.updateTimerId);
+
+    dispatch<ThreadClose>({
+      type: 'THREAD_CLOSE',
+      url,
+    });
+  };
+}
+
+export function closeAllOtherThreads(url: string) {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    getAllThreads(getState())
+      .filter((thread) => thread.url !== url)
+      .forEach((thread) => dispatch(closeThread(thread.url)));
+  };
+}
+
 export interface ThreadUpdateSchedule {
   type: 'THREAD_UPDATE_SCHEDULE';
   url: string;
@@ -234,30 +259,5 @@ export function cancelScheduledUpdateThread(url: string) {
       type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
       url,
     });
-  };
-}
-
-interface ThreadClose {
-  type: 'THREAD_CLOSE';
-  url: string;
-}
-
-export function closeThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
-    const thread = getThread(getState(), url);
-    clearInterval(thread.updateTimerId);
-
-    dispatch<ThreadClose>({
-      type: 'THREAD_CLOSE',
-      url,
-    });
-  };
-}
-
-export function closeAllOtherThreads(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
-    getAllThreads(getState())
-      .filter((thread) => thread.url !== url)
-      .forEach((thread) => dispatch(closeThread(thread.url)));
   };
 }
