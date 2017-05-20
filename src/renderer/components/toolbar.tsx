@@ -69,7 +69,7 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
     }
   }
 
-  handleUrlInputKeydown = (e: any) => {
+  handleUrlInputKeydown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Escape') {
       const { selectedThread } = this.props;
       if (selectedThread) {
@@ -80,21 +80,21 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
     }
   };
 
-  handleUrlInputChange = (e: any) => {
+  handleUrlInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     this.setState({
       url: e.target.value,
     });
   };
 
-  handleUrlInputContextMenu = (e: any) => {
+  handleUrlInputContextMenu: React.MouseEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
 
-    const input: HTMLInputElement = e.currentTarget;
+    const input = e.currentTarget;
     this.urlInputDeleteMenuItem.visible = input.selectionStart !== input.selectionEnd;
     this.urlInputContextMenu.popup(remote.getCurrentWindow());
   };
 
-  handleUrlSubmit = (e: any) => {
+  handleUrlSubmit: React.ReactEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     const url = this.state.url;

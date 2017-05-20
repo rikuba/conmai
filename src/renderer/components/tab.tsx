@@ -31,10 +31,10 @@ export default class TabComponent extends React.PureComponent<{
     },
   ]);
 
-  handleTabClick = (e: any) => {
+  handleTabClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     const { url } = this.props;
 
-    if (e.target.matches('.tab-close-button, .tab-close-button *')) {
+    if ((e.target as HTMLElement).matches('.tab-close-button, .tab-close-button *')) {
       this.props.onTabClose(url);
       return;
     }
@@ -42,24 +42,24 @@ export default class TabComponent extends React.PureComponent<{
     this.props.onTabSelect(url);
   };
 
-  handleMouseDown = (e: any) => {
+  handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.button === 1) {
       this.middleButtonPressed = true;
     }
   };
 
-  handleMouseOut = (e: any) => {
+  handleMouseOut: React.MouseEventHandler<HTMLDivElement> = (e) => {
     this.middleButtonPressed = false;
   };
 
-  handleMouseUp = (e: any) => {
+  handleMouseUp: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.button === 1 && this.middleButtonPressed) {
       this.props.onTabClose(this.props.url);
       this.middleButtonPressed = false;
     }
   };
 
-  handleContextMenu = (e: any) => {
+  handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
     this.contextMenu.popup(remote.getCurrentWindow());

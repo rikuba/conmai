@@ -59,7 +59,7 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
     elm.scrollTop = elm.scrollHeight - elm.clientHeight;
   }
 
-  handleContextMenu = (e: any) => {
+  handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
     this.contextMenu.popup(remote.getCurrentWindow());
