@@ -51,4 +51,6 @@ window.addEventListener('focus', (e) => {
 window.addEventListener('blur', (e) => {
   document.documentElement.classList.remove('active');
   ipcRenderer.send('set-subwindow-is-ignore-mouse-events', true);
+
+  getSelection().removeAllRanges();
 });
