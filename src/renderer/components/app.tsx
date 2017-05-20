@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -23,10 +22,6 @@ const mapStateToProps = (state: State): StateProps => ({
 });
 
 class AppComponent extends React.PureComponent<Props, any> {
-  handleClickOpenSubWindowButton = (e: any) => {
-    ipcRenderer.send('open-subwindow-request');
-  };
-
   render() {
     const { allThreads, selectedThread } = this.props;
     const threadsView = allThreads.map((thread) => (

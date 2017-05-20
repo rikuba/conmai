@@ -69,6 +69,10 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
     }
   }
 
+  handleOpenSubwindowButtonClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    ipcRenderer.send('open-subwindow-request');
+  };
+
   handleUrlInputKeydown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Escape') {
       const { selectedThread } = this.props;
@@ -105,7 +109,7 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
     return (
       <div className="toolbar">
         <button className="open-subwindow-button"
-          onClick={(e) => ipcRenderer.send('open-subwindow-request')}>字幕</button>
+          onClick={this.handleOpenSubwindowButtonClick}>字幕</button>
         <form onSubmit={this.handleUrlSubmit} className="url-form">
           <input type="text" className="url-input"
             placeholder="URLを入力します"
