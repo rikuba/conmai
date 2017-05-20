@@ -1,9 +1,9 @@
-import { clipboard, ipcRenderer, remote } from 'electron';
+import { clipboard, remote } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { State, Thread, getSelectedThread } from '../reducers';
-import { openThread, updateSelectedThread } from '../actions';
+import { openThread, updateSelectedThread, openSubWindow } from '../actions';
 
 import './toolbar.css';
 
@@ -16,6 +16,7 @@ interface StateProps {
 interface DispatchProps {
   openThread: (url: string) => Promise<void>;
   updateSelectedThread: () => Promise<void>;
+  openSubWindow: () => Promise<void>;
 }
 
 const mapStateToProps = (state: State): StateProps => ({
@@ -25,6 +26,7 @@ const mapStateToProps = (state: State): StateProps => ({
 const mapDispatchToProps = {
   openThread,
   updateSelectedThread,
+  openSubWindow,
 };
 
 class ToolbarComponent extends React.Component<Props, { url: string, lastSelectedThread: string }> {
@@ -70,7 +72,7 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
   }
 
   handleOpenSubwindowButtonClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    ipcRenderer.send('open-subwindow-request');
+    this.props.openSubWindow();
   };
 
   handleUrlInputKeydown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {

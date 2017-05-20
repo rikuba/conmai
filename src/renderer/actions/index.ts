@@ -1,5 +1,6 @@
 import URL from 'url';
 import { Dispatch } from 'redux';
+import { ipcRenderer } from 'electron';
 
 import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
 import { State, getUpdateIntervalPreference, getSelectedThread, getThread, getAllThreads } from '../reducers';
@@ -19,7 +20,10 @@ export type Action =
   
   ThreadUpdateSchedule |
   ThreadUpdateWaitTick |
-  ThreadUpdateScheduleCancel;
+  ThreadUpdateScheduleCancel |
+  
+  SubWindowOpen |
+  SubWindowClose;
 
 export interface ThreadSelect {
   type: 'THREAD_SELECT';
@@ -259,5 +263,31 @@ export function cancelScheduledUpdateThread(url: string) {
       type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
       url,
     });
+  };
+}
+
+export interface SubWindowOpen {
+  type: 'SUB_WINDOW_OPEN';
+}
+
+export function openSubWindow() {
+  return (dispatch: Dispatch<State>, getState: () => State) => {
+    ipcRenderer.send('open-sub-window');
+
+    dispatch<SubWindowOpen>({
+      type: 'SUB_WINDOW_OPEN',
+    });
+
+    return Promise.resolve();
+  };
+}
+
+export interface SubWindowClose {
+  type: 'SUB_WINDOW_CLOSE';
+}
+
+export function subWindowClosed(): SubWindowClose {
+  return {
+    type: 'SUB_WINDOW_CLOSE',
   };
 }

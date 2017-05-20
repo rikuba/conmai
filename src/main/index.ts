@@ -56,9 +56,9 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('open-subwindow-request', (e) => {
+ipcMain.on('open-sub-window', (e) => {
   if (subWindow !== null) {
-    console.log('received open-subwindow-request but subwindow is already open');
+    console.log('received open-sub-window but subwindow is already open');
     return;
   }
   subWindow = new BrowserWindow({
@@ -83,6 +83,7 @@ ipcMain.on('open-subwindow-request', (e) => {
   }));
 
   subWindow.on('closed', () => {
+    window!.webContents.send('sub-window-closed');
     subWindow = null;
   });
 
