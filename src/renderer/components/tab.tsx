@@ -81,7 +81,7 @@ export default class TabComponent extends React.PureComponent<{
         onContextMenu={this.handleContextMenu}>
         {iconNode}
         <span className="tab-label">{this.props.title}</span>
-        <span className="tab-close-button">×</span>
+        <span className="tab-close-button" aria-label="閉じる">×</span>
       </div>
     );
   }
