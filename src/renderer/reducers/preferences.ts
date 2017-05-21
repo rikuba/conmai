@@ -13,6 +13,6 @@ function updateInterval(state: number = 10, action: Action) {
   }
 }
 
-export default combineReducers({
+export default combineReducers<Preferences>({
   updateInterval,
 });
