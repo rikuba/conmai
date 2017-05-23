@@ -71,6 +71,13 @@ function render(post?: Post): void {
   document.querySelector('.post-comment')!.innerHTML = post ? post.message : '';
 }
 
+document.addEventListener('click', (e) => {
+  const target = e.target as HTMLElement;
+  if (target.matches('a, a *')) {
+    e.preventDefault();
+  }
+});
+
 window.addEventListener('focus', (e) => {
   document.documentElement.classList.add('active');
   ipcRenderer.send('set-subwindow-is-ignore-mouse-events', false);

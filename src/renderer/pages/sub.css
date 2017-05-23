@@ -95,3 +95,8 @@ html:not(.active) .sub.my-comment:empty {
     var(--shadow-offset) calc(-1 * var(--shadow-offset)) var(--shadow-blur) var(--shadow-color), /* 右上 */
     0px calc(-1 * var(--shadow-offset)) var(--shadow-blur) var(--shadow-color); /* 上 */
 }
+
+.sub a {
+  color: #8ecdf0;
+  text-decoration: none;
+}
