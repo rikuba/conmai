@@ -83,7 +83,9 @@ ipcMain.on('open-sub-window', (e) => {
   }));
 
   subWindow.on('closed', () => {
-    window!.webContents.send('sub-window-closed');
+    if (window) {
+      window.webContents.send('sub-window-closed');
+    }
     subWindow = null;
   });
 
