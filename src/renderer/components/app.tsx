@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread, getAllThreads, getSelectedThread } from '../reducers';
+import { State, Thread } from '../reducers';
+import * as selectors from '../selectors';
 import ToolbarComponent from './toolbar';
 import TabbarComponent from './tabbar';
 import ThreadComponent from './thread';
@@ -17,8 +18,8 @@ interface StateProps {
 }
 
 const mapStateToProps = (state: State): StateProps => ({
-  allThreads: getAllThreads(state),
-  selectedThread: getSelectedThread(state),
+  allThreads: selectors.getAllThreads(state),
+  selectedThread: selectors.getSelectedThread(state),
 });
 
 class AppComponent extends React.PureComponent<Props, any> {

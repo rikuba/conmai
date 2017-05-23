@@ -3,7 +3,8 @@ import { ThunkAction } from 'redux-thunk';
 import { ipcRenderer } from 'electron';
 
 import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
-import { State, getUpdateIntervalPreference, getSelectedThread, getThread, getAllThreads } from '../reducers';
+import { State } from '../reducers';
+import * as selectors from '../selectors';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
@@ -34,7 +35,7 @@ export interface ThreadSelect {
 
 export function selectThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const selectedThread = getSelectedThread(getState());
+    const selectedThread = selectors.getSelectedThread(getState());
     
     if (!selectedThread || selectedThread.url !== url) {
       dispatch<ThreadSelect>({
@@ -77,7 +78,7 @@ export function openThread(inputUrl: string): Dispatcher {
       return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
     }
 
-    const thread = getThread(getState(), url);
+    const thread = selectors.getThread(getState(), url);
     if (thread) {
       return dispatch(selectThread(url));
     }
@@ -138,7 +139,7 @@ export interface ThreadUpdateFailure {
 
 export function updateSelectedThread(): Dispatcher {
   return (dispatch, getState) => {
-    const thread = getSelectedThread(getState());
+    const thread = selectors.getSelectedThread(getState());
     if (!thread) {
       return Promise.reject(new Error(`No thread selected`));
     }
@@ -149,7 +150,7 @@ export function updateSelectedThread(): Dispatcher {
 
 export function updateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const thread = getThread(getState(), url);
+    const thread = selectors.getThread(getState(), url);
     if (!thread) {
       return Promise.reject(new Error(`Thread to update not found: ${url}`));
     }
@@ -192,7 +193,7 @@ interface ThreadClose {
 
 export function closeThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const thread = getThread(getState(), url);
+    const thread = selectors.getThread(getState(), url);
     clearInterval(thread.updateTimerId);
 
     dispatch<ThreadClose>({
@@ -206,7 +207,7 @@ export function closeThread(url: string): Dispatcher {
 
 export function closeAllOtherThreads(url: string): Dispatcher {
   return (dispatch, getState) => {
-    getAllThreads(getState())
+    selectors.getAllThreads(getState())
       .filter((thread) => thread.url !== url)
       .forEach((thread) => dispatch(closeThread(thread.url)));
 
@@ -239,7 +240,7 @@ export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
 
 export function scheduleUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const interval = getUpdateIntervalPreference(getState());
+    const interval = selectors.getUpdateIntervalPreference(getState());
     let wait = 0;
 
     const timerId = setInterval(() => {
@@ -265,7 +266,7 @@ export function scheduleUpdateThread(url: string): Dispatcher {
 
 export function cancelScheduledUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const thread = getThread(getState(), url);
+    const thread = selectors.getThread(getState(), url);
     clearInterval(thread.updateTimerId);
     
     dispatch<ThreadUpdateScheduleCancel>({

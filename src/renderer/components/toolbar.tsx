@@ -2,7 +2,8 @@ import { clipboard, remote } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread, getSelectedThread } from '../reducers';
+import { State, Thread } from '../reducers';
+import * as selectors from '../selectors';
 import { openThread, updateSelectedThread, openSubWindow } from '../actions';
 
 import './toolbar.css';
@@ -20,7 +21,7 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => ({
-  selectedThread: getSelectedThread(state),
+  selectedThread: selectors.getSelectedThread(state),
 });
 
 const mapDispatchToProps = {

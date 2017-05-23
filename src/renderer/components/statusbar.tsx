@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, getSelectedThread, getUpdateIntervalPreference } from '../reducers';
+import { State } from '../reducers';
+import * as selectors from '../selectors';
 
 import './statusbar.css';
 
@@ -14,8 +15,8 @@ interface StateProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  const thread = getSelectedThread(state);
-  const interval = getUpdateIntervalPreference(state);
+  const thread = selectors.getSelectedThread(state);
+  const interval = selectors.getUpdateIntervalPreference(state);
   const isFething = thread ? thread.isFetching : false;
   const wait = thread ? thread.updateWait : 0;
 
