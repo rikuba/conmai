@@ -239,12 +239,13 @@ export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
 
 export function scheduleUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
+    const interval = getUpdateIntervalPreference(getState());
+    let wait = 0;
+
     const timerId = setInterval(() => {
       dispatch(tickUpdateThreadWait(url));
 
-      const interval = getUpdateIntervalPreference(getState());
-      const wait = getThread(getState(), url).updateWait;
-      if (wait >= interval) {
+      if (++wait >= interval) {
         clearInterval(timerId);
         dispatch(updateThread(url)).then(() => {
           dispatch(scheduleUpdateThread(url));
