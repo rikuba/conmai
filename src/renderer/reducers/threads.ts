@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { Action } from '../actions';
-import { Thread, thread } from './thread';
+import thread, { Thread } from './thread';
 
 export interface Threads {
   byUrl: {

@@ -1,4 +1,6 @@
-import { Thread as ThreadResponse } from '../../clients/shitaraba-client';
+import { combineReducers } from 'redux';
+
+import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
 import { Action } from '../actions';
 
 export interface Thread extends ThreadResponse {
@@ -11,76 +13,144 @@ export interface Thread extends ThreadResponse {
   updateTimerId: number;
 }
 
-export function thread(state: Thread, action: Action): Thread {
+export default combineReducers<Thread>({
+  isFetching,
+  error,
+  url,
+  icon,
+  title,
+  posts,
+  newPostNumber,
+  updateWait,
+  updateTimerId,
+});
+
+function isFetching(state: boolean = false, action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
-      return {
-        isFetching: false,
-        error: null,
-        url: action.url,
-        icon: action.icon,
-        title: '',
-        posts: [],
-        newPostNumber: null,
-        updateWait: 0,
-        updateTimerId: 0,
-      };
+    case 'THREAD_FETCH_SUCCESS':
+    case 'THREAD_UPDATE_SUCCESS':
+    case 'THREAD_FETCH_FAILURE':
+    case 'THREAD_UPDATE_FAILURE':
+      return false;
 
     case 'THREAD_FETCH_REQUEST':
     case 'THREAD_UPDATE_REQUEST':
-      return {
-        ...state,
-        isFetching: true,
-        error: null,
-      };
+      return true;
 
-    case 'THREAD_FETCH_SUCCESS':
-      var { title, posts } = action.thread;
-      return {
-        ...state,
-        isFetching: false,
-        title,
-        posts,
-        newPostNumber: 1,
-      };
+    default:
+      return state;
+  }
+}
 
-    case 'THREAD_UPDATE_SUCCESS':
-      var { posts } = action.thread;
-      var nextPosts = posts.length > 0 ? state.posts.concat(posts) : state.posts;
-      return {
-        ...state,
-        isFetching: false,
-        posts: nextPosts,
-        newPostNumber: posts[0] ? posts[0].number : null,
-      };
+function error(state: Error | null = null, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+    case 'THREAD_FETCH_REQUEST':
+    case 'THREAD_UPDATE_REQUEST':
+      return null;
 
     case 'THREAD_FETCH_FAILURE':
     case 'THREAD_UPDATE_FAILURE':
-      return {
-        ...state,
-        isFetching: false,
-        error: action.error,
-      };
+      return action.error;
+
+    default:
+      return state;
+  }
+}
+
+function url(state: string = '', action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return action.url;
+
+    default:
+      return state;
+  }
+}
+
+function icon(state: string | null = null, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return action.icon;
+
+    default:
+      return state;
+  }
+}
+
+function title(state: string = '', action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return '';
+
+    case 'THREAD_FETCH_SUCCESS':
+      return action.thread.title;
+
+    default:
+      return state;
+  }
+}
+
+function posts(state: Post[] = [], action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return [];
+
+    case 'THREAD_FETCH_SUCCESS':
+      return action.thread.posts;
+
+    case 'THREAD_UPDATE_SUCCESS': {
+      const { posts } = action.thread;
+      return posts.length > 0 ? state.concat(posts) : state;
+    }
+
+    default:
+      return state;
+  }
+}
+
+function newPostNumber(state: number | null = null, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return null;
+
+    case 'THREAD_FETCH_SUCCESS':
+      return 1;
+
+    case 'THREAD_UPDATE_SUCCESS': {
+      const { posts } = action.thread;
+      return posts[0] ? posts[0].number : null;
+    }
+
+    default:
+      return state;
+  }
+}
+
+function updateWait(state: number = 0, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+    case 'THREAD_UPDATE_SCHEDULE':
+    case 'THREAD_UPDATE_SCHEDULE_CANCEL':
+      return 0;
+      
+    case 'THREAD_UPDATE_WAIT_TICK':
+      return state + 1;
+
+    default:
+      return state;
+  }
+}
+
+function updateTimerId(state: number = 0, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+    case 'THREAD_UPDATE_SCHEDULE_CANCEL':
+      return 0;
 
     case 'THREAD_UPDATE_SCHEDULE':
-      return {
-        ...state,
-        updateTimerId: action.timerId,
-        updateWait: 0,
-      };
-
-    case 'THREAD_UPDATE_WAIT_TICK':
-      return {
-        ...state,
-        updateWait: state.updateWait + 1,
-      };
-
-    case 'THREAD_UPDATE_SCHEDULE_CANCEL':
-      return {
-        ...state,
-        updateTimerId: 0,
-        updateWait: 0,
-      };
+      return action.timerId;
 
     default:
       return state;
