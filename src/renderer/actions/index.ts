@@ -169,10 +169,8 @@ export function openThread(inputUrl: string): Dispatcher {
       icon,
     });
 
-    return Promise.all([
-      dispatch(fetchBoardSettings(url)),
-      dispatch(fetchThread(url)),
-    ]);
+    return dispatch(fetchBoardSettings(url))
+      .then(() => dispatch(fetchThread(url)));
   };
 }
 
@@ -214,7 +212,7 @@ export function updateThread(url: string): Dispatcher {
       console.info(`Fetch action cancelled because the thread is fetching now`);
       return Promise.resolve();
     }
-
+    
     const lastPost = thread.posts[thread.posts.length - 1];
     const from = lastPost ? lastPost.number + 1 : 1;
 
@@ -296,7 +294,14 @@ export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
 
 export function scheduleUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const interval = selectors.getUpdateIntervalPreference(getState());
+    const state = getState();
+    const thread = selectors.getThread(state, url);
+    const lastPost = thread.posts[thread.posts.length - 1];
+    if (lastPost.number >= thread.threadStop) {
+      return Promise.resolve();
+    }
+
+    const interval = selectors.getUpdateIntervalPreference(state);
     let wait = 0;
 
     const timerId = setInterval(() => {

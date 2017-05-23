@@ -87,7 +87,6 @@ function threadStop(state: number = 1000, action: Action): typeof state {
       return 1000;
 
     case 'BOARD_SETTINGS_FETCH_SUCCESS':
-      console.log(action.settings.BBS_THREAD_STOP);
       return parseInt(action.settings.BBS_THREAD_STOP, 10) || 1000;
 
     default:
