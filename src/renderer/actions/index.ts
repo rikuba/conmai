@@ -1,9 +1,11 @@
 import URL from 'url';
-import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { ipcRenderer } from 'electron';
 
 import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
 import { State, getUpdateIntervalPreference, getSelectedThread, getThread, getAllThreads } from '../reducers';
+
+type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
 export type Action =
   ThreadSelect |
@@ -30,17 +32,18 @@ export interface ThreadSelect {
   url: string;
 }
 
-export function selectThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function selectThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
     const selectedThread = getSelectedThread(getState());
-    if (selectedThread && selectedThread.url === url) {
-      return;
+    
+    if (!selectedThread || selectedThread.url !== url) {
+      dispatch<ThreadSelect>({
+        type: 'THREAD_SELECT',
+        url,
+      });
     }
 
-    dispatch<ThreadSelect>({
-      type: 'THREAD_SELECT',
-      url,
-    });
+    return Promise.resolve();
   };
 }
 
@@ -67,18 +70,16 @@ export interface ThreadFetchFailure {
   error: Error;
 }
 
-export function openThread(inputUrl: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function openThread(inputUrl: string): Dispatcher {
+  return (dispatch, getState) => {
     const url = canonicalizeUrl(inputUrl);
     if (!url) {
-      throw new Error(`Unknown URL: ${inputUrl}`);
+      return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
     }
 
     const thread = getThread(getState(), url);
-
     if (thread) {
-      dispatch(selectThread(url));
-      return Promise.resolve();
+      return dispatch(selectThread(url));
     }
 
     const urlData = URL.parse(url);
@@ -135,18 +136,19 @@ export interface ThreadUpdateFailure {
   error: Error;
 }
 
-export function updateSelectedThread() {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function updateSelectedThread(): Dispatcher {
+  return (dispatch, getState) => {
     const thread = getSelectedThread(getState());
     if (!thread) {
       return Promise.reject(new Error(`No thread selected`));
     }
+
     return dispatch(updateThread(thread.url));
   };
 }
 
-export function updateThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function updateThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
     const thread = getThread(getState(), url);
     if (!thread) {
       return Promise.reject(new Error(`Thread to update not found: ${url}`));
@@ -188,8 +190,8 @@ interface ThreadClose {
   url: string;
 }
 
-export function closeThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function closeThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
     const thread = getThread(getState(), url);
     clearInterval(thread.updateTimerId);
 
@@ -197,14 +199,18 @@ export function closeThread(url: string) {
       type: 'THREAD_CLOSE',
       url,
     });
+
+    return Promise.resolve();
   };
 }
 
-export function closeAllOtherThreads(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function closeAllOtherThreads(url: string): Dispatcher {
+  return (dispatch, getState) => {
     getAllThreads(getState())
       .filter((thread) => thread.url !== url)
       .forEach((thread) => dispatch(closeThread(thread.url)));
+
+    return Promise.resolve();
   };
 }
 
@@ -231,8 +237,8 @@ export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
   };
 }
 
-export function scheduleUpdateThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function scheduleUpdateThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
     const timerId = setInterval(() => {
       dispatch(tickUpdateThreadWait(url));
 
@@ -251,11 +257,13 @@ export function scheduleUpdateThread(url: string) {
       url,
       timerId,
     });
+
+    return Promise.resolve();
   };
 }
 
-export function cancelScheduledUpdateThread(url: string) {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function cancelScheduledUpdateThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
     const thread = getThread(getState(), url);
     clearInterval(thread.updateTimerId);
     
@@ -263,6 +271,8 @@ export function cancelScheduledUpdateThread(url: string) {
       type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
       url,
     });
+
+    return Promise.resolve();
   };
 }
 
@@ -270,8 +280,8 @@ export interface SubWindowOpen {
   type: 'SUB_WINDOW_OPEN';
 }
 
-export function openSubWindow() {
-  return (dispatch: Dispatch<State>, getState: () => State) => {
+export function openSubWindow(): Dispatcher {
+  return (dispatch, getState) => {
     ipcRenderer.send('open-sub-window');
 
     dispatch<SubWindowOpen>({
