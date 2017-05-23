@@ -33,6 +33,14 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
         [action.url]: thread(state[action.url], action),
       };
 
+    case 'BOARD_SETTINGS_FETCH_REQUEST':
+    case 'BOARD_SETTINGS_FETCH_SUCCESS':
+    case 'BOARD_SETTINGS_FETCH_FAILURE':
+      return {
+        ...state,
+        [action.threadUrl]: thread(state[action.threadUrl], action),
+      };
+
     case 'THREAD_CLOSE':
       const nextState = { ...state };
       delete nextState[action.url];

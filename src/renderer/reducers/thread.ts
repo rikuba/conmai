@@ -8,6 +8,7 @@ export interface Thread extends ThreadResponse {
   error: Error | null;
   url: string;
   icon: string | null;
+  threadStop: number;
   newPostNumber: number | null;
   updateWait: number;
   updateTimerId: number;
@@ -18,6 +19,7 @@ export default combineReducers<Thread>({
   error,
   url,
   icon,
+  threadStop,
   title,
   posts,
   newPostNumber,
@@ -79,13 +81,31 @@ function icon(state: string | null = null, action: Action): typeof state {
   }
 }
 
+function threadStop(state: number = 1000, action: Action): typeof state {
+  switch (action.type) {
+    case 'THREAD_OPEN':
+      return 1000;
+
+    case 'BOARD_SETTINGS_FETCH_SUCCESS':
+      console.log(action.settings.BBS_THREAD_STOP);
+      return parseInt(action.settings.BBS_THREAD_STOP, 10) || 1000;
+
+    default:
+      return state;
+  }
+}
+
 function title(state: string = '', action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
       return '';
 
     case 'THREAD_FETCH_SUCCESS':
-      return action.thread.title;
+      // BBS_THREAD_STOP > 1000 の場合 action.thread.title が空になる
+      return action.thread.title || state;
+
+    case 'BOARD_SETTINGS_FETCH_SUCCESS':
+      return action.settings.BBS_TITLE;
 
     default:
       return state;

@@ -2,7 +2,7 @@ import URL from 'url';
 import { ThunkAction } from 'redux-thunk';
 import { ipcRenderer } from 'electron';
 
-import { Thread, canonicalizeUrl, fetchThread } from '../../clients/shitaraba-client';
+import * as shitaraba from '../../clients/shitaraba-client';
 import { State } from '../reducers';
 import * as selectors from '../selectors';
 
@@ -12,6 +12,10 @@ export type Action =
   ThreadSelect |
   ThreadOpen |
   ThreadClose |
+
+  BoardSettingsFetchRequest |
+  BoardSettingsFetchSuccess |
+  BoardSettingsFetchFailure |
 
   ThreadFetchRequest |
   ThreadFetchSuccess |
@@ -54,6 +58,49 @@ export interface ThreadOpen {
   icon: string | null;
 }
 
+export interface BoardSettingsFetchRequest {
+  type: 'BOARD_SETTINGS_FETCH_REQUEST';
+  threadUrl: string;
+}
+
+export interface BoardSettingsFetchSuccess {
+  type: 'BOARD_SETTINGS_FETCH_SUCCESS';
+  threadUrl: string;
+  settings: shitaraba.BoardSettings;
+}
+
+export interface BoardSettingsFetchFailure {
+  type: 'BOARD_SETTINGS_FETCH_FAILURE';
+  threadUrl: string;
+  error: Error;
+}
+
+export function fetchBoardSettings(url: string): Dispatcher {
+  return (dispatch, getState) => {
+    dispatch<BoardSettingsFetchRequest>({
+      type: 'BOARD_SETTINGS_FETCH_REQUEST',
+      threadUrl: url,
+    });
+
+    return shitaraba.fetchSettings(url).then(
+      (settings) => {
+        dispatch<BoardSettingsFetchSuccess>({
+          type: 'BOARD_SETTINGS_FETCH_SUCCESS',
+          threadUrl: url,
+          settings,
+        });
+      },
+      (error) => {
+        dispatch<BoardSettingsFetchFailure>({
+          type: 'BOARD_SETTINGS_FETCH_FAILURE',
+          threadUrl: url,
+          error,
+        });
+      }
+    );
+  };
+}
+
 export interface ThreadFetchRequest {
   type: 'THREAD_FETCH_REQUEST';
   url: string;
@@ -62,7 +109,7 @@ export interface ThreadFetchRequest {
 export interface ThreadFetchSuccess {
   type: 'THREAD_FETCH_SUCCESS';
   url: string;
-  thread: Thread;
+  thread: shitaraba.Thread;
 }
 
 export interface ThreadFetchFailure {
@@ -71,33 +118,14 @@ export interface ThreadFetchFailure {
   error: Error;
 }
 
-export function openThread(inputUrl: string): Dispatcher {
+export function fetchThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const url = canonicalizeUrl(inputUrl);
-    if (!url) {
-      return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
-    }
-
-    const thread = selectors.getThread(getState(), url);
-    if (thread) {
-      return dispatch(selectThread(url));
-    }
-
-    const urlData = URL.parse(url);
-    const icon = `${urlData.protocol}//${urlData.hostname}/favicon.ico`;
-
-    dispatch<ThreadOpen>({
-      type: 'THREAD_OPEN',
-      url,
-      icon,
-    });
-    
     dispatch<ThreadFetchRequest>({
       type: 'THREAD_FETCH_REQUEST',
       url,
     });
-    
-    return fetchThread(url, { last: 1000 }).then(
+
+    return shitaraba.fetchThread(url, { last: 1000 }).then(
       (thread) => {
         dispatch<ThreadFetchSuccess>({
           type: 'THREAD_FETCH_SUCCESS',
@@ -120,6 +148,34 @@ export function openThread(inputUrl: string): Dispatcher {
   };
 }
 
+export function openThread(inputUrl: string): Dispatcher {
+  return (dispatch, getState) => {
+    const url = shitaraba.canonicalizeUrl(inputUrl);
+    if (!url) {
+      return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
+    }
+
+    const thread = selectors.getThread(getState(), url);
+    if (thread) {
+      return dispatch(selectThread(url));
+    }
+
+    const urlData = URL.parse(url);
+    const icon = `${urlData.protocol}//${urlData.hostname}/favicon.ico`;
+
+    dispatch<ThreadOpen>({
+      type: 'THREAD_OPEN',
+      url,
+      icon,
+    });
+
+    return Promise.all([
+      dispatch(fetchBoardSettings(url)),
+      dispatch(fetchThread(url)),
+    ]);
+  };
+}
+
 export interface ThreadUpdateRequest {
   type: 'THREAD_UPDATE_REQUEST';
   url: string;
@@ -128,7 +184,7 @@ export interface ThreadUpdateRequest {
 export interface ThreadUpdateSuccess {
   type: 'THREAD_UPDATE_SUCCESS';
   url: string;
-  thread: Thread;
+  thread: shitaraba.Thread;
 }
 
 export interface ThreadUpdateFailure {
@@ -167,7 +223,7 @@ export function updateThread(url: string): Dispatcher {
       url,
     });
 
-    return fetchThread(url, { from }).then(
+    return shitaraba.fetchThread(url, { from }).then(
       (thread) => {
         dispatch<ThreadUpdateSuccess>({
           type: 'THREAD_UPDATE_SUCCESS',

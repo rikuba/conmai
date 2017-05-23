@@ -24,13 +24,29 @@ interface PostsRange {
 const threadUrlRegex = /^http:\/\/jbbs\.shitaraba\.net\/bbs\/(?:read|rawmode)\.cgi\/([0-9A-Za-z]+)\/([0-9]+)\/([0-9]+)\/?/;
 
 export function canonicalizeUrl(url: string): string | null {
+  const urlData = parseThreadUrl(url);
+  if (!urlData) {
+    return null;
+  }
+
+  return `http://jbbs.shitaraba.net/bbs/read.cgi/${urlData.dir}/${urlData.board}/${urlData.thread}/`;
+}
+
+function parseThreadUrl(url: string) {
   const match = threadUrlRegex.exec(url);
   if (!match) {
     return null;
   }
 
-  const [, category, board, thread] = match;
-  return `http://jbbs.shitaraba.net/bbs/read.cgi/${category}/${board}/${thread}/`;
+  return {
+    dir: match[1],
+    board: match[2],
+    thread: match[3],
+  };
+}
+
+function toSettingUrl({ dir, board }: { dir: string, board: string }) {
+  return `http://jbbs.shitaraba.net/bbs/api/setting.cgi/${dir}/${board}/`;
 }
 
 export function fetchThread(url: string, range?: PostsRange) {
@@ -46,37 +62,30 @@ export function fetchThread(url: string, range?: PostsRange) {
     }
   }
 
-  return fetchThreadRaw(finalUrl).then(
-    (text) => parseThreadRaw(text),
-  );
+  return fetchAsText(finalUrl).then(parseThreadRaw);
 }
 
-function fetchThreadRaw(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const req = http.request(url, (res) => {
-      const chunks: Buffer[] = [];
+export interface BoardSettings {
+  TOP: string;
+  DIR: string;
+  BBS: string;
+  CATEGORY: string;
+  BBS_ADULT: string;
+  BBS_THREAD_STOP: string;
+  BBS_NONAME_NAME: string;
+  BBS_DELETE_NAME: string;
+  BBS_TITLE: string;
+  BBS_COMMENT: string;
+}
 
-      res.on('data', (chunk) => {
-        chunks.push(chunk as Buffer);
-      });
+export function fetchSettings(url: string) {
+  const urlData = parseThreadUrl(url);
+  if (!urlData) {
+    throw new Error(`Unknown URL: ${url}`);
+  }
 
-      res.on('end', () => {
-        const buffer = Buffer.concat(chunks);
-        const text = encoding.convert(buffer, {
-          to: 'UNICODE',
-          from: 'EUCJP',
-          type: 'string'
-        });
-        resolve(text);
-      });
-    });
-
-    req.on('error', (error) => {
-      reject(error);
-    });
-
-    req.end();
-  });
+  const reqUrl = toSettingUrl(urlData);
+  return fetchAsText(reqUrl).then(parseSettingTxt);
 }
 
 function parseThreadRaw(text: string): Thread {
@@ -111,4 +120,42 @@ function sanitizeName(name: string): string {
 function sanitizeMessage(message: string): string {
   const tagsRegex = /<a href="[^"]*" target="_blank">[^<]*<\/a>|<br>|(<[^<]*>)/g;
   return message.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
+}
+
+function parseSettingTxt(text: string): BoardSettings {
+  return text.match(/.+/g)!.reduce((map, line) => {
+    const match = /([^=]+)=(.*)/.exec(line);
+    if (match) {
+      map[match[1]] = match[2];
+    }
+    return map;
+  }, {} as any);
+}
+
+function fetchAsText(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const req = http.request(url, (res) => {
+      const chunks: Buffer[] = [];
+
+      res.on('data', (chunk: Buffer) => {
+        chunks.push(chunk);
+      });
+
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        const text = encoding.convert(buffer, {
+          to: 'UNICODE',
+          from: 'EUCJP',
+          type: 'string'
+        });
+        resolve(text);
+      });
+    });
+
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.end();
+  });
 }
