@@ -7,11 +7,12 @@ import PostComponent from './post';
 interface Props {
   posts: Post[];
   newPostNumber: number | null;
+  threadUrl: string;
 }
 
 export default class PostsComponent extends React.PureComponent<Props, {}> {
   render() {
-    const { posts, newPostNumber } = this.props;
+    const { posts, newPostNumber, threadUrl } = this.props;
     const isNew = newPostNumber ?
       (number: number) => number >= newPostNumber :
       (number: number) => false;
@@ -26,7 +27,10 @@ export default class PostsComponent extends React.PureComponent<Props, {}> {
     return (
       <div className="posts">
         {posts.map((post) => (
-          <PostComponent key={post.number} isNew={isNew(post.number)} post={post} />
+          <PostComponent key={post.number}
+            isNew={isNew(post.number)}
+            post={post}
+            threadUrl={threadUrl} />
         ))}
       </div>
     );

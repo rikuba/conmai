@@ -32,7 +32,7 @@ export function canonicalizeUrl(url: string): string | null {
   return `http://jbbs.shitaraba.net/bbs/read.cgi/${urlData.dir}/${urlData.board}/${urlData.thread}/`;
 }
 
-function parseThreadUrl(url: string) {
+export function parseThreadUrl(url: string) {
   const match = threadUrlRegex.exec(url);
   if (!match) {
     return null;

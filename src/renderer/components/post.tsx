@@ -1,19 +1,24 @@
 import React from 'react';
 
 import { Post } from '../reducers';
+import { generatePostId } from '../../utils';
 
 import './post.css';
 
 interface Props {
   isNew: boolean;
   post: Post;
+  threadUrl: string;
 }
 
 export default class PostComponent extends React.PureComponent<Props, any> {
   render() {
-    const { isNew, post } = this.props;
+    const { isNew, post, threadUrl } = this.props;
+    const id = generatePostId(threadUrl, post.number);
+
     return (
       <article
+        id={id}
         className="post"
         data-number={post.number}
         data-is-new={isNew}>

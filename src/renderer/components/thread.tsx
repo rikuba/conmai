@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 
 import { Thread } from '../reducers';
 import PostsComponent from './posts';
+import { generatePostId } from '../../utils';
 
 import './thread.css';
 
@@ -13,6 +14,7 @@ interface OwnProps {
   newPostNumber: Thread['newPostNumber'];
   posts: Thread['posts'];
   isSelected: boolean;
+  threadUrl: string;
 }
 
 export default class ThreadComponent extends React.PureComponent<Props, any> {
@@ -59,19 +61,36 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
     elm.scrollTop = elm.scrollHeight - elm.clientHeight;
   }
 
+  scrollToPost(number: number) {
+    const doc = ReactDOM.findDOMNode(this).ownerDocument;
+    const id = generatePostId(this.props.threadUrl, number);
+    doc.getElementById(id)!.scrollIntoView();
+  }
+
   handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
     this.contextMenu.popup(remote.getCurrentWindow());
   };
 
+  handleClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const target = e.target as HTMLElement;
+
+    if (target.matches('a')) {
+      e.preventDefault();
+      const [, number] = /^>>(\d+)$/.exec(target.textContent!)!;
+      this.scrollToPost(parseInt(number, 10));
+    }
+  };
+
   render() {
-    const { posts, newPostNumber, isSelected } = this.props;
+    const { posts, newPostNumber, isSelected, threadUrl } = this.props;
 
     return (
       <div role="tabpanel" className="thread" aria-hidden={String(!isSelected)}
-        onContextMenu={this.handleContextMenu}>
-        <PostsComponent posts={posts} newPostNumber={newPostNumber} />
+        onContextMenu={this.handleContextMenu}
+        onClick={this.handleClick}>
+        <PostsComponent posts={posts} newPostNumber={newPostNumber} threadUrl={threadUrl} />
       </div>
     );
   }

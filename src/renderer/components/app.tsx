@@ -27,6 +27,7 @@ class AppComponent extends React.PureComponent<Props, any> {
     const { allThreads, selectedThread } = this.props;
     const threadsView = allThreads.map((thread) => (
       <ThreadComponent key={thread.url}
+        threadUrl={thread.url}
         isSelected={thread === selectedThread}
         newPostNumber={thread.newPostNumber}
         posts={thread.posts} />
