@@ -10,9 +10,9 @@ type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
 
 export type Action =
-  ThreadSelect |
   ThreadOpen |
   ThreadClose |
+  ThreadSelect |
 
   BoardSettingsFetchRequest |
   BoardSettingsFetchSuccess |
@@ -32,6 +32,69 @@ export type Action =
   
   SubWindowOpen |
   SubWindowClose;
+
+
+export interface ThreadOpen {
+  type: 'THREAD_OPEN';
+  url: string;
+  icon: string | null;
+}
+
+export function openThread(inputUrl: string): Dispatcher {
+  return (dispatch, getState) => {
+    const url = shitaraba.canonicalizeUrl(inputUrl);
+    if (!url) {
+      return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
+    }
+
+    const thread = selectors.getThread(getState(), url);
+    if (thread) {
+      return dispatch(selectThread(url));
+    }
+
+    const urlData = URL.parse(url);
+    const icon = `${urlData.protocol}//${urlData.hostname}/favicon.ico`;
+
+    dispatch<ThreadOpen>({
+      type: 'THREAD_OPEN',
+      url,
+      icon,
+    });
+
+    return dispatch(fetchBoardSettings(url))
+      .then(() => dispatch(fetchThread(url)));
+  };
+}
+
+
+export interface ThreadClose {
+  type: 'THREAD_CLOSE';
+  url: string;
+}
+
+export function closeThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
+    const thread = selectors.getThread(getState(), url);
+    clearInterval(thread.updateTimerId);
+
+    dispatch<ThreadClose>({
+      type: 'THREAD_CLOSE',
+      url,
+    });
+
+    return Promise.resolve();
+  };
+}
+
+export function closeAllOtherThreads(url: string): Dispatcher {
+  return (dispatch, getState) => {
+    selectors.getAllThreads(getState())
+      .filter((thread) => thread.url !== url)
+      .forEach((thread) => dispatch(closeThread(thread.url)));
+
+    return Promise.resolve();
+  };
+}
 
 
 export interface ThreadSelect {
@@ -54,12 +117,6 @@ export function selectThread(url: string): Dispatcher {
   };
 }
 
-
-export interface ThreadOpen {
-  type: 'THREAD_OPEN';
-  url: string;
-  icon: string | null;
-}
 
 export interface BoardSettingsFetchRequest {
   type: 'BOARD_SETTINGS_FETCH_REQUEST';
@@ -152,32 +209,6 @@ export function fetchThread(url: string): Dispatcher {
   };
 }
 
-export function openThread(inputUrl: string): Dispatcher {
-  return (dispatch, getState) => {
-    const url = shitaraba.canonicalizeUrl(inputUrl);
-    if (!url) {
-      return Promise.reject(new Error(`Unknown URL: ${inputUrl}`));
-    }
-
-    const thread = selectors.getThread(getState(), url);
-    if (thread) {
-      return dispatch(selectThread(url));
-    }
-
-    const urlData = URL.parse(url);
-    const icon = `${urlData.protocol}//${urlData.hostname}/favicon.ico`;
-
-    dispatch<ThreadOpen>({
-      type: 'THREAD_OPEN',
-      url,
-      icon,
-    });
-
-    return dispatch(fetchBoardSettings(url))
-      .then(() => dispatch(fetchThread(url)));
-  };
-}
-
 
 export interface ThreadUpdateRequest {
   type: 'THREAD_UPDATE_REQUEST';
@@ -246,49 +277,8 @@ export function updateThread(url: string): Dispatcher {
 }
 
 
-export interface ThreadClose {
-  type: 'THREAD_CLOSE';
-  url: string;
-}
-
-export function closeThread(url: string): Dispatcher {
-  return (dispatch, getState) => {
-    const thread = selectors.getThread(getState(), url);
-    clearInterval(thread.updateTimerId);
-
-    dispatch<ThreadClose>({
-      type: 'THREAD_CLOSE',
-      url,
-    });
-
-    return Promise.resolve();
-  };
-}
-
-export function closeAllOtherThreads(url: string): Dispatcher {
-  return (dispatch, getState) => {
-    selectors.getAllThreads(getState())
-      .filter((thread) => thread.url !== url)
-      .forEach((thread) => dispatch(closeThread(thread.url)));
-
-    return Promise.resolve();
-  };
-}
-
-
-export interface ThreadUpdateSchedule {
-  type: 'THREAD_UPDATE_SCHEDULE';
-  url: string;
-  timerId: any;
-}
-
 export interface ThreadUpdateWaitTick {
   type: 'THREAD_UPDATE_WAIT_TICK';
-  url: string;
-}
-
-export interface ThreadUpdateScheduleCancel {
-  type: 'THREAD_UPDATE_SCHEDULE_CANCEL';
   url: string;
 }
 
@@ -297,6 +287,13 @@ export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
     type: 'THREAD_UPDATE_WAIT_TICK',
     url,
   };
+}
+
+
+export interface ThreadUpdateSchedule {
+  type: 'THREAD_UPDATE_SCHEDULE';
+  url: string;
+  timerId: any;
 }
 
 export function scheduleUpdateThread(url: string): Dispatcher {
@@ -330,6 +327,12 @@ export function scheduleUpdateThread(url: string): Dispatcher {
 
     return Promise.resolve();
   };
+}
+
+
+export interface ThreadUpdateScheduleCancel {
+  type: 'THREAD_UPDATE_SCHEDULE_CANCEL';
+  url: string;
 }
 
 export function cancelScheduledUpdateThread(url: string): Dispatcher {
