@@ -8,6 +8,7 @@ import * as selectors from '../selectors';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
+
 export type Action =
   ThreadSelect |
   ThreadOpen |
@@ -32,6 +33,7 @@ export type Action =
   SubWindowOpen |
   SubWindowClose;
 
+
 export interface ThreadSelect {
   type: 'THREAD_SELECT';
   url: string;
@@ -51,6 +53,7 @@ export function selectThread(url: string): Dispatcher {
     return Promise.resolve();
   };
 }
+
 
 export interface ThreadOpen {
   type: 'THREAD_OPEN';
@@ -100,6 +103,7 @@ export function fetchBoardSettings(url: string): Dispatcher {
     );
   };
 }
+
 
 export interface ThreadFetchRequest {
   type: 'THREAD_FETCH_REQUEST';
@@ -174,6 +178,7 @@ export function openThread(inputUrl: string): Dispatcher {
   };
 }
 
+
 export interface ThreadUpdateRequest {
   type: 'THREAD_UPDATE_REQUEST';
   url: string;
@@ -240,7 +245,8 @@ export function updateThread(url: string): Dispatcher {
   };
 }
 
-interface ThreadClose {
+
+export interface ThreadClose {
   type: 'THREAD_CLOSE';
   url: string;
 }
@@ -268,6 +274,7 @@ export function closeAllOtherThreads(url: string): Dispatcher {
     return Promise.resolve();
   };
 }
+
 
 export interface ThreadUpdateSchedule {
   type: 'THREAD_UPDATE_SCHEDULE';
@@ -339,6 +346,7 @@ export function cancelScheduledUpdateThread(url: string): Dispatcher {
   };
 }
 
+
 export interface SubWindowOpen {
   type: 'SUB_WINDOW_OPEN';
 }
@@ -354,6 +362,7 @@ export function openSubWindow(): Dispatcher {
     return Promise.resolve();
   };
 }
+
 
 export interface SubWindowClose {
   type: 'SUB_WINDOW_CLOSE';
