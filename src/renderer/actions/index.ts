@@ -76,7 +76,7 @@ export interface BoardSettingsFetchFailure {
 }
 
 export function fetchBoardSettings(url: string): Dispatcher {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch<BoardSettingsFetchRequest>({
       type: 'BOARD_SETTINGS_FETCH_REQUEST',
       threadUrl: url,
@@ -119,7 +119,7 @@ export interface ThreadFetchFailure {
 }
 
 export function fetchThread(url: string): Dispatcher {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch<ThreadFetchRequest>({
       type: 'THREAD_FETCH_REQUEST',
       url,
@@ -344,7 +344,7 @@ export interface SubWindowOpen {
 }
 
 export function openSubWindow(): Dispatcher {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     ipcRenderer.send('open-sub-window');
 
     dispatch<SubWindowOpen>({
