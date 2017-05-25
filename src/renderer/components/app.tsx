@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread } from '../reducers';
-import * as selectors from '../selectors';
+import { State, Thread } from '../../reducers';
+import * as selectors from '../../selectors';
 import ToolbarComponent from './toolbar';
 import TabbarComponent from './tabbar';
 import ThreadComponent from './thread';

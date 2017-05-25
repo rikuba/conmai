@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Post } from '../reducers';
+import { Post } from '../../reducers';
 import { generatePostId } from '../../utils';
 
 import './post.css';

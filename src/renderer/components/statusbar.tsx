@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State } from '../reducers';
-import * as selectors from '../selectors';
+import { State } from '../../reducers';
+import * as selectors from '../../selectors';
 
 import './statusbar.css';
 

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
+import { Thread as ThreadResponse, Post } from '../clients/shitaraba-client';
 import { Action } from '../actions';
 
 export interface Thread extends ThreadResponse {

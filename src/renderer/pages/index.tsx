@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
 import App from '../components/app';
-import configureStore from '../store';
-import { openThread, subWindowClosed } from '../actions';
+import configureStore from '../../store';
+import { openThread, subWindowClosed } from '../../actions';
 
 import './index.css';
 

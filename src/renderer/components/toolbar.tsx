@@ -2,9 +2,9 @@ import { clipboard, remote } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread } from '../reducers';
-import * as selectors from '../selectors';
-import { openThread, updateSelectedThread, openSubWindow } from '../actions';
+import { State, Thread } from '../../reducers';
+import * as selectors from '../../selectors';
+import { openThread, updateSelectedThread, openSubWindow } from '../../actions';
 
 import './toolbar.css';
 

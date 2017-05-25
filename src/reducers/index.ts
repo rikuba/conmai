@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { Post } from '../../clients/shitaraba-client';
+import { Post } from '../clients/shitaraba-client';
 import preferences, { Preferences } from './preferences';
 import threads, { Threads } from './threads';
 import { Thread } from './thread';

@@ -2,7 +2,7 @@ import URL from 'url';
 import { ThunkAction } from 'redux-thunk';
 import { ipcRenderer } from 'electron';
 
-import * as shitaraba from '../../clients/shitaraba-client';
+import * as shitaraba from '../clients/shitaraba-client';
 import { State } from '../reducers';
 import * as selectors from '../selectors';
 
