@@ -3,8 +3,12 @@ import loadDevtool from 'electron-load-devtool';
 import path from 'path';
 import url from 'url';
 
+import { configureStore } from '../store';
+
 let window: Electron.BrowserWindow | null = null;
 let subWindow: Electron.BrowserWindow | null = null;
+
+configureStore();
 
 function createWindow(): void {
   window = new BrowserWindow({
