@@ -8,3 +8,10 @@ export function generatePostId(url: string, postNumber: number): string {
 
   return `jbbs-post-${urlData.dir}-${urlData.board}-${urlData.thread}-${postNumber}`;
 }
+
+
+export const setInnerHTML = (html: string) => (element: Element | null) => {
+  if (element) {
+    element.innerHTML = html;
+  }
+};

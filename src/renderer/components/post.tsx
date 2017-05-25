@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Post } from '../../store/reducers';
-import { generatePostId } from '../../utils';
+import { generatePostId, setInnerHTML } from '../../utils';
 
 import './post.css';
 
@@ -34,9 +34,3 @@ export default class PostComponent extends React.PureComponent<Props, any> {
     );
   }
 }
-
-const setInnerHTML = (html: string) => (element: HTMLElement | null): void => {
-  if (element) {
-    element.innerHTML = html;
-  }
-};
