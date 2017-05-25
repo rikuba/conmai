@@ -1,7 +1,7 @@
 import { ipcRenderer, remote } from 'electron';
 import debounce from 'lodash.debounce';
 
-import { Post } from '../../reducers';
+import { Post } from '../../store/reducers';
 
 import './sub.css';
 

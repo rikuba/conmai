@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import React from 'react';
 
-import { Thread } from '../../reducers';
+import { Thread } from '../../store/reducers';
 
 import './tab.css';
 

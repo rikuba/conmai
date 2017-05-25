@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import rootReducer, { State } from '../reducers';
+import rootReducer, { State } from '../store/reducers';
 
-export default function configureStore() {
+export function configureStore() {
   let enhancer = applyMiddleware(thunk);
 
   // if (process.env.NODE_ENV === 'development') {
