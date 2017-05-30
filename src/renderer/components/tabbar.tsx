@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 import { State, Thread } from '../../store/reducers';
 import * as selectors from '../../store/selectors';
-import { selectThread, closeThread, closeAllOtherThreads } from '../../store/actions';
+import * as actions from '../../store/actions';
 import TabComponent from './tab';
 
 import './tabbar.css';
 
-type Props = StateProps & typeof mapDispatchToProps;
+type Props = StateProps & typeof actions;
 
 interface StateProps {
   allThreads: Thread[];
@@ -19,12 +19,6 @@ const mapStateToProps = (state: State): StateProps => ({
   allThreads: selectors.getAllThreads(state),
   selectedThread: selectors.getSelectedThread(state),
 });
-
-const mapDispatchToProps = {
-  selectThread,
-  closeThread,
-  closeAllOtherThreads,
-};
 
 class TabbarComponent extends React.PureComponent<Props, {}> {
   render() {
@@ -47,4 +41,4 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TabbarComponent);
+export default connect(mapStateToProps, actions as any)(TabbarComponent);

@@ -4,31 +4,19 @@ import { connect } from 'react-redux';
 
 import { State, Thread } from '../../store/reducers';
 import * as selectors from '../../store/selectors';
-import { openThread, updateSelectedThread, openSubWindow } from '../../store/actions';
+import * as actions from '../../store/actions';
 
 import './toolbar.css';
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & typeof actions;
 
 interface StateProps {
   selectedThread: Thread | undefined;
 }
 
-interface DispatchProps {
-  openThread: (url: string) => Promise<void>;
-  updateSelectedThread: () => Promise<void>;
-  openSubWindow: () => Promise<void>;
-}
-
 const mapStateToProps = (state: State): StateProps => ({
   selectedThread: selectors.getSelectedThread(state),
 });
-
-const mapDispatchToProps = {
-  openThread,
-  updateSelectedThread,
-  openSubWindow,
-};
 
 class ToolbarComponent extends React.Component<Props, { url: string, lastSelectedThread: string }> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
@@ -127,4 +115,4 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToolbarComponent);
+export default connect(mapStateToProps, actions as any)(ToolbarComponent);
