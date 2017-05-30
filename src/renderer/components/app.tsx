@@ -29,8 +29,7 @@ class AppComponent extends React.PureComponent<Props, any> {
       <ThreadComponent key={thread.url}
         threadUrl={thread.url}
         isSelected={thread === selectedThread}
-        newPostNumber={thread.newPostNumber}
-        posts={thread.posts} />
+        newPostNumber={thread.newPostNumber} />
     ));
     if (threadsView.length === 0) {
       threadsView.push(<div className="thread" key=""></div>);

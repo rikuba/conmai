@@ -240,7 +240,8 @@ export function updateSelectedThread(): Dispatcher {
 
 export function updateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
-    const thread = selectors.getThread(getState(), url);
+    const state = getState();
+    const thread = selectors.getThread(state, url);
     if (!thread) {
       return Promise.reject(new Error(`Thread to update not found: ${url}`));
     }
@@ -248,8 +249,8 @@ export function updateThread(url: string): Dispatcher {
       console.info(`Fetch action cancelled because the thread is fetching now`);
       return Promise.resolve();
     }
-    
-    const lastPost = thread.posts[thread.posts.length - 1];
+
+    const lastPost = selectors.getLastPost(state, url);
     const from = lastPost ? lastPost.number + 1 : 1;
 
     dispatch<ThreadUpdateRequest>({
@@ -300,8 +301,8 @@ export function scheduleUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
     const state = getState();
     const thread = selectors.getThread(state, url);
-    const lastPost = thread.posts[thread.posts.length - 1];
-    if (lastPost.number >= thread.threadStop) {
+    const lastPost = selectors.getLastPost(state, url);
+    if (lastPost && lastPost.number >= thread.threadStop) {
       return Promise.resolve();
     }
 

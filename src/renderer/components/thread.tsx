@@ -1,23 +1,35 @@
 import { remote } from 'electron';
 import React from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import { Thread } from '../../store/reducers';
+import { State, Thread, Posts } from '../../store/reducers';
+import * as selectors from '../../store/selectors';
 import PostsComponent from './posts';
 import { generatePostId } from '../../utils';
 
 import './thread.css';
 
-type Props = OwnProps;
+type Props = OwnProps & StateProps;
 
 interface OwnProps {
   newPostNumber: Thread['newPostNumber'];
-  posts: Thread['posts'];
   isSelected: boolean;
   threadUrl: string;
 }
 
-export default class ThreadComponent extends React.PureComponent<Props, any> {
+interface StateProps {
+  posts: Posts;
+}
+
+const mapStateToProps = () => {
+  const getPosts = selectors.makeGetPosts();
+  return (state: State, ownProps: OwnProps) => ({
+    posts: getPosts(state, ownProps),
+  });
+};
+
+class ThreadComponent extends React.PureComponent<Props, any> {
   private isScrolledToTheEnd = true;
 
   private contextMenu = remote.Menu.buildFromTemplate([
@@ -95,3 +107,5 @@ export default class ThreadComponent extends React.PureComponent<Props, any> {
     );
   }
 }
+
+export default connect<StateProps, {}, OwnProps>(mapStateToProps as any)(ThreadComponent);

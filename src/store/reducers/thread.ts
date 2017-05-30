@@ -1,16 +1,15 @@
 import { combineReducers } from 'redux';
 
-import { Thread as ThreadResponse, Post } from '../../clients/shitaraba-client';
 import { Action } from '../actions';
 
-export interface Thread extends ThreadResponse {
+export interface Thread {
   isFetching: boolean;
   error: Error | null;
   url: string;
   icon: string | null;
   threadStop: number;
+  title: string;
   newPostNumber: number | null;
-  updateWait: number;
   updateTimerId: number;
 }
 
@@ -21,9 +20,7 @@ export default combineReducers<Thread>({
   icon,
   threadStop,
   title,
-  posts,
   newPostNumber,
-  updateWait,
   updateTimerId,
 });
 
@@ -111,24 +108,6 @@ function title(state: string = '', action: Action): typeof state {
   }
 }
 
-function posts(state: Post[] = [], action: Action): typeof state {
-  switch (action.type) {
-    case 'THREAD_OPEN':
-      return [];
-
-    case 'THREAD_FETCH_SUCCESS':
-      return action.thread.posts;
-
-    case 'THREAD_UPDATE_SUCCESS': {
-      const { posts } = action.thread;
-      return posts.length > 0 ? state.concat(posts) : state;
-    }
-
-    default:
-      return state;
-  }
-}
-
 function newPostNumber(state: number | null = null, action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
@@ -141,21 +120,6 @@ function newPostNumber(state: number | null = null, action: Action): typeof stat
       const { posts } = action.thread;
       return posts[0] ? posts[0].number : null;
     }
-
-    default:
-      return state;
-  }
-}
-
-function updateWait(state: number = 0, action: Action): typeof state {
-  switch (action.type) {
-    case 'THREAD_OPEN':
-    case 'THREAD_UPDATE_SCHEDULE':
-    case 'THREAD_UPDATE_SCHEDULE_CANCEL':
-      return 0;
-      
-    case 'THREAD_UPDATE_WAIT_TICK':
-      return state + 1;
 
     default:
       return state;

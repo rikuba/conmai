@@ -26,25 +26,33 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
     case 'THREAD_UPDATE_REQUEST':
     case 'THREAD_UPDATE_SUCCESS':
     case 'THREAD_UPDATE_FAILURE':
-    case 'THREAD_UPDATE_SCHEDULE':
-    case 'THREAD_UPDATE_WAIT_TICK':
-      return {
+    case 'THREAD_UPDATE_SCHEDULE': {
+      const prevThread = state[action.url];
+      const nextThread = thread(prevThread, action);
+
+      return nextThread === prevThread ? state : {
         ...state,
         [action.url]: thread(state[action.url], action),
       };
+    }
 
     case 'BOARD_SETTINGS_FETCH_REQUEST':
     case 'BOARD_SETTINGS_FETCH_SUCCESS':
-    case 'BOARD_SETTINGS_FETCH_FAILURE':
-      return {
+    case 'BOARD_SETTINGS_FETCH_FAILURE': {
+      const prevThread = state[action.threadUrl];
+      const nextThread = thread(prevThread, action);
+      
+      return nextThread === prevThread ? state : {
         ...state,
         [action.threadUrl]: thread(state[action.threadUrl], action),
       };
+    }
 
-    case 'THREAD_CLOSE':
+    case 'THREAD_CLOSE': {
       const nextState = { ...state };
       delete nextState[action.url];
       return nextState;
+    }
 
     default:
       return state;

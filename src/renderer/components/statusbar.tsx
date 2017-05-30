@@ -18,7 +18,7 @@ const mapStateToProps = (state: State): StateProps => {
   const thread = selectors.getSelectedThread(state);
   const interval = selectors.getUpdateIntervalPreference(state);
   const isFething = thread ? thread.isFetching : false;
-  const wait = thread ? thread.updateWait : 0;
+  const wait = thread ? selectors.getThreadWaits(state, thread.url) : 0;
 
   return {
     isFething,
