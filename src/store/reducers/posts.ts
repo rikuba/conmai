@@ -27,6 +27,11 @@ export default function posts(state: Post[] = [], action: Action): typeof state 
       return state.concat(newPosts);
     }
 
+    case 'THREAD_CLOSE': {
+      const newState = state.filter((post) => post.thread !== action.url);
+      return newState.length !== state.length ? newState : state;
+    }
+
     default:
       return state;
   }
