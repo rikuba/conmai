@@ -76,6 +76,7 @@ export function closeThread(url: string): Dispatcher {
   return (dispatch, getState) => {
     const thread = selectors.getThread(getState(), url);
     clearInterval(thread.updateTimerId);
+    selectors.clearThreadRelatedCache(url);
 
     dispatch<ThreadClose>({
       type: 'THREAD_CLOSE',

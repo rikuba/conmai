@@ -22,12 +22,9 @@ interface StateProps {
   posts: Posts;
 }
 
-const mapStateToProps = () => {
-  const getPosts = selectors.makeGetPosts();
-  return (state: State, ownProps: OwnProps) => ({
-    posts: getPosts(state, ownProps.threadUrl),
-  });
-};
+const mapStateToProps = (state: State, ownProps: OwnProps) => ({
+  posts: selectors.getPosts(state, ownProps.threadUrl),
+});;
 
 class ThreadComponent extends React.PureComponent<Props, any> {
   private isScrolledToTheEnd = true;

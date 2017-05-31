@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import createCachedSelector from 're-reselect';
 
 import { State } from '../reducers';
 
@@ -7,10 +8,12 @@ export const getUpdateIntervalPreference = createSelector(
   (updateInterval) => updateInterval,
 );
 
-export const getThread = createSelector(
+export const getThread = createCachedSelector(
   (state: State) => state.threads.byUrl,
   (state: State, url: string) => url,
-  (byUrl, url) => byUrl[url],
+  (byUrl: any, url: any) => byUrl[url],
+)(
+  (state: State, url: string) => url,
 );
 
 export const getSelectedThread = createSelector(
@@ -25,10 +28,10 @@ export const getAllThreads = createSelector(
   (all, byUrl) => all.map((url) => byUrl[url]),
 );
 
-export const getLastPost = createSelector(
+export const getLastPost = createCachedSelector(
   (state: State) => state.posts,
   (state: State, threadUrl: string) => threadUrl,
-  (posts, threadUrl) => {
+  (posts: any, threadUrl: any) => {
     let i = posts.length;
     while (i--) {
       const post = posts[i];
@@ -38,16 +41,28 @@ export const getLastPost = createSelector(
     }
     return null;
   }
+)(
+  (state: State, threadUrl: string) => threadUrl,
 );
 
-export const makeGetPosts = () => createSelector(
+export const getPosts = createCachedSelector(
   (state: State) => state.posts,
   (state: State, threadUrl: string) => threadUrl,
-  (posts, threadUrl) => posts.filter((post) => post.thread === threadUrl),
+  (posts: any, threadUrl: any) => posts.filter((post: any) => post.thread === threadUrl),
+)(
+  (state: State, threadUrl: string) => threadUrl,
 );
 
-export const getThreadWaits = createSelector(
+export const getThreadWaits = createCachedSelector(
   (state: State) => state.threadWaits,
   (state: State, threadUrl: string) => threadUrl,
-  (threadWaits, threadUrl) => threadWaits[threadUrl],
+  (threadWaits: any, threadUrl: any) => threadWaits[threadUrl],
+)(
+  (state: State, threadUrl: string) => threadUrl,
 );
+
+export function clearThreadRelatedCache(url: string) {
+  [getThread, getLastPost, getPosts, getThreadWaits].forEach((selector) => {
+    selector.removeMatchingSelector(void 0, url);
+  });
+}
