@@ -25,7 +25,7 @@ interface StateProps {
 const mapStateToProps = () => {
   const getPosts = selectors.makeGetPosts();
   return (state: State, ownProps: OwnProps) => ({
-    posts: getPosts(state, ownProps),
+    posts: getPosts(state, ownProps.threadUrl),
   });
 };
 

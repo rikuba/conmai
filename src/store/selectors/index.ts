@@ -42,7 +42,7 @@ export const getLastPost = createSelector(
 
 export const makeGetPosts = () => createSelector(
   (state: State) => state.posts,
-  (state: State, ownProps: { threadUrl: string }) => ownProps.threadUrl,
+  (state: State, threadUrl: string) => threadUrl,
   (posts, threadUrl) => posts.filter((post) => post.thread === threadUrl),
 );
 
