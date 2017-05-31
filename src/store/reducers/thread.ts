@@ -4,7 +4,10 @@ import { Action } from '../actions';
 
 export interface Thread {
   isFetching: boolean;
-  error: Error | null;
+  error: {
+    message: string;
+    stack: string | undefined;
+  } | null;
   url: string;
   icon: string | null;
   threadStop: number;
@@ -42,7 +45,7 @@ function isFetching(state: boolean = false, action: Action): typeof state {
   }
 }
 
-function error(state: Error | null = null, action: Action): typeof state {
+function error(state: Thread['error'] | null = null, action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
     case 'THREAD_FETCH_REQUEST':
@@ -51,7 +54,10 @@ function error(state: Error | null = null, action: Action): typeof state {
 
     case 'THREAD_FETCH_FAILURE':
     case 'THREAD_UPDATE_FAILURE':
-      return action.error;
+      return {
+        message: action.error.message,
+        stack: action.error.stack,
+      };
 
     default:
       return state;
