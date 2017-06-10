@@ -5,7 +5,9 @@ import { Thread } from '../../store/reducers';
 
 import './tab.css';
 
-export default class TabComponent extends React.PureComponent<{
+type Props = React.Props<any> & OwnProps;
+
+type OwnProps = {
   url: Thread['url'];
   icon: Thread['icon'];
   title: Thread['title'];
@@ -13,7 +15,9 @@ export default class TabComponent extends React.PureComponent<{
   onTabSelect: (url: string) => void;
   onTabClose: (url: string) => void;
   onTabCloseOthers: (url: string) => void;
-}, {}> {
+};
+
+export default class TabComponent extends React.PureComponent<Props, {}> {
   private middleButtonPressed = false;
 
   private contextMenu = remote.Menu.buildFromTemplate([

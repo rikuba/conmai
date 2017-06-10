@@ -8,17 +8,19 @@ import TabComponent from './tab';
 
 import './tabbar.css';
 
-type Props = StateProps & typeof actions;
+type Props = React.Props<any> & StateProps & DispatchProps;
 
-interface StateProps {
+type StateProps = {
   allThreads: Thread[];
   selectedThread: Thread | undefined;
-}
+};
 
 const mapStateToProps = (state: State): StateProps => ({
   allThreads: selectors.getAllThreads(state),
   selectedThread: selectors.getSelectedThread(state),
 });
+
+type DispatchProps = typeof actions;
 
 class TabbarComponent extends React.PureComponent<Props, {}> {
   render() {
@@ -41,4 +43,4 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-export default connect(mapStateToProps, actions as any)(TabbarComponent);
+export default connect<StateProps, DispatchProps, {}>(mapStateToProps, actions as any)(TabbarComponent);

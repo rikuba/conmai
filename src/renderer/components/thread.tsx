@@ -10,7 +10,7 @@ import { generatePostId } from '../../utils';
 
 import './thread.css';
 
-type Props = OwnProps & StateProps;
+type Props = React.Props<any> & OwnProps & StateProps;
 
 interface OwnProps {
   newPostNumber: Thread['newPostNumber'];
@@ -23,9 +23,9 @@ interface StateProps {
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => ({
   posts: selectors.getPosts(state, ownProps.threadUrl),
-});;
+});
 
-class ThreadComponent extends React.PureComponent<Props, any> {
+class ThreadComponent extends React.PureComponent<Props, {}> {
   private isScrolledToTheEnd = true;
 
   private contextMenu = remote.Menu.buildFromTemplate([
@@ -104,4 +104,4 @@ class ThreadComponent extends React.PureComponent<Props, any> {
   }
 }
 
-export default connect<StateProps, {}, OwnProps>(mapStateToProps as any)(ThreadComponent);
+export default connect<StateProps, {}, OwnProps>(mapStateToProps)(ThreadComponent);

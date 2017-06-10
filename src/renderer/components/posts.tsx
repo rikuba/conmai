@@ -4,11 +4,13 @@ import React from 'react';
 import { Post } from '../../store/reducers';
 import PostComponent from './post';
 
-interface Props {
+type Props = React.Props<any> & OwnProps;
+
+type OwnProps = {
   posts: Post[];
   newPostNumber: number | null;
   threadUrl: string;
-}
+};
 
 export default class PostsComponent extends React.PureComponent<Props, {}> {
   render() {

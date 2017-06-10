@@ -5,13 +5,15 @@ import { generatePostId, setInnerHTML } from '../../utils';
 
 import './post.css';
 
-interface Props {
+type Props = React.Props<any> & OwnProps;
+
+type OwnProps = {
   isNew: boolean;
   post: Post;
   threadUrl: string;
-}
+};
 
-export default class PostComponent extends React.PureComponent<Props, any> {
+export default class PostComponent extends React.PureComponent<Props, {}> {
   render() {
     const { isNew, post, threadUrl } = this.props;
     const id = generatePostId(threadUrl, post.number);

@@ -11,19 +11,19 @@ import ThreadComponent from './thread';
 
 import './app.css';
 
-type Props = StateProps;
+type Props = React.Props<any> & StateProps;
 
-interface StateProps {
+type StateProps = {
   allThreads: Thread[];
   selectedThread: Thread | undefined;
-}
+};
 
 const mapStateToProps = (state: State): StateProps => ({
   allThreads: selectors.getAllThreads(state),
   selectedThread: selectors.getSelectedThread(state),
 });
 
-class AppComponent extends React.PureComponent<Props, any> {
+class AppComponent extends React.PureComponent<Props, {}> {
   render() {
     const { allThreads, selectedThread } = this.props;
     const tabpanels = allThreads.map((thread) => (
@@ -47,4 +47,4 @@ class AppComponent extends React.PureComponent<Props, any> {
   }
 }
 
-export default connect(mapStateToProps)(AppComponent);
+export default connect<StateProps, {}, {}>(mapStateToProps)(AppComponent);

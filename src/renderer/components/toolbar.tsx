@@ -8,17 +8,24 @@ import * as actions from '../../store/actions';
 
 import './toolbar.css';
 
-type Props = StateProps & typeof actions;
+type Props = React.Props<any> & StateProps & DispatchProps;
 
-interface StateProps {
+type StateProps = {
   selectedThread: Thread | undefined;
-}
+};
 
 const mapStateToProps = (state: State): StateProps => ({
   selectedThread: selectors.getSelectedThread(state),
 });
 
-class ToolbarComponent extends React.Component<Props, { url: string, lastSelectedThread: string }> {
+type DispatchProps = typeof actions;
+
+type OwnState = {
+  url: string;
+  lastSelectedThread: string;
+};
+
+class ToolbarComponent extends React.Component<Props, OwnState> {
   private urlInputContextMenu = remote.Menu.buildFromTemplate([
     { role: 'undo', label: '元に戻す' },
     { type: 'separator' },
@@ -115,4 +122,4 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
   }
 }
 
-export default connect(mapStateToProps, actions as any)(ToolbarComponent);
+export default connect<StateProps, DispatchProps, {}>(mapStateToProps, actions as any)(ToolbarComponent);
