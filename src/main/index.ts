@@ -60,7 +60,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('open-sub-window', (e) => {
+ipcMain.on('open-sub-window', (e: any) => {
   if (subWindow !== null) {
     console.log('received open-sub-window but subwindow is already open');
     return;
@@ -76,7 +76,7 @@ ipcMain.on('open-sub-window', (e) => {
     alwaysOnTop: true,
   });
 
-  subWindow.on('new-window', handleNewWindow);
+  subWindow.webContents.on('new-window', handleNewWindow);
 
   subWindow.setIgnoreMouseEvents(true);
 
@@ -98,13 +98,13 @@ ipcMain.on('open-sub-window', (e) => {
   }
 });
 
-ipcMain.on('new-posts', (e, newPosts) => {
+ipcMain.on('new-posts', (e: any, newPosts: any) => {
   if (subWindow) {
     subWindow.webContents.send('new-posts', newPosts);
   }
 });
 
-ipcMain.on('set-subwindow-is-ignore-mouse-events', (e, value) => {
+ipcMain.on('set-subwindow-is-ignore-mouse-events', (e: any, value: boolean) => {
   if (subWindow !== null) {
     subWindow.setIgnoreMouseEvents(value);
   }
