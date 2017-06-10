@@ -6,10 +6,10 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const srcDir = path.join(__dirname, 'src');
 const distDir = path.join(__dirname, 'dist');
-const pageDir = (baseDir) => path.join(baseDir, 'renderer', 'pages');
 const publicPath = `http://localhost:8080/`;
 
 const forPage = (page) => {
+  const pageDir = (baseDir) => path.join(baseDir, 'renderer', page);
   return {
     context: pageDir(srcDir),
 

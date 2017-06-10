@@ -1,5 +1,5 @@
-import { Post as PostResponse } from '../../clients/shitaraba-client';
-import { generatePostId } from '../../utils';
+import { Post as PostResponse } from '../../../clients/shitaraba-client';
+import { generatePostId } from '../../../utils';
 import { Action } from '../actions';
 
 export type Posts = Post[];

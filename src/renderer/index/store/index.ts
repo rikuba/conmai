@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { electronEnhancer } from 'redux-electron-store';
 
-import rootReducer, { State } from '../store/reducers';
+import rootReducer, { State } from '../reducers';
 
 export function configureStore() {
   let enhancer: any = compose(

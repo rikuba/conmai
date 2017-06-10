@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import debounce from 'lodash.debounce';
 
-import { Post } from '../../store/reducers';
+import { Post } from '../index/reducers';
 import { setInnerHTML } from '../../utils';
 
 import './sub.css';

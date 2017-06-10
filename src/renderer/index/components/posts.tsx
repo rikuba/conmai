@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 
-import { Post } from '../../store/reducers';
+import { Post } from '../reducers';
 import PostComponent from './post';
 
 type Props = React.Props<any> & OwnProps;

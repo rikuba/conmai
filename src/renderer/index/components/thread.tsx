@@ -3,10 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import { State, Thread, Posts } from '../../store/reducers';
-import * as selectors from '../../store/selectors';
+import { State, Thread, Posts } from '../reducers';
+import * as selectors from '../selectors';
 import PostsComponent from './posts';
-import { generatePostId } from '../../utils';
+import { generatePostId } from '../../../utils';
 
 import './thread.css';
 

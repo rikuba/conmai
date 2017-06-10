@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
-import App from '../components/app';
-import { configureStore } from '../../store';
-import { openThread, subWindowClosed } from '../../store/actions';
+import App from './components/app';
+import { configureStore } from './store';
+import { openThread, subWindowClosed } from './actions';
 
 import './index.css';
 
@@ -26,7 +26,7 @@ const render = () => {
 render();
 
 if (module.hot) {
-  module.hot.accept('../components/app', render);
+  module.hot.accept('./components/app', render);
 }
 
 ipcRenderer.on('sub-window-closed', () => {

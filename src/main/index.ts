@@ -3,7 +3,7 @@ import loadDevtool from 'electron-load-devtool';
 import path from 'path';
 import url from 'url';
 
-import { configureStore } from '../store';
+import { configureStore } from '../renderer/index/store';
 
 let window: Electron.BrowserWindow | null = null;
 let subWindow: Electron.BrowserWindow | null = null;
@@ -19,7 +19,7 @@ function createWindow(): void {
   window.webContents.on('new-window', handleNewWindow);
 
   window.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'index.html'),
+    pathname: path.join(__dirname, '..', 'renderer', 'index', 'index.html'),
     protocol: 'file:',
     slashes: true,
   }));
