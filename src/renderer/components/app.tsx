@@ -8,7 +8,6 @@ import TabbarComponent from './tabbar';
 import TabPanelsComponent from './tabpanels';
 import TabPanelComponent from './tabpanel';
 import ThreadComponent from './thread';
-import StatusbarComponent from './statusbar';
 
 import './app.css';
 
@@ -43,7 +42,6 @@ class AppComponent extends React.PureComponent<Props, any> {
         <TabPanelsComponent>
           {tabpanels}
         </TabPanelsComponent>
-        <StatusbarComponent />
       </div>
     );
   }
