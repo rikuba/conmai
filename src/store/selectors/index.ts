@@ -3,10 +3,8 @@ import createCachedSelector from 're-reselect';
 
 import { State } from '../reducers';
 
-export const getUpdateIntervalPreference = createSelector(
-  (state: State) => state.preferences.updateInterval,
-  (updateInterval) => updateInterval,
-);
+export const getUpdateIntervalPreference =
+  (state: State) => state.preferences.updateInterval;
 
 export const getThread = createCachedSelector(
   (state: State) => state.threads.byUrl,
