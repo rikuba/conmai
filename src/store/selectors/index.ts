@@ -53,16 +53,8 @@ export const getPosts = createCachedSelector(
   (state: State, threadUrl: string) => threadUrl,
 );
 
-export const getThreadWaits = createCachedSelector(
-  (state: State) => state.threadWaits,
-  (state: State, threadUrl: string) => threadUrl,
-  (threadWaits: any, threadUrl: any) => threadWaits[threadUrl],
-)(
-  (state: State, threadUrl: string) => threadUrl,
-);
-
 export function clearThreadRelatedCache(url: string) {
-  [getThread, getLastPost, getPosts, getThreadWaits].forEach((selector) => {
+  [getThread, getLastPost, getPosts].forEach((selector) => {
     selector.removeMatchingSelector(void 0, url);
   });
 }

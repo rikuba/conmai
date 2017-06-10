@@ -27,7 +27,6 @@ export type Action =
   ThreadUpdateFailure |
   
   ThreadUpdateSchedule |
-  ThreadUpdateWaitTick |
   ThreadUpdateScheduleCancel |
   
   SubWindowOpen |
@@ -279,19 +278,6 @@ export function updateThread(url: string): Dispatcher {
 }
 
 
-export interface ThreadUpdateWaitTick {
-  type: 'THREAD_UPDATE_WAIT_TICK';
-  url: string;
-}
-
-export function tickUpdateThreadWait(url: string): ThreadUpdateWaitTick {
-  return {
-    type: 'THREAD_UPDATE_WAIT_TICK',
-    url,
-  };
-}
-
-
 export interface ThreadUpdateSchedule {
   type: 'THREAD_UPDATE_SCHEDULE';
   url: string;
@@ -307,19 +293,12 @@ export function scheduleUpdateThread(url: string): Dispatcher {
       return Promise.resolve();
     }
 
-    const interval = selectors.getUpdateIntervalPreference(state);
-    let wait = 0;
-
-    const timerId = setInterval(() => {
-      dispatch(tickUpdateThreadWait(url));
-
-      if (++wait >= interval) {
-        clearInterval(timerId);
-        dispatch(updateThread(url)).then(() => {
-          dispatch(scheduleUpdateThread(url));
-        });
-      }
-    }, 1000);
+    const time = selectors.getUpdateIntervalPreference(state) * 1000;
+    const timerId = setTimeout(() => {
+      dispatch(updateThread(url)).then(() => {
+        dispatch(scheduleUpdateThread(url));
+      });
+    }, time);
 
     dispatch<ThreadUpdateSchedule>({
       type: 'THREAD_UPDATE_SCHEDULE',
