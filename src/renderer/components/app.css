@@ -5,9 +5,3 @@
   font-family: "Meiryo UI", sans-serif;
   font-size: 90%;
 }
-
-.thread-container {
-  flex: 1;
-  position: relative;
-  font-size: medium;
-}

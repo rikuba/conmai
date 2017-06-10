@@ -14,7 +14,6 @@ type Props = OwnProps & StateProps;
 
 interface OwnProps {
   newPostNumber: Thread['newPostNumber'];
-  isSelected: boolean;
   threadUrl: string;
 }
 
@@ -93,10 +92,10 @@ class ThreadComponent extends React.PureComponent<Props, any> {
   };
 
   render() {
-    const { posts, newPostNumber, isSelected, threadUrl } = this.props;
+    const { posts, newPostNumber, threadUrl } = this.props;
 
     return (
-      <div role="tabpanel" className="thread" aria-hidden={String(!isSelected)}
+      <div className="thread"
         onContextMenu={this.handleContextMenu}
         onClick={this.handleClick}>
         <PostsComponent posts={posts} newPostNumber={newPostNumber} threadUrl={threadUrl} />

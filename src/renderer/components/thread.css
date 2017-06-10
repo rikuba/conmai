@@ -1,16 +1,12 @@
 .thread {
-  position: absolute;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   padding: 8px;
   overflow: auto;
   background: #eee;
+  font-size: medium;
   font-family: "MS PGothic", sans-serif;
-}
-
-.thread[aria-hidden="true"] {
-  z-index: -1;
 }
 
 .thread-title {

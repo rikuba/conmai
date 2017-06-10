@@ -5,6 +5,8 @@ import { State, Thread } from '../../store/reducers';
 import * as selectors from '../../store/selectors';
 import ToolbarComponent from './toolbar';
 import TabbarComponent from './tabbar';
+import TabPanelsComponent from './tabpanels';
+import TabPanelComponent from './tabpanel';
 import ThreadComponent from './thread';
 import StatusbarComponent from './statusbar';
 
@@ -25,23 +27,22 @@ const mapStateToProps = (state: State): StateProps => ({
 class AppComponent extends React.PureComponent<Props, any> {
   render() {
     const { allThreads, selectedThread } = this.props;
-    const threadsView = allThreads.map((thread) => (
-      <ThreadComponent key={thread.url}
-        threadUrl={thread.url}
-        isSelected={thread === selectedThread}
-        newPostNumber={thread.newPostNumber} />
+    const tabpanels = allThreads.map((thread) => (
+      <TabPanelComponent key={thread.url}
+        isSelected={thread === selectedThread}>
+        <ThreadComponent
+          threadUrl={thread.url}
+          newPostNumber={thread.newPostNumber} />
+      </TabPanelComponent>
     ));
-    if (threadsView.length === 0) {
-      threadsView.push(<div className="thread" key=""></div>);
-    }
 
     return (
       <div className="application">
         <ToolbarComponent />
         <TabbarComponent />
-        <div className="thread-container">
-          {threadsView}
-        </div>
+        <TabPanelsComponent>
+          {tabpanels}
+        </TabPanelsComponent>
         <StatusbarComponent />
       </div>
     );

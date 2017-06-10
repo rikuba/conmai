@@ -38,7 +38,7 @@ class ToolbarComponent extends React.Component<Props, { url: string, lastSelecte
   ]);
 
   private urlInputDeleteMenuItem = this.urlInputContextMenu.items
-    .find((item) => item.role === 'delete')!;
+    .find((item) => (item as any).role === 'delete')!;
 
   state = {
     url: '',
