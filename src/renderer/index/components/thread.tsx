@@ -1,16 +1,18 @@
 import { remote } from 'electron';
 import React from 'react';
-import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 import { State, Thread, Posts } from '../reducers';
+import * as actions from '../actions/thread';
 import * as selectors from '../selectors';
 import PostsComponent from './posts';
 import { generatePostId } from '../../../utils';
 
 import './thread.css';
 
-type Props = React.Props<any> & OwnProps & StateProps;
+type Props = React.Props<any> & OwnProps & StateProps & DispatchProps;
 
 interface OwnProps {
   newPostNumber: Thread['newPostNumber'];
@@ -23,6 +25,17 @@ interface StateProps {
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => ({
   posts: selectors.getPosts(state, ownProps.threadUrl),
+});
+
+interface DispatchProps {
+  loadThread: (url: string) => Promise<void>;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
+  loadThread: async (url: string) => {
+    await dispatch(actions.fetchBoardSettings(url))
+    await dispatch(actions.fetchThread(url));
+  },
 });
 
 class ThreadComponent extends React.PureComponent<Props, {}> {
@@ -44,6 +57,14 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
       },
     },
   ]);
+
+  componentDidMount() {
+    const { threadUrl, posts, loadThread } = this.props;
+
+    if (posts.length === 0) {
+      loadThread(threadUrl);
+    }
+  }
 
   componentWillUpdate() {
     const elm = ReactDOM.findDOMNode(this);
@@ -104,4 +125,4 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-export default connect<StateProps, {}, OwnProps>(mapStateToProps)(ThreadComponent);
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ThreadComponent);

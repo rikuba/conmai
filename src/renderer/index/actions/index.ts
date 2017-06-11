@@ -48,8 +48,7 @@ export function openThread(inputUrl: string): Dispatcher {
       icon,
     });
 
-    return dispatch(ThreadAction.fetchBoardSettings(url))
-      .then(() => dispatch(ThreadAction.fetchThread(url)));
+    return Promise.resolve();
   };
 }
 
