@@ -81,7 +81,7 @@ ipcMain.on('open-sub-window', (e: any) => {
   subWindow.setIgnoreMouseEvents(true);
 
   subWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'pages', 'sub.html'),
+    pathname: path.join(__dirname, '..', 'renderer', 'sub', 'sub.html'),
     protocol: 'file:',
     slashes: true,
   }));

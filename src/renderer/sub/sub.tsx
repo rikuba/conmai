@@ -23,7 +23,15 @@ window.addEventListener('blur', (e) => {
 });
 
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root'),
-);
+const render = () => {
+  ReactDOM.render(
+    <App />,
+    document.getElementById('root'),
+  );
+};
+
+render();
+
+if (module.hot) {
+  module.hot.accept('./components/app', render);
+}

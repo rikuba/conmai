@@ -6,19 +6,34 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const srcDir = path.join(__dirname, 'src');
 const distDir = path.join(__dirname, 'dist');
-const publicPath = `http://localhost:8080/`;
+const port = 8144;
+const publicPath = `http://localhost:${port}/`;
 
-const forPage = (page) => {
-  const pageDir = (baseDir) => path.join(baseDir, 'renderer', page);
+module.exports = (env) => {
+  const pages = ['index', 'sub'];
+  const pageDir = (baseDir) => path.join(baseDir, 'renderer');
+
+  const entry = {};
+  pages.forEach((page) => {
+    entry[`${page}/${page}`] = [
+      'react-hot-loader/patch',
+      `./${page}/${page}`,
+    ];
+  });
+
+  const htmls = pages.map((page) => (
+    new HtmlPlugin({
+      filename: `${page}/${page}.html`,
+      template: `./${page}/${page}.html`,
+      chunks: [`${page}/${page}`],
+      alwaysWriteToDisk: true,
+    })
+  ));
+
   return {
     context: pageDir(srcDir),
 
-    entry: {
-      [`${page}`]: [
-        'react-hot-loader/patch',
-        `./${page}`,
-      ],
-    },
+    entry,
 
     output: {
       path: pageDir(distDir),
@@ -68,6 +83,7 @@ const forPage = (page) => {
     devServer: {
       hot: true,
       contentBase: pageDir(distDir),
+      port,
       publicPath,
     },
 
@@ -77,16 +93,8 @@ const forPage = (page) => {
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
       new CheckerPlugin(),
-      new HtmlPlugin({
-        filename: `${page}.html`,
-        template: `./${page}.html`,
-        alwaysWriteToDisk: true,
-      }),
+      ...htmls,
       new HtmlHarddiskPlugin(),
     ],
   };
-};
-
-module.exports = (env) => {
-  return forPage('index');
 };

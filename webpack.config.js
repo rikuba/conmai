@@ -138,9 +138,9 @@ const forPage = (page) => (env, common) => {
 };
 
 const renderer = (env, common) => {
-  const pages = ['sub'];
+  const pages = [];
   if (env !== 'development') {
-    pages.push('index');
+    pages.push('index', 'sub');
   }
   return pages.map((page) => forPage(page)(env, common));
 };
