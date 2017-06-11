@@ -62,7 +62,7 @@ app.on('activate', () => {
 
 ipcMain.on('open-sub-window', (e: any) => {
   if (subWindow !== null) {
-    console.log('received open-sub-window but subwindow is already open');
+    subWindow.focus();
     return;
   }
   subWindow = new BrowserWindow({

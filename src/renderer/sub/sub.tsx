@@ -7,6 +7,20 @@ import App from './components/app';
 import './sub.css';
 
 
+const render = () => {
+  ReactDOM.render(
+    <App />,
+    document.getElementById('root'),
+  );
+};
+
+render();
+
+if (module.hot) {
+  module.hot.accept('./components/app', render);
+}
+
+
 window.addEventListener('focus', (e) => {
   document.documentElement.classList.add('active');
   ipcRenderer.send('set-subwindow-is-ignore-mouse-events', false);
@@ -22,16 +36,6 @@ window.addEventListener('blur', (e) => {
   getSelection().removeAllRanges();
 });
 
-
-const render = () => {
-  ReactDOM.render(
-    <App />,
-    document.getElementById('root'),
-  );
-};
-
-render();
-
-if (module.hot) {
-  module.hot.accept('./components/app', render);
+if (document.hasFocus()) {
+  window.dispatchEvent(new FocusEvent('focus'));
 }
