@@ -6,12 +6,16 @@ import * as shitaraba from '../../../clients/shitaraba-client';
 import { State } from '../reducers';
 import * as selectors from '../selectors';
 import * as ThreadAction from './thread';
+import { Action as PageAction } from './page';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
 
+export * from './page';
+
 export type Action =
   ThreadAction.Action |
+  PageAction |
 
   ThreadOpen |
   ThreadClose |

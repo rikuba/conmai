@@ -5,12 +5,16 @@ import threads, { Threads } from './threads';
 import { Thread } from './thread';
 import posts, { Posts, Post } from './posts';
 import ui, { UI } from './ui';
+import pages, { Pages } from './pages';
+import { Page } from './page';
 
 export {
   Preferences,
   Posts,
   Post,
   Thread,
+  Pages,
+  Page,
 };
 
 export interface State {
@@ -18,6 +22,7 @@ export interface State {
   threads: Threads;
   posts: Posts;
   ui: UI;
+  pages: Pages,
 }
 
 export default combineReducers<State>({
@@ -25,4 +30,5 @@ export default combineReducers<State>({
   threads,
   posts,
   ui,
+  pages,
 });
