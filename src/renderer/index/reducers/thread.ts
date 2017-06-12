@@ -9,7 +9,6 @@ export interface Thread {
     stack: string | undefined;
   } | null;
   url: string;
-  icon: string | null;
   threadStop: number;
   title: string;
   newPostNumber: number | null;
@@ -20,7 +19,6 @@ export default combineReducers<Thread>({
   isFetching,
   error,
   url,
-  icon,
   threadStop,
   title,
   newPostNumber,
@@ -68,16 +66,6 @@ function url(state: string = '', action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
       return action.url;
-
-    default:
-      return state;
-  }
-}
-
-function icon(state: string | null = null, action: Action): typeof state {
-  switch (action.type) {
-    case 'THREAD_OPEN':
-      return action.icon;
 
     default:
       return state;

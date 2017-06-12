@@ -1,8 +1,9 @@
 import { clipboard, remote } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-import { State, Thread } from '../reducers';
+import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
 
@@ -11,14 +12,22 @@ import './toolbar.css';
 type Props = React.Props<any> & StateProps & DispatchProps;
 
 type StateProps = {
-  selectedThread: Thread | undefined;
+  selectedPage: Page;
 };
 
 const mapStateToProps = (state: State): StateProps => ({
-  selectedThread: selectors.getSelectedThread(state),
+  selectedPage: selectors.getSelectedPage(state),
 });
 
-type DispatchProps = typeof actions;
+type DispatchProps = {
+  openUrl: (url: string) => Promise<void>;
+  openSubWindow: () => Promise<void>;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
+  openUrl: (url: string) => dispatch(actions.openPage(url)),
+  openSubWindow:() => dispatch(actions.openSubWindow()),
+});
 
 type OwnState = {
   url: string;
@@ -36,7 +45,7 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
       label: '貼り付けて移動',
       click: (menuItem, browserWindow, event) => {
         const text = clipboard.readText();
-        this.props.openThread(text);
+        this.props.openUrl(text);
       },
     },
     { role: 'delete', label: '削除', visible: false },
@@ -53,16 +62,16 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
   };
 
   componentWillReceiveProps(nextProps: Props) {
-    const { selectedThread } = nextProps;
-    if (!selectedThread) {
+    const { selectedPage } = nextProps;
+    if (!selectedPage) {
       this.setState({
         url: '',
         lastSelectedThread: '',
       });
-    } else if (selectedThread.url !== this.state.lastSelectedThread) {
+    } else if (selectedPage.url !== this.state.lastSelectedThread) {
       this.setState({
-        url: selectedThread.url,
-        lastSelectedThread: selectedThread.url,
+        url: selectedPage.url,
+        lastSelectedThread: selectedPage.url,
       });
     }
   }
@@ -73,10 +82,10 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
 
   handleUrlInputKeydown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Escape') {
-      const { selectedThread } = this.props;
-      if (selectedThread) {
+      const { selectedPage } = this.props;
+      if (selectedPage) {
         this.setState({
-          url: selectedThread.url,
+          url: selectedPage.url,
         });
       }
     }
@@ -100,7 +109,7 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
     e.preventDefault();
 
     const url = this.state.url;
-    this.props.openThread(url);
+    this.props.openUrl(url);
   };
 
   render() {
@@ -122,4 +131,4 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
   }
 }
 
-export default connect<StateProps, DispatchProps, {}>(mapStateToProps, actions as any)(ToolbarComponent);
+export default connect<StateProps, DispatchProps, {}>(mapStateToProps, mapDispatchToProps)(ToolbarComponent);

@@ -16,12 +16,6 @@ export const getThread = createCachedSelector(
   (state: State, url: string) => url,
 );
 
-export const getSelectedThread = createSelector(
-  (state: State) => state.threads.selectOrder,
-  (state: State) => state.threads.byUrl,
-  (selectOrder, byUrl) => byUrl[selectOrder[0]],
-);
-
 export const getAllThreads = createSelector(
   (state: State) => state.threads.all,
   (state: State) => state.threads.byUrl,

@@ -26,6 +26,10 @@ export const getAllPages = createSelector(
   (all, byId) => all.map((id) => byId[id]),
 );
 
+export const getPagesByUrl = (state: State, url: string) => {
+  return getAllPages(state).filter((page) => page.url === url);
+};
+
 
 export const clearPageCache = (id: string) => {
   getPage.removeMatchingSelector({} as State, id);

@@ -20,3 +20,9 @@ declare module 're-reselect' {
 declare module 'redux-electron-store' {
   export const electronEnhancer: any;
 }
+
+declare module JSX {
+  interface IntrinsicElements {
+    webview: any;
+  }
+}

@@ -6,7 +6,7 @@ import { AppContainer } from 'react-hot-loader';
 
 import App from './components/app';
 import { configureStore } from './store';
-import { openThread, subWindowClosed } from './actions';
+import { subWindowClosed } from './actions';
 
 import './index.css';
 
@@ -44,12 +44,4 @@ store.subscribe(() => {
   }
   lastThreads = threads;
   localStorage.setItem('threads.all', JSON.stringify(threads));
-});
-
-
-const threadsJson = localStorage.getItem('threads.all');
-const threads: string[] = threadsJson ? JSON.parse(threadsJson) : [];
-
-threads.forEach((url) => {
-  store.dispatch(openThread(url));
 });

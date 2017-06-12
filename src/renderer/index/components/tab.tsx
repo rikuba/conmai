@@ -1,20 +1,21 @@
 import { remote } from 'electron';
 import React from 'react';
 
-import { Thread } from '../reducers';
+import { Page } from '../reducers';
 
 import './tab.css';
 
 type Props = React.Props<any> & OwnProps;
 
 type OwnProps = {
-  url: Thread['url'];
-  icon: Thread['icon'];
-  title: Thread['title'];
+  id: Page['id'];
+  url: Page['url'];
+  icon: Page['faviconUrl'];
+  title: Page['title'];
   isSelected: boolean;
-  onTabSelect: (url: string) => void;
-  onTabClose: (url: string) => void;
-  onTabCloseOthers: (url: string) => void;
+  onTabSelect: (id: string) => void;
+  onTabClose: (id: string) => void;
+  onTabCloseOthers: (id: string) => void;
 };
 
 export default class TabComponent extends React.PureComponent<Props, {}> {
@@ -24,26 +25,26 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
     {
       label: 'タブを閉じる',
       click: (menuItem, browserWindow, event) => {
-        this.props.onTabClose(this.props.url);
+        this.props.onTabClose(this.props.id);
       },
     },
     {
       label: '他のタブをすべて閉じる',
       click: (menuItem, browserWindow, event) => {
-        this.props.onTabCloseOthers(this.props.url);
+        this.props.onTabCloseOthers(this.props.id);
       },
     },
   ]);
 
   handleTabClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    const { url } = this.props;
+    const { id } = this.props;
 
     if ((e.target as HTMLElement).matches('.tab-close-button, .tab-close-button *')) {
-      this.props.onTabClose(url);
+      this.props.onTabClose(id);
       return;
     }
 
-    this.props.onTabSelect(url);
+    this.props.onTabSelect(id);
   };
 
   handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -58,7 +59,7 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
 
   handleMouseUp: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.button === 1 && this.middleButtonPressed) {
-      this.props.onTabClose(this.props.url);
+      this.props.onTabClose(this.props.id);
       this.middleButtonPressed = false;
     }
   };

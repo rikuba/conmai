@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { State, Thread } from '../reducers';
+import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
 import ToolbarComponent from './toolbar';
 import TabbarComponent from './tabbar';
 import TabPanelsComponent from './tabpanels';
 import TabPanelComponent from './tabpanel';
+import PageComponent from './page';
 import ThreadComponent from './thread';
 
 import './app.css';
@@ -14,24 +15,29 @@ import './app.css';
 type Props = React.Props<any> & StateProps;
 
 type StateProps = {
-  allThreads: Thread[];
-  selectedThread: Thread | undefined;
+  allPages: Page[];
+  selectedPageId: Page['id'];
 };
 
 const mapStateToProps = (state: State): StateProps => ({
-  allThreads: selectors.getAllThreads(state),
-  selectedThread: selectors.getSelectedThread(state),
+  allPages: selectors.getAllPages(state),
+  selectedPageId: selectors.getSelectedPageId(state),
 });
 
 class AppComponent extends React.PureComponent<Props, {}> {
   render() {
-    const { allThreads, selectedThread } = this.props;
-    const tabpanels = allThreads.map((thread) => (
-      <TabPanelComponent key={thread.url}
-        isSelected={thread === selectedThread}>
-        <ThreadComponent
-          threadUrl={thread.url}
-          newPostNumber={thread.newPostNumber} />
+    const { allPages, selectedPageId } = this.props;
+    const tabpanels = allPages.map((page) => (
+      <TabPanelComponent key={page.id}
+        isSelected={page.id === selectedPageId}>
+        {
+          page.pageType === 'shitaraba' ?
+            <ThreadComponent
+              url={page.url} /> :
+            <PageComponent
+              id={page.id}
+              url={page.url} />
+        }
       </TabPanelComponent>
     ));
 
@@ -47,4 +53,4 @@ class AppComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-export default connect<StateProps, {}, {}>(mapStateToProps)(AppComponent);
+export default connect<StateProps, {}, {}>(mapStateToProps)<{}>(AppComponent);

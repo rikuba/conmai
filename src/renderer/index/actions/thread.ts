@@ -3,11 +3,15 @@ import { ThunkAction } from 'redux-thunk';
 import * as shitaraba from '../../../clients/shitaraba-client';
 import { State } from '../reducers';
 import * as selectors from '../selectors';
+import * as pageActions from './page';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
 
 export type Action =
+  ThreadOpen |
+  ThreadClose |
+
   BoardSettingsFetchRequest |
   BoardSettingsFetchSuccess |
   BoardSettingsFetchFailure |
@@ -22,6 +26,38 @@ export type Action =
   
   ThreadUpdateSchedule |
   ThreadUpdateScheduleCancel;
+
+
+export interface ThreadOpen {
+  type: 'THREAD_OPEN';
+  url: string;
+}
+
+export const openThread = (url: string): ThreadOpen => ({
+  type: 'THREAD_OPEN',
+  url,
+});
+
+
+export interface ThreadClose {
+  type: 'THREAD_CLOSE';
+  url: string;
+}
+
+export function closeThread(url: string): Dispatcher {
+  return (dispatch, getState) => {
+    const thread = selectors.getThread(getState(), url);
+    clearInterval(thread.updateTimerId);
+    selectors.clearThreadRelatedCache(url);
+
+    dispatch<ThreadClose>({
+      type: 'THREAD_CLOSE',
+      url,
+    });
+
+    return Promise.resolve();
+  };
+}
 
 
 export interface BoardSettingsFetchRequest {
@@ -86,7 +122,7 @@ export interface ThreadFetchFailure {
 }
 
 export function fetchThread(url: string): Dispatcher {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch<ThreadFetchRequest>({
       type: 'THREAD_FETCH_REQUEST',
       url,
@@ -98,6 +134,10 @@ export function fetchThread(url: string): Dispatcher {
           type: 'THREAD_FETCH_SUCCESS',
           url,
           thread,
+        });
+
+        selectors.getPagesByUrl(getState(), url).forEach((page) => {
+          dispatch(pageActions.pageTitleUpdated(page.id, thread.title));
         });
       },
       (error) => {
@@ -131,17 +171,6 @@ export interface ThreadUpdateFailure {
   type: 'THREAD_UPDATE_FAILURE';
   url: string;
   error: Error;
-}
-
-export function updateSelectedThread(): Dispatcher {
-  return (dispatch, getState) => {
-    const thread = selectors.getSelectedThread(getState());
-    if (!thread) {
-      return Promise.reject(new Error(`No thread selected`));
-    }
-
-    return dispatch(updateThread(thread.url));
-  };
 }
 
 export function updateThread(url: string): Dispatcher {

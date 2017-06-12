@@ -8,13 +8,11 @@ export interface Threads {
     [url: string]: Thread;
   };
   all: string[];
-  selectOrder: string[];
 }
 
 export default combineReducers<Threads>({
   byUrl,
   all,
-  selectOrder,
 });
 
 function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
@@ -66,23 +64,6 @@ function all(state: Threads['all'] = [], action: Action): typeof state {
         ...state,
         action.url,
       ];
-
-    case 'THREAD_CLOSE':
-      return state.filter((url) => url !== action.url);
-
-    default:
-      return state;
-  }
-}
-
-function selectOrder(state: Threads['selectOrder'] = [], action: Action): typeof state {
-  switch (action.type) {
-    case 'THREAD_OPEN':
-      return [action.url].concat(state);
-
-    case 'THREAD_SELECT':
-      return state[0] === action.url ? state :
-        [action.url].concat(state.filter((url) => url !== action.url));
 
     case 'THREAD_CLOSE':
       return state.filter((url) => url !== action.url);

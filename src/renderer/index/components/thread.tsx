@@ -15,16 +15,17 @@ import './thread.css';
 type Props = React.Props<any> & OwnProps & StateProps & DispatchProps;
 
 interface OwnProps {
-  newPostNumber: Thread['newPostNumber'];
-  threadUrl: string;
+  url: string;
 }
 
 interface StateProps {
   posts: Posts;
+  newPostNumber: Thread['newPostNumber'];
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => ({
-  posts: selectors.getPosts(state, ownProps.threadUrl),
+  posts: selectors.getPosts(state, ownProps.url),
+  newPostNumber: selectors.getThread(ownProps.url) && selectors.getThread(ownProps.url).newPostNumber,
 });
 
 interface DispatchProps {
@@ -59,10 +60,10 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
   ]);
 
   componentDidMount() {
-    const { threadUrl, posts, loadThread } = this.props;
+    const { url, posts, loadThread } = this.props;
 
     if (posts.length === 0) {
-      loadThread(threadUrl);
+      loadThread(url);
     }
   }
 
@@ -92,7 +93,7 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
 
   scrollToPost(number: number) {
     const doc = ReactDOM.findDOMNode(this).ownerDocument;
-    const id = generatePostId(this.props.threadUrl, number);
+    const id = generatePostId(this.props.url, number);
     doc.getElementById(id)!.scrollIntoView();
   }
 
@@ -113,13 +114,13 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
   };
 
   render() {
-    const { posts, newPostNumber, threadUrl } = this.props;
+    const { posts, newPostNumber, url } = this.props;
 
     return (
       <div className="thread"
         onContextMenu={this.handleContextMenu}
         onClick={this.handleClick}>
-        <PostsComponent posts={posts} newPostNumber={newPostNumber} threadUrl={threadUrl} />
+        <PostsComponent posts={posts} newPostNumber={newPostNumber} threadUrl={url} />
       </div>
     );
   }
