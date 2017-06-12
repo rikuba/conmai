@@ -54,6 +54,7 @@ class PageComponent extends React.Component<Props, {}> {
     if (this.webview) {
       this.webview.addEventListener('dom-ready', this.handleDOMReady);
       this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
+      this.webview = null;
     }
   }
 
