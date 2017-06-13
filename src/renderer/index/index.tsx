@@ -6,7 +6,8 @@ import { AppContainer } from 'react-hot-loader';
 
 import App from './components/app';
 import { configureStore } from './store';
-import { subWindowClosed } from './actions';
+import { openPage, subWindowClosed } from './actions';
+import * as selectors from './selectors';
 
 import './index.css';
 
@@ -29,19 +30,34 @@ if (module.hot) {
   module.hot.accept('./components/app', render);
 }
 
+
 ipcRenderer.on('sub-window-closed', () => {
   store.dispatch(subWindowClosed());
 });
 
 
-let lastThreads: string[] | null = null;
+let lastPageUrls: string[] | null = null;
+
+(function restorePages() {
+  const json = localStorage.getItem('pageUrls');
+  if (json) {
+    try {
+      const pageUrls = JSON.parse(json);
+      pageUrls.forEach((url: string) => {
+        store.dispatch(openPage(url));
+      });
+    } catch (e) {
+      localStorage.removeItem('pageUrls');
+    }
+  }
+})();
 
 store.subscribe(() => {
-  const state = store.getState();
-  const threads = state.threads.all;
-  if (threads === lastThreads) {
+  const pageUrls = selectors.getAllPages(store.getState()).map((page) => page.url);
+  if (pageUrls === lastPageUrls) {
     return;
   }
-  lastThreads = threads;
-  localStorage.setItem('threads.all', JSON.stringify(threads));
+
+  lastPageUrls = pageUrls;
+  localStorage.setItem('pageUrls', JSON.stringify(pageUrls));
 });
