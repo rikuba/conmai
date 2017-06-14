@@ -33,7 +33,7 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
         isSelected={page.id === this.props.selectedPageId}
         onTabSelect={this.props.selectPage}
         onTabClose={this.props.closePage}
-        onTabCloseOthers={() => {}} />
+        onTabCloseOthers={this.props.closeAllOtherPages} />
     ));
 
     return (

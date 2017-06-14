@@ -88,6 +88,14 @@ export const closePage = (id: string): Dispatcher => async (dispatch, getState) 
   });
 };
 
+export const closeAllOtherPages = (id: string): Dispatcher => async (dispatch, getState) => {
+  getState().pages.all
+    .filter((pageId) => pageId !== id)
+    .forEach((pageId) => {
+      dispatch(closePage(pageId));
+    });
+};
+
 
 export interface PageSelect {
   type: 'PAGE_SELECT';
