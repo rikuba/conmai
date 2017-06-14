@@ -6,7 +6,7 @@ import { Action } from '../actions';
 export interface Page {
   id: string;
   url: string;
-  pageType: 'shitaraba' | 'unknown';
+  pageType: 'cavetube' | 'shitaraba' | 'unknown';
   title: string;
   faviconUrl: string;
 }

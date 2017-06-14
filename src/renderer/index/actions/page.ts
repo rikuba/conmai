@@ -2,6 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import uuid from 'uuid/v4';
 
 import * as shitaraba from '../../../clients/shitaraba-client';
+import * as cavetube from '../../../clients/cavetube';
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
 import { openThread, closeThread } from './thread';
@@ -35,6 +36,23 @@ export const openPage = (url: string): Dispatcher => async (dispatch) => {
     url = shitarabaUrl;
     pageType = 'shitaraba';
     faviconUrl = 'http://jbbs.shitaraba.net/favicon.ico';
+  }
+
+  const cavetubeUrl = cavetube.determineUrl(url);
+  if (cavetubeUrl) {
+    if (cavetubeUrl.type === 'chat') {
+      url = cavetubeUrl.url;
+      pageType = 'cavetube';
+      faviconUrl = 'https://www.cavelis.net/favicon.ico';
+    } else if (cavetubeUrl.type === 'view') {
+      url = cavetubeUrl.url.replace('view', 'popup');
+      pageType = 'cavetube';
+      faviconUrl = 'https://www.cavelis.net/favicon.ico';
+    } else if (cavetubeUrl.type === 'live') {
+      const chatUrl = await cavetube.fetchChatUrl(cavetubeUrl.url);
+      dispatch(openPage(chatUrl));
+      return;
+    }
   }
 
   dispatch<PageOpen>({

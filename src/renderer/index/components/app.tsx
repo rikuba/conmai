@@ -30,14 +30,7 @@ class AppComponent extends React.PureComponent<Props, {}> {
     const tabpanels = allPages.map((page) => (
       <TabPanelComponent key={page.id}
         isSelected={page.id === selectedPageId}>
-        {
-          page.pageType === 'shitaraba' ?
-            <ThreadComponent
-              url={page.url} /> :
-            <PageComponent
-              id={page.id}
-              url={page.url} />
-        }
+        {this.determinePageComponent(page)}
       </TabPanelComponent>
     ));
 
@@ -51,6 +44,19 @@ class AppComponent extends React.PureComponent<Props, {}> {
       </div>
     );
   }
+
+  determinePageComponent(page: Page): React.ReactNode {
+    switch (page.pageType) {
+      case 'shitaraba':
+        return <ThreadComponent url={page.url} />;
+
+      case 'cavetube':
+        return <PageComponent id={page.id} url={page.url} preload="../../scripts/cavetube.js" />;
+
+      default:
+        return <PageComponent id={page.id} url={page.url} />;
+    }
+  };
 }
 
 export default connect<StateProps, {}, {}>(mapStateToProps)<{}>(AppComponent);

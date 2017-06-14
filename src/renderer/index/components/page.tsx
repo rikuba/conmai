@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -14,6 +15,7 @@ type Props = React.Props<any> & OwnProps & DispatchProps;
 type OwnProps = {
   id: string;
   url: string;
+  preload?: string;
 };
 
 type DispatchProps = {
@@ -35,11 +37,15 @@ class PageComponent extends React.Component<Props, {}> {
   private webview: Electron.WebviewTag | null = null;
 
   render() {
-    const { url } = this.props;
+    const { url, preload } = this.props;
 
     return (
       <div className="page-container">
-        <webview className="page-view" src={url} />
+        {
+          preload ?
+            <webview className="page-view" src={url} preload={preload} /> :
+            <webview className="page-view" src={url} />
+        }
       </div>
     );
   }
@@ -48,12 +54,14 @@ class PageComponent extends React.Component<Props, {}> {
     this.webview = ReactDOM.findDOMNode(this).querySelector('webview') as Electron.WebviewTag;
     this.webview.addEventListener('dom-ready', this.handleDOMReady);
     this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
+    this.webview.addEventListener('ipc-message', this.handleIPCMessage);
   }
 
   componentWillUnmount() {
     if (this.webview) {
-      this.webview.addEventListener('dom-ready', this.handleDOMReady);
-      this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
+      this.webview.removeEventListener('dom-ready', this.handleDOMReady);
+      this.webview.removeEventListener('page-favicon-updated', this.handleFaviconUpdated);
+      this.webview.removeEventListener('ipc-message', this.handleIPCMessage);
       this.webview = null;
     }
   }
@@ -70,5 +78,13 @@ class PageComponent extends React.Component<Props, {}> {
 
     const faviconUrl = e.favicons[0];
     onUpdateFavicon(faviconUrl);
+  };
+
+  handleIPCMessage = (e: Electron.IpcMessageEvent) => {
+    switch (e.channel) {
+      case 'NEW_POSTS':
+        ipcRenderer.send('new-posts', e.args[0]);
+        break;
+    }
   };
 });
