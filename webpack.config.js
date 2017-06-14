@@ -45,6 +45,45 @@ const main = (env, common) => {
   return Object.assign({}, common, config);
 };
 
+const script = (env, common) => {
+  const config = {
+    context: path.join(srcDir, 'scripts'),
+    entry: { 'cavetube': './cavetube' },
+    output: {
+      path: path.join(distDir, 'scripts'),
+      filename: '[name].js',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.[jt]sx?$/,
+          include: srcDir,
+          use: [
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: 'tsconfig.script.json',
+              },
+            },
+          ],
+        },
+      ],
+    },
+    devtool: 'source-map',
+    target: 'electron-renderer',
+    node: {
+      __dirname: false,
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(env),
+      }),
+    ],
+  };
+
+  return Object.assign({}, common, config);
+};
+
 const forPage = (page) => (env, common) => {
   const pageDir = (baseDir) => path.join(baseDir, 'renderer', page);
   
@@ -154,6 +193,7 @@ module.exports = (env) => {
 
   return [].concat(
     main(env, common),
+    script(env, common),
     renderer(env, common)
   );
 };
