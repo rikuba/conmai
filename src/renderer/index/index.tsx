@@ -39,6 +39,12 @@ ipcRenderer.on('sub-window-closed', () => {
 let lastPageUrls: string[] | null = null;
 
 (function restorePages() {
+  const pages = selectors.getAllPages(store.getState());
+  if (pages.length > 0) {
+    // HMR
+    return;
+  }
+
   const json = localStorage.getItem('pageUrls');
   if (json) {
     try {
