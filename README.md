@@ -7,11 +7,11 @@
 ### 対応済み
 
 - したらば掲示板
-- CaveTube
+- CaveTube (簡易的)
+- Twitch (簡易的)
 
 ### 対応予定
 
-- Twitch
 - Steam ブロードキャスト
 
 ## 起動する

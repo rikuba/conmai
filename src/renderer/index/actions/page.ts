@@ -3,6 +3,7 @@ import uuid from 'uuid/v4';
 
 import * as shitaraba from '../../../clients/shitaraba-client';
 import * as cavetube from '../../../clients/cavetube';
+import * as twitch from '../../../clients/twitch';
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
 import { openThread, closeThread } from './thread';
@@ -39,6 +40,11 @@ export const openPage = (url: string): Dispatcher => async (dispatch) => {
   const cavetubeUrl = cavetube.determineUrl(url);
   if (cavetubeUrl) {
     return dispatch(openCavetubePage(cavetubeUrl));
+  }
+
+  const twitchUrl = twitch.canonicalizeUrl(url);
+  if (twitchUrl) {
+    return dispatch(openTwitchPage(twitchUrl));
   }
 
   dispatch<PageOpen>({
@@ -79,6 +85,18 @@ const openCavetubePage = (cavetubeUrl: cavetube.CavetubeUrl): Dispatcher => asyn
     url,
     pageType: 'cavetube',
     faviconUrl: cavetube.faviconUrl,
+    id: uuid(),
+  });
+};
+
+const openTwitchPage = (url: string): Dispatcher => async (dispatch) => {
+  const chatUrl = `${url}/chat`;
+  
+  dispatch<PageOpen>({
+    type: 'PAGE_OPEN',
+    url: chatUrl,
+    pageType: 'twitch',
+    faviconUrl: twitch.faviconUrl,
     id: uuid(),
   });
 };

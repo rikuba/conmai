@@ -53,6 +53,9 @@ class AppComponent extends React.PureComponent<Props, {}> {
       case 'cavetube':
         return <PageComponent id={page.id} url={page.url} preload="../../scripts/cavetube.js" />;
 
+      case 'twitch':
+        return <PageComponent id={page.id} url={page.url} preload="../../scripts/twitch.js" />;
+
       default:
         return <PageComponent id={page.id} url={page.url} />;
     }

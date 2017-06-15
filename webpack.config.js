@@ -48,7 +48,10 @@ const main = (env, common) => {
 const script = (env, common) => {
   const config = {
     context: path.join(srcDir, 'scripts'),
-    entry: { 'cavetube': './cavetube' },
+    entry: {
+      'cavetube': './cavetube',
+      'twitch': './twitch',
+    },
     output: {
       path: path.join(distDir, 'scripts'),
       filename: '[name].js',
