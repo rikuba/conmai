@@ -16,7 +16,7 @@ export const faviconUrl = 'https://www.cavelis.net/favicon.ico';
 
 const chatUrlRegex = /^https:\/\/www\.cavelis\.net\/popup\/[0-9A-Z]+/;
 const viewUrlRegex = /^https:\/\/www\.cavelis\.net\/view\/[0-9A-Z]+/;
-const liveUrlRegex = /\https:\/\/www\.cavelis\.net\/live\/[^/?#]+/;
+const liveUrlRegex = /^https:\/\/www\.cavelis\.net\/live\/[^/?#]+/;
 
 export type CavetubeUrl = {
   type: 'chat' | 'live' | 'view';
