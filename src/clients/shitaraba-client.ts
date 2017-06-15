@@ -21,6 +21,8 @@ interface PostsRange {
   last?: number;
 }
 
+export const faviconUrl = 'http://jbbs.shitaraba.net/favicon.ico';
+
 const threadUrlRegex = /^http:\/\/jbbs\.(?:shitaraba\.net|livedoor\.jp)\/bbs\/(?:read|rawmode)\.cgi\/([0-9A-Za-z]+)\/([0-9]+)\/([0-9]+)\/?/;
 
 export function canonicalizeUrl(url: string): string | null {

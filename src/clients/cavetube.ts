@@ -1,6 +1,5 @@
 import * as https from 'https';
 
-
 export interface Post {
   number: number;
   author: {
@@ -11,6 +10,8 @@ export interface Post {
   postedAt: number;
   message: string;
 }
+
+export const faviconUrl = 'https://www.cavelis.net/favicon.ico';
 
 
 const chatUrlRegex = /^https:\/\/www\.cavelis\.net\/popup\/[0-9A-Z]+/;

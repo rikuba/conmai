@@ -33,26 +33,12 @@ export const openPage = (url: string): Dispatcher => async (dispatch) => {
 
   const shitarabaUrl = shitaraba.canonicalizeUrl(url);
   if (shitarabaUrl) {
-    url = shitarabaUrl;
-    pageType = 'shitaraba';
-    faviconUrl = 'http://jbbs.shitaraba.net/favicon.ico';
+    return dispatch(openShitarabaPage(shitarabaUrl));
   }
 
   const cavetubeUrl = cavetube.determineUrl(url);
   if (cavetubeUrl) {
-    if (cavetubeUrl.type === 'chat') {
-      url = cavetubeUrl.url;
-      pageType = 'cavetube';
-      faviconUrl = 'https://www.cavelis.net/favicon.ico';
-    } else if (cavetubeUrl.type === 'view') {
-      url = cavetubeUrl.url.replace('view', 'popup');
-      pageType = 'cavetube';
-      faviconUrl = 'https://www.cavelis.net/favicon.ico';
-    } else if (cavetubeUrl.type === 'live') {
-      const chatUrl = await cavetube.fetchChatUrl(cavetubeUrl.url);
-      dispatch(openPage(chatUrl));
-      return;
-    }
+    return dispatch(openCavetubePage(cavetubeUrl));
   }
 
   dispatch<PageOpen>({
@@ -62,10 +48,39 @@ export const openPage = (url: string): Dispatcher => async (dispatch) => {
     faviconUrl,
     id: uuid(),
   });
+};
 
-  if (pageType === 'shitaraba') {
-    dispatch(openThread(url));
+const openShitarabaPage = (url: string): Dispatcher => async (dispatch) => {
+  dispatch<PageOpen>({
+    type: 'PAGE_OPEN',
+    url,
+    pageType: 'shitaraba',
+    faviconUrl: shitaraba.faviconUrl,
+    id: uuid(),
+  });
+
+  dispatch(openThread(url));
+};
+
+const openCavetubePage = (cavetubeUrl: cavetube.CavetubeUrl): Dispatcher => async (dispatch) => {
+  let { url } = cavetubeUrl;
+
+  if (cavetubeUrl.type === 'live') {
+    const chatUrl = await cavetube.fetchChatUrl(url);
+    return dispatch(openPage(chatUrl));
   }
+
+  if (cavetubeUrl.type === 'view') {
+    url = cavetubeUrl.url.replace('view', 'popup');
+  }
+
+  dispatch<PageOpen>({
+    type: 'PAGE_OPEN',
+    url,
+    pageType: 'cavetube',
+    faviconUrl: cavetube.faviconUrl,
+    id: uuid(),
+  });
 };
 
 
