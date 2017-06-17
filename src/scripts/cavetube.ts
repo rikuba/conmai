@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
       return;
     }
 
-    const comments = (addedNodes as HTMLElement[]).map(collectPostData);
+    const comments = (addedNodes as HTMLElement[])
+      .map(collectPostData)
+      .map((post) => ({ type: 'cavetube', ...post }));
     ipcRenderer.sendToHost('NEW_POSTS', comments);
   });
 

@@ -31,7 +31,9 @@ const startObserve = (container: Element) => {
       return;
     }
 
-    const comments = postElms.map(collectPostData);
+    const comments = postElms
+      .map(collectPostData)
+      .map((post) => ({ type: 'twitch', ...post }));
     ipcRenderer.sendToHost('NEW_POSTS', comments);
   });
 

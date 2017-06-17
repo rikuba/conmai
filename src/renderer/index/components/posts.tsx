@@ -22,7 +22,10 @@ export default class PostsComponent extends React.PureComponent<Props, {}> {
     // Deliver new posts to sub window
     if (newPostNumber && newPostNumber > 1) {
       const i = posts.findIndex((post) => post.number === newPostNumber);
-      const newPosts = posts.slice(i);
+      const newPosts = posts.slice(i).map((post) => ({
+        type: 'shitaraba',
+        ...post,
+      }));
       ipcRenderer.send('new-posts', newPosts);
     }
 
