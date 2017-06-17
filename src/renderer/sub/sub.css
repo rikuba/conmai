@@ -100,3 +100,15 @@ html:not(.active) .sub.my-comment:empty {
   color: #8ecdf0;
   text-decoration: none;
 }
+
+.sub p {
+  margin: 0;
+}
+
+.sub .author {
+  color: #ccc;
+}
+
+.sub .author::after {
+  content: ':  ';
+}
