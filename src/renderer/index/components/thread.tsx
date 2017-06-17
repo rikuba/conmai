@@ -25,7 +25,7 @@ interface StateProps {
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => ({
   posts: selectors.getPosts(state, ownProps.url),
-  newPostNumber: selectors.getThread(ownProps.url) && selectors.getThread(ownProps.url).newPostNumber,
+  newPostNumber: selectors.getThread(state, ownProps.url) && selectors.getThread(state, ownProps.url).newPostNumber,
 });
 
 interface DispatchProps {
