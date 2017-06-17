@@ -55,27 +55,50 @@ type OwnState = {
 export default class PostComment extends React.Component<{}, OwnState> {
   private posts: Post[] = [];
   private consumeTime = 10 * 1000;
+  private renderStart: number = 0;
   private timerId: any = 0;
 
   state: OwnState = {
     post: null,
   };
 
-  renderLoop = () => {
+  rescheduleRender() {
+    clearTimeout(this.timerId);
+    const renderTime = Date.now() - this.renderStart;
+    const next = this.consumeTime / (this.posts.length + 1) - renderTime;
+
+    if (next <= 0) {
+      this.renderNextPost();
+      return;
+    }
+
+    this.timerId = setTimeout(this.renderNextPost, next);
+  }
+
+  renderNextPost = () => {
     const post = this.posts.shift() || null;
     this.setState({ post });
 
-    const time = post ? this.consumeTime / (this.posts.length + 1) : 1000;
-    this.timerId = setTimeout(this.renderLoop, time);
+    if (post) {
+      this.renderStart = Date.now();
+
+      const next = this.consumeTime / (this.posts.length + 1);
+      this.timerId = setTimeout(this.renderNextPost, next);
+    }
   };
 
   handleNewPosts = (event: any, newPosts: Post[]) => {
+    const reschedule = this.state.post != null;
     this.posts.push(...newPosts);
+    if (reschedule) {
+      this.rescheduleRender();
+    } else {
+      this.renderNextPost();
+    }
   };
 
   componentDidMount() {
     ipcRenderer.on('new-posts', this.handleNewPosts);
-    this.renderLoop();
   }
 
   componentWillUnMount() {
