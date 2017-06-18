@@ -40,10 +40,9 @@ function CavetubePostComponent({ author, message }: CavetubePost) {
 }
 
 function TwitchPostComponent({ message }: TwitchPost) {
+  console.log(message);
   return (
-    <p className="sub post-comment">
-      {message}
-    </p>
+    <p className="sub post-comment" ref={setInnerHTML(message)}></p>
   );
 }
 
