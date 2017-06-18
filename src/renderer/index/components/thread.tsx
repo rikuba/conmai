@@ -34,6 +34,7 @@ interface DispatchProps {
 
 const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
   loadThread: async (url: string) => {
+    await dispatch(actions.openThread(url));
     await dispatch(actions.fetchBoardSettings(url))
     await dispatch(actions.fetchThread(url));
   },

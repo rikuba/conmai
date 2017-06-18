@@ -6,7 +6,7 @@ import * as cavetube from '../../../clients/cavetube';
 import * as twitch from '../../../clients/twitch';
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
-import { openThread, closeThread } from './thread';
+import { closeThread } from './thread';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
@@ -64,8 +64,6 @@ const openShitarabaPage = (url: string): Dispatcher => async (dispatch) => {
     faviconUrl: shitaraba.faviconUrl,
     id: uuid(),
   });
-
-  dispatch(openThread(url));
 };
 
 const openCavetubePage = (cavetubeUrl: cavetube.CavetubeUrl): Dispatcher => async (dispatch) => {
