@@ -39,10 +39,13 @@ function CavetubePostComponent({ author, message }: CavetubePost) {
   );
 }
 
-function TwitchPostComponent({ message }: TwitchPost) {
+function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
   console.log(message);
   return (
-    <p className="sub post-comment" ref={setInnerHTML(message)}></p>
+    <div className="sub post-comment">
+      <span className="author" style={{ color }}>{name}</span>
+      <span className="message" ref={setInnerHTML(message)}></span>
+    </div>
   );
 }
 

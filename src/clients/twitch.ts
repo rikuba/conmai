@@ -1,6 +1,9 @@
 export interface Post {
   // badges: string[];
-  author: string;
+  author: {
+    name: string;
+    color: string;
+  };
   timeStamp: string;
   message: string; // HTML?
 }
@@ -20,8 +23,11 @@ export const canonicalizeUrl = (url: string): string | null => {
 
 export const collectPostData = (elm: HTMLElement): Post => {
   const timeStamp = elm.querySelector('.timestamp')!.textContent!;
-  const author = elm.querySelector('.from')!.textContent!;
+  const fromElm = elm.querySelector('.from') as HTMLElement;
   const messageElm = elm.querySelector('.message')!;
+
+  const name = fromElm.textContent!;
+  const color = fromElm.style.color!;
 
   const message = [...messageElm.childNodes].map((node) => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -39,7 +45,10 @@ export const collectPostData = (elm: HTMLElement): Post => {
   }).join('');
 
   return {
-    author,
+    author: {
+      name,
+      color,
+    },
     timeStamp,
     message,
   };
