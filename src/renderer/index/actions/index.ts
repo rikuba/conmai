@@ -14,8 +14,23 @@ export type Action =
   PageAction |
   ThreadAction |
   
+  MainWindowClosed |
+
   SubWindowOpen |
-  SubWindowClose;
+  SubWindowClosed;
+
+
+export interface MainWindowClosed {
+  type: 'MAIN_WINDOW_CLOSED';
+  windowBounds: Electron.Rectangle;
+}
+
+export function mainWindowClosed(windowBounds: Electron.Rectangle): MainWindowClosed {
+  return {
+    type: 'MAIN_WINDOW_CLOSED',
+    windowBounds,
+  };
+}
 
 
 export interface SubWindowOpen {
@@ -35,12 +50,14 @@ export function openSubWindow(): Dispatcher {
 }
 
 
-export interface SubWindowClose {
-  type: 'SUB_WINDOW_CLOSE';
+export interface SubWindowClosed {
+  type: 'SUB_WINDOW_CLOSED';
+  windowBounds: Electron.Rectangle;
 }
 
-export function subWindowClosed(): SubWindowClose {
+export function subWindowClosed(windowBounds: Electron.Rectangle): SubWindowClosed {
   return {
-    type: 'SUB_WINDOW_CLOSE',
+    type: 'SUB_WINDOW_CLOSED',
+    windowBounds,
   };
 }

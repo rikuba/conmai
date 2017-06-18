@@ -11,7 +11,7 @@ function subWindowIsOpen(state = false, action: Action): typeof state {
     case 'SUB_WINDOW_OPEN':
       return true;
   
-    case 'SUB_WINDOW_CLOSE':
+    case 'SUB_WINDOW_CLOSED':
       return false;
 
     default:

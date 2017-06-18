@@ -4,11 +4,12 @@ import path from 'path';
 import url from 'url';
 
 import { configureStore } from '../renderer/index/store';
+import * as actions from '../renderer/index/actions';
 
 let window: Electron.BrowserWindow | null = null;
 let subWindow: Electron.BrowserWindow | null = null;
 
-configureStore();
+const store = configureStore();
 
 function createWindow(): void {
   window = new BrowserWindow({
@@ -23,6 +24,10 @@ function createWindow(): void {
     protocol: 'file:',
     slashes: true,
   }));
+
+  window.on('close', () => {
+    store.dispatch(actions.mainWindowClosed(window!.getBounds()));
+  });
 
   window.on('closed', () => {
     window = null;
@@ -86,10 +91,11 @@ ipcMain.on('open-sub-window', (e: any) => {
     slashes: true,
   }));
 
+  subWindow.on('close', () => {
+    store.dispatch(actions.subWindowClosed(subWindow!.getBounds()));
+  });
+
   subWindow.on('closed', () => {
-    if (window) {
-      window.webContents.send('sub-window-closed');
-    }
     subWindow = null;
   });
 

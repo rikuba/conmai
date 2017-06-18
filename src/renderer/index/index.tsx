@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -6,7 +5,7 @@ import { AppContainer } from 'react-hot-loader';
 
 import App from './components/app';
 import { configureStore } from './store';
-import { openPage, subWindowClosed } from './actions';
+import { openPage } from './actions';
 import * as selectors from './selectors';
 
 import './index.css';
@@ -29,11 +28,6 @@ render();
 if (module.hot) {
   module.hot.accept('./components/app', render);
 }
-
-
-ipcRenderer.on('sub-window-closed', () => {
-  store.dispatch(subWindowClosed());
-});
 
 
 let lastPageUrls: string[] | null = null;
