@@ -4,7 +4,7 @@ import { electronEnhancer } from 'redux-electron-store';
 
 import rootReducer, { State } from '../reducers';
 
-export function configureStore() {
+export function configureStore(preloadedState?: State) {
   let enhancer: any = compose(
     applyMiddleware(thunk),
     electronEnhancer({
@@ -19,6 +19,7 @@ export function configureStore() {
 
   let store = createStore<State>(
     rootReducer,
+    preloadedState || {} as State,
     enhancer
   );
 

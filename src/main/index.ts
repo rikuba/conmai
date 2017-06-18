@@ -2,20 +2,32 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import loadDevtool from 'electron-load-devtool';
 import path from 'path';
 import url from 'url';
+import fs from 'fs';
 
 import { configureStore } from '../renderer/index/store';
 import * as actions from '../renderer/index/actions';
 
+const userDataPath = app.getPath('userData');
+const sessionFilePath = path.join(userDataPath, 'session.json');
+
 let window: Electron.BrowserWindow | null = null;
 let subWindow: Electron.BrowserWindow | null = null;
 
-const store = configureStore();
+let preloadedState: any;
+try {
+  const text = fs.readFileSync(sessionFilePath, 'utf8');
+  preloadedState = JSON.parse(text);
+} catch (e) {}
+
+const store = configureStore(preloadedState);
 
 function createWindow(): void {
-  window = new BrowserWindow({
-    width: 600,
-    height: 600,
-  });
+  const { x, y, width, height } = store.getState().preferences.mainWindowBounds;
+  const bounds = x < 0 ?
+    { center: true, width, height } :
+    { x, y, width, height };
+
+  window = new BrowserWindow(bounds);
 
   window.webContents.on('new-window', handleNewWindow);
 
@@ -59,6 +71,15 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('will-quit', () => {
+  const state = store.getState();
+  fs.writeFileSync(
+    sessionFilePath,
+    JSON.stringify(state, null, 2),
+    { encoding: 'utf8' },
+  );
+});
+
 app.on('activate', () => {
   if (window === null) {
     createWindow();
@@ -70,11 +91,14 @@ ipcMain.on('open-sub-window', (e: any) => {
     subWindow.focus();
     return;
   }
+
+  const { x, y, width, height } = store.getState().preferences.subWindowBounds;
+  const bounds = x < 0 ?
+    { center: true, width, height } :
+    { x, y, width, height };
+
   subWindow = new BrowserWindow({
-    x: 1620,
-    y: 80,
-    width: 800,
-    height: 400,
+    ...bounds,
     transparent: true,
     frame: false,
     resizable: false, // TODO: should be false because break transparency on some platforms

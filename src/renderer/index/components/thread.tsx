@@ -29,14 +29,18 @@ const mapStateToProps = (state: State, ownProps: OwnProps) => ({
 });
 
 interface DispatchProps {
-  loadThread: (url: string) => Promise<void>;
+  loadThread: (url: string, init: boolean) => Promise<void>;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
-  loadThread: async (url: string) => {
-    await dispatch(actions.openThread(url));
-    await dispatch(actions.fetchBoardSettings(url))
-    await dispatch(actions.fetchThread(url));
+  loadThread: async (url: string, init: boolean) => {
+    if (init) {
+      await dispatch(actions.openThread(url));
+      await dispatch(actions.fetchBoardSettings(url))
+      await dispatch(actions.fetchThread(url));
+    } else {
+      await dispatch(actions.scheduleUpdateThread(url));
+    }
   },
 });
 
@@ -63,9 +67,7 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
   componentDidMount() {
     const { url, posts, loadThread } = this.props;
 
-    if (posts.length === 0) {
-      loadThread(url);
-    }
+    loadThread(url, posts.length === 0);
   }
 
   componentWillUpdate() {

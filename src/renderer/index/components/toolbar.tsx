@@ -57,8 +57,8 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
     .find((item) => (item as any).role === 'delete')!;
 
   state = {
-    url: '',
-    lastSelectedThread: '',
+    url: this.props.selectedPage && this.props.selectedPage.url,
+    lastSelectedThread: this.props.selectedPage && this.props.selectedPage.url,
   };
 
   componentWillReceiveProps(nextProps: Props) {
