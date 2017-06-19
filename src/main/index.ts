@@ -101,7 +101,6 @@ ipcMain.on('open-sub-window', (e: any) => {
     ...bounds,
     transparent: true,
     frame: false,
-    resizable: false, // TODO: should be false because break transparency on some platforms
     alwaysOnTop: true,
   });
 
