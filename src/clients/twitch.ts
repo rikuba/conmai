@@ -5,7 +5,7 @@ export interface Post {
     color: string;
   };
   timeStamp: string;
-  message: string; // HTML?
+  message: string;
 }
 
 export const faviconUrl = 'https://www.twitch.tv/favicon.ico';
