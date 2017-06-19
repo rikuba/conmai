@@ -39,6 +39,13 @@ function createWindow(): void {
 
   window.on('close', () => {
     store.dispatch(actions.mainWindowClosed(window!.getBounds()));
+
+    const state = store.getState();
+    fs.writeFileSync(
+      sessionFilePath,
+      JSON.stringify(state, null, 2),
+      { encoding: 'utf8' },
+    );
   });
 
   window.on('closed', () => {
@@ -58,6 +65,10 @@ const handleNewWindow = (e: any, url: string) => {
 app.on('ready', () => {
   createWindow();
 
+  if (store.getState().ui.subWindowIsOpen) {
+    ipcMain.emit('open-sub-window');
+  }
+
   if (process.env.NODE_ENV === 'development') {
     loadDevtool(loadDevtool['REACT_DEVELOPER_TOOLS']);
     loadDevtool(loadDevtool['REDUX_DEVTOOLS']);
@@ -69,15 +80,6 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-});
-
-app.on('will-quit', () => {
-  const state = store.getState();
-  fs.writeFileSync(
-    sessionFilePath,
-    JSON.stringify(state, null, 2),
-    { encoding: 'utf8' },
-  );
 });
 
 app.on('activate', () => {
