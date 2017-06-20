@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, DispatchProp } from 'react-redux';
 
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
@@ -12,7 +12,7 @@ import ThreadComponent from './thread';
 
 import './app.css';
 
-type Props = React.Props<any> & StateProps;
+type Props = React.Props<any> & StateProps & DispatchProp<State>;
 
 type StateProps = {
   allPages: Page[];
@@ -62,4 +62,4 @@ class AppComponent extends React.PureComponent<Props, {}> {
   };
 }
 
-export default connect<StateProps, {}, {}>(mapStateToProps)<{}>(AppComponent);
+export default connect<StateProps, {}, {}>(mapStateToProps)(AppComponent);

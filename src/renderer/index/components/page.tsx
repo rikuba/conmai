@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch: Dispatch<State>, { id }: OwnProps): Dispat
   },
 });
 
-export default connect<{}, DispatchProps, {}>(null, mapDispatchToProps)(
+export default connect<{}, DispatchProps, OwnProps>(null, mapDispatchToProps)(
 class PageComponent extends React.Component<Props, {}> {
   private webview: Electron.WebviewTag | null = null;
 
