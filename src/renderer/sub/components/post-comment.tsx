@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 
-import { setInnerHTML } from '../../../utils';
+import { setInnerHtmlSafely } from '../../../utils';
 import { Post as ShitarabaPost } from '../../../clients/shitaraba-client';
 import { Post as CavetubePost } from '../../../clients/cavetube';
 import { Post as TwitchPost } from '../../../clients/twitch';
@@ -16,7 +16,7 @@ type Post =
 function ShitarabaPostComponent({ message }: ShitarabaPost) {
   return (
     <p className="sub post-comment"
-      ref={setInnerHTML(message)}
+      ref={setInnerHtmlSafely(message)}
     ></p>
   );
 }
@@ -44,7 +44,7 @@ function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
   return (
     <div className="sub post-comment">
       <span className="author" style={{ color }}>{name}</span>
-      <span className="message" ref={setInnerHTML(message)}></span>
+      <span className="message" ref={setInnerHtmlSafely(message)}></span>
     </div>
   );
 }

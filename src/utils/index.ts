@@ -1,4 +1,5 @@
 import { Store } from 'redux';
+import xss from 'xss';
 
 import { parseThreadUrl } from '../clients/shitaraba-client';
 
@@ -16,6 +17,15 @@ export const setInnerHTML = (html: string) => (element: Element | null) => {
   if (element) {
     element.innerHTML = html;
   }
+};
+
+export const setInnerHtmlSafely = (html: string) => {
+  const safeHtml = xss(html);
+  return (element: Element | null) => {
+    if (element) {
+      element.innerHTML = safeHtml;
+    }
+  };
 };
 
 export function observeStore<T, U>(store: Store<T>, select: (state: T) => U, onChange: (value: U) => void) {
