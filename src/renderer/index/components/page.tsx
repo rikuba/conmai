@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -55,6 +55,7 @@ class PageComponent extends React.Component<Props, {}> {
     this.webview.addEventListener('dom-ready', this.handleDOMReady);
     this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
     this.webview.addEventListener('ipc-message', this.handleIPCMessage);
+    this.webview.addEventListener('new-window', this.handleNewWindow);
   }
 
   componentWillUnmount() {
@@ -62,6 +63,7 @@ class PageComponent extends React.Component<Props, {}> {
       this.webview.removeEventListener('dom-ready', this.handleDOMReady);
       this.webview.removeEventListener('page-favicon-updated', this.handleFaviconUpdated);
       this.webview.removeEventListener('ipc-message', this.handleIPCMessage);
+      this.webview.removeEventListener('new-window', this.handleNewWindow);
       this.webview = null;
     }
   }
@@ -86,5 +88,10 @@ class PageComponent extends React.Component<Props, {}> {
         ipcRenderer.send('new-posts', e.args[0]);
         break;
     }
+  };
+
+  handleNewWindow = (e: Electron.NewWindowEvent) => {
+    e.preventDefault();
+    shell.openExternal(e.url);
   };
 });
