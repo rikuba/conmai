@@ -21,11 +21,6 @@ declare module 'redux-electron-store' {
   export const electronEnhancer: any;
 }
 
-declare module 'xss' {
-  const xss: (string: string) => string;
-  export default xss;
-}
-
 declare module JSX {
   interface IntrinsicElements {
     webview: any;
