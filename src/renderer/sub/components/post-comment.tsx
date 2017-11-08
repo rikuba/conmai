@@ -117,13 +117,13 @@ export default class PostComment extends React.Component<{}, OwnState> {
 
     switch (post.type) {
       case 'shitaraba':
-        return <ShitarabaPostComponent {...(post as ShitarabaPost)} />;
+        return <ShitarabaPostComponent {...post} />;
 
       case 'cavetube':
-        return <CavetubePostComponent {...(post as CavetubePost)} />;
+        return <CavetubePostComponent {...post} />;
 
       case 'twitch':
-        return <TwitchPostComponent {...(post as TwitchPost)} />;
+        return <TwitchPostComponent {...post} />;
     }
   }
 }
