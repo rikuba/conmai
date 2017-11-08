@@ -149,7 +149,7 @@ function fetchAsText(url: string): Promise<string> {
           to: 'UNICODE',
           from: 'EUCJP',
           type: 'string'
-        });
+        }) as string;
         resolve(text);
       });
     });
