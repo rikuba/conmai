@@ -119,3 +119,24 @@ html:not(.active) .sub.my-comment:empty {
 .sub .author::after {
   content: ':  ';
 }
+
+
+.posts-container {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.post-comment {
+  animation: show-comment 250ms ease 0s 1 normal;
+}
+
+@keyframes show-comment {
+  0% {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}

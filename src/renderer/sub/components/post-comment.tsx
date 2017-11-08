@@ -13,6 +13,19 @@ type Post =
   { type: 'twitch' } & TwitchPost;
 
 
+function renderPost(post: Post): JSX.Element {
+  switch (post.type) {
+    case 'shitaraba':
+      return <ShitarabaPostComponent {...post} />;
+
+    case 'cavetube':
+      return <CavetubePostComponent {...post} />;
+
+    case 'twitch':
+      return <TwitchPostComponent {...post} />;
+  }
+}
+
 function ShitarabaPostComponent({ message }: ShitarabaPost) {
   return (
     <p className="sub post-comment"
@@ -51,79 +64,40 @@ function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
 
 
 type OwnState = {
-  post: Post | null;
+  posts: Post[];
 };
 
 export default class PostComment extends React.Component<{}, OwnState> {
-  private posts: Post[] = [];
-  private consumeTime = 10 * 1000;
-  private renderStart: number = 0;
-  private timerId: any = 0;
+  private _handleNewPosts: any;
 
   state: OwnState = {
-    post: null,
+    posts: [],
   };
 
-  rescheduleRender() {
-    clearTimeout(this.timerId);
-    const renderTime = Date.now() - this.renderStart;
-    const next = this.consumeTime / (this.posts.length + 1) - renderTime;
-
-    if (next <= 0) {
-      this.renderNextPost();
-      return;
-    }
-
-    this.timerId = setTimeout(this.renderNextPost, next);
+  handleNewPosts(event: any, newPosts: Post[]) {
+    this.setState({
+      posts: this.state.posts.concat(newPosts),
+    });
+    
+    setTimeout(() => {
+      this.setState({
+        posts: this.state.posts.slice(newPosts.length),
+      });
+    }, 10 * 1000);
   }
 
-  renderNextPost = () => {
-    const post = this.posts.shift() || null;
-    this.setState({ post });
-
-    if (post) {
-      this.renderStart = Date.now();
-
-      const next = this.consumeTime / (this.posts.length + 1);
-      this.timerId = setTimeout(this.renderNextPost, next);
-    }
-  };
-
-  handleNewPosts = (event: any, newPosts: Post[]) => {
-    const reschedule = this.state.post != null;
-    this.posts.push(...newPosts);
-    if (reschedule) {
-      this.rescheduleRender();
-    } else {
-      this.renderNextPost();
-    }
-  };
-
   componentDidMount() {
-    ipcRenderer.on('new-posts', this.handleNewPosts);
+    this._handleNewPosts = this.handleNewPosts.bind(this);
+    ipcRenderer.on('new-posts', this._handleNewPosts);
   }
 
   componentWillUnMount() {
-    ipcRenderer.removeListener('new-posts', this.handleNewPosts);
-    clearTimeout(this.timerId);
+    ipcRenderer.removeListener('new-posts', this._handleNewPosts);
   }
 
   render() {
-    const { post } = this.state;
-
-    if (post == null) {
-      return <div />;
-    }
-
-    switch (post.type) {
-      case 'shitaraba':
-        return <ShitarabaPostComponent {...post} />;
-
-      case 'cavetube':
-        return <CavetubePostComponent {...post} />;
-
-      case 'twitch':
-        return <TwitchPostComponent {...post} />;
-    }
+    return <div className="posts-container">
+      {this.state.posts.map(renderPost)}
+    </div>;
   }
 }
