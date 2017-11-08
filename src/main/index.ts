@@ -72,7 +72,7 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'development') {
     loadDevtool(loadDevtool['REACT_DEVELOPER_TOOLS']);
     loadDevtool(loadDevtool['REDUX_DEVTOOLS']);
-    window!.webContents.openDevTools();
+    window!.webContents.openDevTools({ mode: 'detach' });
   }
 });
 
@@ -125,7 +125,7 @@ ipcMain.on('open-sub-window', (e: any) => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    subWindow.webContents.openDevTools();
+    subWindow.webContents.openDevTools({ mode: 'detach' });
   }
 });
 
