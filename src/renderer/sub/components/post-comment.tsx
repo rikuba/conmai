@@ -83,7 +83,7 @@ export default class PostComment extends React.Component<{}, OwnState> {
       this.setState({
         posts: this.state.posts.slice(newPosts.length),
       });
-    }, 10 * 1000);
+    }, 30 * 1000);
   }
 
   componentDidMount() {
