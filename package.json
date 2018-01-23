@@ -22,7 +22,7 @@
     "@types/webpack-env": "^1.13.2",
     "awesome-typescript-loader": "^3.3.0",
     "css-loader": "^0.28.7",
-    "electron": "^1.7.9",
+    "electron": "^1.7.11",
     "electron-load-devtool": "^0.5.1",
     "encoding-japanese": "^1.0.26",
     "extract-text-webpack-plugin": "^3.0.2",
