@@ -25,7 +25,8 @@ type DispatchProps = typeof actions;
 class TabbarComponent extends React.PureComponent<Props, {}> {
   render() {
     const tabs = this.props.allPages.map((page) => (
-      <TabComponent key={page.id}
+      <TabComponent
+        key={page.id}
         id={page.id}
         url={page.url}
         icon={page.faviconUrl}
@@ -33,7 +34,8 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
         isSelected={page.id === this.props.selectedPageId}
         onTabSelect={this.props.selectPage}
         onTabClose={this.props.closePage}
-        onTabCloseOthers={this.props.closeAllOtherPages} />
+        onTabCloseOthers={this.props.closeAllOtherPages}
+      />
     ));
 
     return (
@@ -44,4 +46,4 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-export default connect<StateProps, DispatchProps, {}>(mapStateToProps, actions as any)(TabbarComponent);
+export default connect(mapStateToProps, actions)(TabbarComponent);

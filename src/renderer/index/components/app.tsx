@@ -28,8 +28,7 @@ class AppComponent extends React.PureComponent<Props, {}> {
   render() {
     const { allPages, selectedPageId } = this.props;
     const tabpanels = allPages.map((page) => (
-      <TabPanelComponent key={page.id}
-        isSelected={page.id === selectedPageId}>
+      <TabPanelComponent key={page.id} isSelected={page.id === selectedPageId}>
         {this.determinePageComponent(page)}
       </TabPanelComponent>
     ));
@@ -38,9 +37,7 @@ class AppComponent extends React.PureComponent<Props, {}> {
       <div className="application">
         <ToolbarComponent />
         <TabbarComponent />
-        <TabPanelsComponent>
-          {tabpanels}
-        </TabPanelsComponent>
+        <TabPanelsComponent>{tabpanels}</TabPanelsComponent>
       </div>
     );
   }
@@ -59,7 +56,7 @@ class AppComponent extends React.PureComponent<Props, {}> {
       default:
         return <PageComponent id={page.id} url={page.url} />;
     }
-  };
+  }
 }
 
-export default connect<StateProps, {}, {}>(mapStateToProps)(AppComponent);
+export default connect(mapStateToProps)(AppComponent);

@@ -25,7 +25,9 @@ interface StateProps {
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => ({
   posts: selectors.getPosts(state, ownProps.url),
-  newPostNumber: selectors.getThread(state, ownProps.url) && selectors.getThread(state, ownProps.url).newPostNumber,
+  newPostNumber:
+    selectors.getThread(state, ownProps.url) &&
+    selectors.getThread(state, ownProps.url).newPostNumber,
 });
 
 interface DispatchProps {
@@ -36,7 +38,7 @@ const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
   loadThread: async (url: string, init: boolean) => {
     if (init) {
       await dispatch(actions.openThread(url));
-      await dispatch(actions.fetchBoardSettings(url))
+      await dispatch(actions.fetchBoardSettings(url));
       await dispatch(actions.fetchThread(url));
     } else {
       await dispatch(actions.scheduleUpdateThread(url));
@@ -56,7 +58,8 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
       click: (menuItem, browserWindow, event) => {
         this.scrollToTheTop();
       },
-    },{
+    },
+    {
       label: 'スレッドの末尾へ',
       click: (menuItem, browserWindow, event) => {
         this.scrollToTheEnd();
@@ -77,9 +80,7 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
 
   componentDidUpdate() {
     const { newPostNumber } = this.props;
-    if (newPostNumber &&
-      (newPostNumber === 1 || (newPostNumber > 1 && this.isScrolledToTheEnd))
-    ) {
+    if (newPostNumber && (newPostNumber === 1 || (newPostNumber > 1 && this.isScrolledToTheEnd))) {
       this.scrollToTheEnd();
     }
   }
@@ -120,13 +121,11 @@ class ThreadComponent extends React.PureComponent<Props, {}> {
     const { posts, newPostNumber, url } = this.props;
 
     return (
-      <div className="thread"
-        onContextMenu={this.handleContextMenu}
-        onClick={this.handleClick}>
+      <div className="thread" onContextMenu={this.handleContextMenu} onClick={this.handleClick}>
         <PostsComponent posts={posts} newPostNumber={newPostNumber} threadUrl={url} />
       </div>
     );
   }
 }
 
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ThreadComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ThreadComponent);

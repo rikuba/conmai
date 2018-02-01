@@ -10,7 +10,7 @@ type OwnProps = {
 
 export default function TabPanelComponent(props: Props) {
   return (
-    <div role="tablanel" className="tabpanel" aria-hidden={String(!props.isSelected)}>
+    <div role="tablanel" className="tabpanel" aria-hidden={!props.isSelected}>
       {props.children}
     </div>
   );

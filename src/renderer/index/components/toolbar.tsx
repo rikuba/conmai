@@ -26,7 +26,7 @@ type DispatchProps = {
 
 const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
   openUrl: (url: string) => dispatch(actions.openPage(url)),
-  openSubWindow:() => dispatch(actions.openSubWindow()),
+  openSubWindow: () => dispatch(actions.openSubWindow()),
 });
 
 type OwnState = {
@@ -53,8 +53,9 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
     { role: 'selectall', label: 'すべて選択' },
   ]);
 
-  private urlInputDeleteMenuItem = this.urlInputContextMenu.items
-    .find((item) => (item as any).role === 'delete')!;
+  private urlInputDeleteMenuItem = this.urlInputContextMenu.items.find(
+    (item) => (item as any).role === 'delete',
+  )!;
 
   state = {
     url: this.props.selectedPage && this.props.selectedPage.url,
@@ -115,15 +116,19 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
   render() {
     return (
       <div className="toolbar">
-        <button className="open-subwindow-button"
-          onClick={this.handleOpenSubwindowButtonClick}>字幕</button>
+        <button className="open-subwindow-button" onClick={this.handleOpenSubwindowButtonClick}>
+          字幕
+        </button>
         <form onSubmit={this.handleUrlSubmit} className="url-form">
-          <input type="text" className="url-input"
+          <input
+            type="text"
+            className="url-input"
             placeholder="URLを入力します"
             value={this.state.url}
             onChange={this.handleUrlInputChange}
             onKeyDown={this.handleUrlInputKeydown}
-            onContextMenu={this.handleUrlInputContextMenu} />
+            onContextMenu={this.handleUrlInputContextMenu}
+          />
           <button type="submit">開く</button>
         </form>
       </div>
@@ -131,4 +136,4 @@ class ToolbarComponent extends React.Component<Props, OwnState> {
   }
 }
 
-export default connect<StateProps, DispatchProps, {}>(mapStateToProps, mapDispatchToProps)(ToolbarComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolbarComponent);
