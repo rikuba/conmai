@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 
-import * as shitaraba from '../../../clients/shitaraba';
+import * as shitaraba from '../../../services/shitaraba';
 import { State } from '../reducers';
 import * as selectors from '../selectors';
 import * as pageActions from './page';

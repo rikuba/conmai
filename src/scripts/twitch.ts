@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 
-import { collectPostData } from '../clients/twitch';
+import { collectPostData } from '../services/twitch';
 
 setTimeout(function next() {
   const container = document.querySelector('.chat-lines');

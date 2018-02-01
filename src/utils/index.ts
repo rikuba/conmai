@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 import xss from 'xss';
 
-import { parseThreadUrl } from '../clients/shitaraba';
+import { parseThreadUrl } from '../services/shitaraba';
 
 export function generatePostId(url: string, postNumber: number): string {
   const urlData = parseThreadUrl(url);

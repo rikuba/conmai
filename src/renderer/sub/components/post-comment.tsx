@@ -2,9 +2,9 @@ import { ipcRenderer } from 'electron';
 import React from 'react';
 
 import { setInnerHtmlSafely } from '../../../utils';
-import { Post as ShitarabaPost } from '../../../clients/shitaraba';
-import { Post as CavetubePost } from '../../../clients/cavetube';
-import { Post as TwitchPost } from '../../../clients/twitch';
+import { Post as ShitarabaPost } from '../../../services/shitaraba';
+import { Post as CavetubePost } from '../../../services/cavetube';
+import { Post as TwitchPost } from '../../../services/twitch';
 
 type Post =
   | { type: 'shitaraba' } & ShitarabaPost

@@ -1,9 +1,9 @@
 import { ThunkAction } from 'redux-thunk';
 import uuid from 'uuid/v4';
 
-import * as shitaraba from '../../../clients/shitaraba';
-import * as cavetube from '../../../clients/cavetube';
-import * as twitch from '../../../clients/twitch';
+import * as shitaraba from '../../../services/shitaraba';
+import * as cavetube from '../../../services/cavetube';
+import * as twitch from '../../../services/twitch';
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
 import { closeThread } from './thread';
