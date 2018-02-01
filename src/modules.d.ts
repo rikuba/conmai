@@ -25,9 +25,3 @@ declare module 'xss' {
   const module: any;
   export default module;
 }
-
-declare namespace JSX {
-  interface IntrinsicElements {
-    webview: any;
-  }
-}
