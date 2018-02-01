@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import React from 'react';
 
 import { setInnerHtmlSafely } from '../../../utils';
-import { Post as ShitarabaPost } from '../../../clients/shitaraba-client';
+import { Post as ShitarabaPost } from '../../../clients/shitaraba';
 import { Post as CavetubePost } from '../../../clients/cavetube';
 import { Post as TwitchPost } from '../../../clients/twitch';
 

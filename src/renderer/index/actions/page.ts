@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import uuid from 'uuid/v4';
 
-import * as shitaraba from '../../../clients/shitaraba-client';
+import * as shitaraba from '../../../clients/shitaraba';
 import * as cavetube from '../../../clients/cavetube';
 import * as twitch from '../../../clients/twitch';
 import { State, Page } from '../reducers';

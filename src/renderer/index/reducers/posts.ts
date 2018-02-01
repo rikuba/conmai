@@ -1,4 +1,4 @@
-import { Post as PostResponse } from '../../../clients/shitaraba-client';
+import { Post as PostResponse } from '../../../clients/shitaraba';
 import { generatePostId } from '../../../utils';
 import { Action } from '../actions';
 
