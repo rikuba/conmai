@@ -8,7 +8,7 @@
     "dev": "run-p dev:*",
     "dev:main": "webpack --env development --watch",
     "dev:hmr": "webpack-dev-server --config webpack.hmr.config.js --env development",
-    "prettier": "prettier --write \"src/**/*.{ts,tsx}\""
+    "prettier": "prettier --write \"{src/**/*.{ts,tsx},*.js{,on}}\""
   },
   "license": "MIT",
   "devDependencies": {

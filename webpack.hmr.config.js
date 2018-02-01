@@ -15,20 +15,18 @@ module.exports = (env) => {
 
   const entry = {};
   pages.forEach((page) => {
-    entry[`${page}/${page}`] = [
-      'react-hot-loader/patch',
-      `./${page}/${page}`,
-    ];
+    entry[`${page}/${page}`] = ['react-hot-loader/patch', `./${page}/${page}`];
   });
 
-  const htmls = pages.map((page) => (
-    new HtmlPlugin({
-      filename: `${page}/${page}.html`,
-      template: `./${page}/${page}.html`,
-      chunks: [`${page}/${page}`],
-      alwaysWriteToDisk: true,
-    })
-  ));
+  const htmls = pages.map(
+    (page) =>
+      new HtmlPlugin({
+        filename: `${page}/${page}.html`,
+        template: `./${page}/${page}.html`,
+        chunks: [`${page}/${page}`],
+        alwaysWriteToDisk: true,
+      }),
+  );
 
   return {
     context: pageDir(srcDir),

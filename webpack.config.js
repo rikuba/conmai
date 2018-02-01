@@ -9,7 +9,7 @@ const distDir = path.join(__dirname, 'dist');
 const main = (env, common) => {
   const config = {
     context: path.join(srcDir, 'main'),
-    entry: { 'index': './index' },
+    entry: { index: './index' },
     output: {
       path: path.join(distDir, 'main'),
       filename: '[name].js',
@@ -49,8 +49,8 @@ const script = (env, common) => {
   const config = {
     context: path.join(srcDir, 'scripts'),
     entry: {
-      'cavetube': './cavetube',
-      'twitch': './twitch',
+      cavetube: './cavetube',
+      twitch: './twitch',
     },
     output: {
       path: path.join(distDir, 'scripts'),
@@ -89,14 +89,11 @@ const script = (env, common) => {
 
 const forPage = (page) => (env, common) => {
   const pageDir = (baseDir) => path.join(baseDir, 'renderer', page);
-  
+
   const config = {
     context: pageDir(srcDir),
     entry: {
-      [page]: [
-        'react-hot-loader/patch',
-        `./${page}`,
-      ],
+      [page]: ['react-hot-loader/patch', `./${page}`],
     },
     output: {
       path: pageDir(distDir),
@@ -134,41 +131,35 @@ const forPage = (page) => (env, common) => {
 
   // Handle CSS
   if (env === 'development') {
-    config.module.rules.push(
-      {
-        test: /\.css$/,
-        include: srcDir,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
+    config.module.rules.push({
+      test: /\.css$/,
+      include: srcDir,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
           },
-        ],
-      }
-    );
+        },
+      ],
+    });
   } else {
     const extractCSS = new ExtractTextPlugin('[name].css');
-    config.module.rules.push(
-      {
-        test: /\.css$/,
-        include: srcDir,
-        use: extractCSS.extract({
-          fallback: 'style-loader',
-          use: {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
+    config.module.rules.push({
+      test: /\.css$/,
+      include: srcDir,
+      use: extractCSS.extract({
+        fallback: 'style-loader',
+        use: {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
           },
-        }),
-      }
-    );
-    config.plugins.push(
-      extractCSS
-    );
+        },
+      }),
+    });
+    config.plugins.push(extractCSS);
   }
 
   // Make more debuggable
@@ -194,9 +185,5 @@ module.exports = (env) => {
     },
   };
 
-  return [].concat(
-    main(env, common),
-    script(env, common),
-    renderer(env, common)
-  );
+  return [].concat(main(env, common), script(env, common), renderer(env, common));
 };
