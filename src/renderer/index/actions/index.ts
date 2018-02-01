@@ -7,18 +7,9 @@ import { Action as ThreadAction } from './thread';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
-
 export * from './page';
 
-export type Action =
-  PageAction |
-  ThreadAction |
-  
-  MainWindowClosed |
-
-  SubWindowOpen |
-  SubWindowClosed;
-
+export type Action = PageAction | ThreadAction | MainWindowClosed | SubWindowOpen | SubWindowClosed;
 
 export interface MainWindowClosed {
   type: 'MAIN_WINDOW_CLOSED';
@@ -31,7 +22,6 @@ export function mainWindowClosed(windowBounds: Electron.Rectangle): MainWindowCl
     windowBounds,
   };
 }
-
 
 export interface SubWindowOpen {
   type: 'SUB_WINDOW_OPEN';
@@ -48,7 +38,6 @@ export function openSubWindow(): Dispatcher {
     return Promise.resolve();
   };
 }
-
 
 export interface SubWindowClosed {
   type: 'SUB_WINDOW_CLOSED';

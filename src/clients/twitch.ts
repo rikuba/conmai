@@ -10,7 +10,6 @@ export interface Post {
 
 export const faviconUrl = 'https://www.twitch.tv/favicon.ico';
 
-
 export const canonicalizeUrl = (url: string): string | null => {
   const match = /^https:\/\/www\.twitch\.tv\/[^/?#]+/.exec(url);
   if (!match) {
@@ -18,8 +17,7 @@ export const canonicalizeUrl = (url: string): string | null => {
   }
 
   return match[0];
-}
-
+};
 
 export const collectPostData = (elm: HTMLElement): Post => {
   const timeStamp = elm.querySelector('.timestamp')!.textContent!;
@@ -29,20 +27,24 @@ export const collectPostData = (elm: HTMLElement): Post => {
   const name = fromElm.textContent!;
   const color = fromElm.style.color!;
 
-  const message = [...messageElm.childNodes].map((node) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = (node as Text).data;
-      return new Option(text).innerHTML;
-    }
+  const message = [...messageElm.childNodes]
+    .map((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = (node as Text).data;
+        return new Option(text).innerHTML;
+      }
 
-    if (node.nodeType === Node.ELEMENT_NODE &&
-        (node as HTMLElement).matches('span.balloon-wrapper')) {
-      const img = (node as HTMLElement).firstElementChild as HTMLImageElement;
-      return ` ${img.outerHTML.replace(/\/\//, 'https://')} `;
-    }
+      if (
+        node.nodeType === Node.ELEMENT_NODE &&
+        (node as HTMLElement).matches('span.balloon-wrapper')
+      ) {
+        const img = (node as HTMLElement).firstElementChild as HTMLImageElement;
+        return ` ${img.outerHTML.replace(/\/\//, 'https://')} `;
+      }
 
-    return '';
-  }).join('');
+      return '';
+    })
+    .join('');
 
   return {
     author: {

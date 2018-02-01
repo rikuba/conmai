@@ -23,29 +23,25 @@ const store = configureStore(preloadedState);
 
 function createWindow(): void {
   const { x, y, width, height } = store.getState().preferences.mainWindowBounds;
-  const bounds = x < 0 ?
-    { center: true, width, height } :
-    { x, y, width, height };
+  const bounds = x < 0 ? { center: true, width, height } : { x, y, width, height };
 
   window = new BrowserWindow(bounds);
 
   window.webContents.on('new-window', handleNewWindow);
 
-  window.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'index', 'index.html'),
-    protocol: 'file:',
-    slashes: true,
-  }));
+  window.loadURL(
+    url.format({
+      pathname: path.join(__dirname, '..', 'renderer', 'index', 'index.html'),
+      protocol: 'file:',
+      slashes: true,
+    }),
+  );
 
   window.on('close', () => {
     store.dispatch(actions.mainWindowClosed(window!.getBounds()));
 
     const state = store.getState();
-    fs.writeFileSync(
-      sessionFilePath,
-      JSON.stringify(state, null, 2),
-      { encoding: 'utf8' },
-    );
+    fs.writeFileSync(sessionFilePath, JSON.stringify(state, null, 2), { encoding: 'utf8' });
   });
 
   window.on('closed', () => {
@@ -95,9 +91,7 @@ ipcMain.on('open-sub-window', (e: any) => {
   }
 
   const { x, y, width, height } = store.getState().preferences.subWindowBounds;
-  const bounds = x < 0 ?
-    { center: true, width, height } :
-    { x, y, width, height };
+  const bounds = x < 0 ? { center: true, width, height } : { x, y, width, height };
 
   subWindow = new BrowserWindow({
     ...bounds,
@@ -110,11 +104,13 @@ ipcMain.on('open-sub-window', (e: any) => {
 
   subWindow.setIgnoreMouseEvents(true);
 
-  subWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'renderer', 'sub', 'sub.html'),
-    protocol: 'file:',
-    slashes: true,
-  }));
+  subWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, '..', 'renderer', 'sub', 'sub.html'),
+      protocol: 'file:',
+      slashes: true,
+    }),
+  );
 
   subWindow.on('close', () => {
     store.dispatch(actions.subWindowClosed(subWindow!.getBounds()));

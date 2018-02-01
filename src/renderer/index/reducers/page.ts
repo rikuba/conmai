@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 
 import { Action } from '../actions';
 
-
 export interface Page {
   id: string;
   url: string;
@@ -18,7 +17,6 @@ export default combineReducers<Page>({
   title,
   faviconUrl,
 });
-
 
 function id(state: Page['id'] = '', action: Action): typeof state {
   switch (action.type) {

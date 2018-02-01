@@ -28,10 +28,12 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
       const prevThread = state[action.url];
       const nextThread = thread(prevThread, action);
 
-      return nextThread === prevThread ? state : {
-        ...state,
-        [action.url]: thread(state[action.url], action),
-      };
+      return nextThread === prevThread
+        ? state
+        : {
+            ...state,
+            [action.url]: thread(state[action.url], action),
+          };
     }
 
     case 'BOARD_SETTINGS_FETCH_REQUEST':
@@ -39,11 +41,13 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
     case 'BOARD_SETTINGS_FETCH_FAILURE': {
       const prevThread = state[action.threadUrl];
       const nextThread = thread(prevThread, action);
-      
-      return nextThread === prevThread ? state : {
-        ...state,
-        [action.threadUrl]: thread(state[action.threadUrl], action),
-      };
+
+      return nextThread === prevThread
+        ? state
+        : {
+            ...state,
+            [action.threadUrl]: thread(state[action.threadUrl], action),
+          };
     }
 
     case 'THREAD_CLOSE': {
@@ -60,10 +64,7 @@ function byUrl(state: Threads['byUrl'] = {}, action: Action): typeof state {
 function all(state: Threads['all'] = [], action: Action): typeof state {
   switch (action.type) {
     case 'THREAD_OPEN':
-      return [
-        ...state,
-        action.url,
-      ];
+      return [...state, action.url];
 
     case 'THREAD_CLOSE':
       return state.filter((url) => url !== action.url);

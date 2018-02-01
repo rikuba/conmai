@@ -15,9 +15,9 @@ type OwnProps = {
 export default class PostsComponent extends React.PureComponent<Props, {}> {
   render() {
     const { posts, newPostNumber, threadUrl } = this.props;
-    const isNew = newPostNumber ?
-      (number: number) => number >= newPostNumber :
-      (number: number) => false;
+    const isNew = newPostNumber
+      ? (number: number) => number >= newPostNumber
+      : (number: number) => false;
 
     // Deliver new posts to sub window
     if (newPostNumber && newPostNumber > 1) {
@@ -32,10 +32,12 @@ export default class PostsComponent extends React.PureComponent<Props, {}> {
     return (
       <div className="posts">
         {posts.map((post) => (
-          <PostComponent key={post.number}
+          <PostComponent
+            key={post.number}
             isNew={isNew(post.number)}
             post={post}
-            threadUrl={threadUrl} />
+            threadUrl={threadUrl}
+          />
         ))}
       </div>
     );

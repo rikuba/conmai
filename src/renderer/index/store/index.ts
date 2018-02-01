@@ -17,11 +17,7 @@ export function configureStore(preloadedState?: State) {
     enhancer = composeEnhancers(enhancer);
   }
 
-  let store = createStore<State>(
-    rootReducer,
-    preloadedState || {} as State,
-    enhancer
-  );
+  let store = createStore<State>(rootReducer, preloadedState || ({} as State), enhancer);
 
   return store;
 }

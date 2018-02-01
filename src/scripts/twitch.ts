@@ -7,7 +7,7 @@ setTimeout(function next() {
   if (!container) {
     return setTimeout(next, 16);
   }
-  
+
   startObserve(container);
 }, 64);
 
@@ -15,12 +15,14 @@ const startObserve = (container: Element) => {
   let initialCommentsLoaded = false;
 
   const observer = new MutationObserver((mutations) => {
-    const postElms = mutations.reduce((nodes, m) => {
-      return nodes.concat(
-        [...m.addedNodes]
-          .filter((node) => node.nodeType === Node.ELEMENT_NODE) as HTMLElement[]
-      );
-    }, [] as HTMLElement[]);
+    const postElms = mutations.reduce(
+      (nodes, m) => {
+        return nodes.concat([...m.addedNodes].filter(
+          (node) => node.nodeType === Node.ELEMENT_NODE,
+        ) as HTMLElement[]);
+      },
+      [] as HTMLElement[],
+    );
 
     if (!initialCommentsLoaded) {
       initialCommentsLoaded = true;
@@ -31,9 +33,7 @@ const startObserve = (container: Element) => {
       return;
     }
 
-    const comments = postElms
-      .map(collectPostData)
-      .map((post) => ({ type: 'twitch', ...post }));
+    const comments = postElms.map(collectPostData).map((post) => ({ type: 'twitch', ...post }));
     ipcRenderer.sendToHost('NEW_POSTS', comments);
   });
 

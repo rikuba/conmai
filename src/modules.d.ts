@@ -12,16 +12,16 @@ declare module 're-reselect' {
     resultFunc: Function;
   }
 
-  export default function createCachedSelector(...funcs: Function[]):
-    (resolver: Function, createSelectorInstance?: Function) =>
-      CachedSelector;
+  export default function createCachedSelector(
+    ...funcs: Function[]
+  ): (resolver: Function, createSelectorInstance?: Function) => CachedSelector;
 }
 
 declare module 'redux-electron-store' {
   export const electronEnhancer: any;
 }
 
-declare module JSX {
+declare namespace JSX {
   interface IntrinsicElements {
     webview: any;
   }

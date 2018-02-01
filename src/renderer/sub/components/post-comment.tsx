@@ -6,12 +6,10 @@ import { Post as ShitarabaPost } from '../../../clients/shitaraba-client';
 import { Post as CavetubePost } from '../../../clients/cavetube';
 import { Post as TwitchPost } from '../../../clients/twitch';
 
-
-type Post = 
-  { type: 'shitaraba' } & ShitarabaPost |
-  { type: 'cavetube'} & CavetubePost |
-  { type: 'twitch' } & TwitchPost;
-
+type Post =
+  | { type: 'shitaraba' } & ShitarabaPost
+  | { type: 'cavetube' } & CavetubePost
+  | { type: 'twitch' } & TwitchPost;
 
 function renderPost(post: Post): JSX.Element {
   switch (post.type) {
@@ -27,11 +25,7 @@ function renderPost(post: Post): JSX.Element {
 }
 
 function ShitarabaPostComponent({ message }: ShitarabaPost) {
-  return (
-    <p className="sub post-comment"
-      ref={setInnerHtmlSafely(message)}
-    ></p>
-  );
+  return <p className="sub post-comment" ref={setInnerHtmlSafely(message)} />;
 }
 
 function CavetubePostComponent({ author, message }: CavetubePost) {
@@ -56,12 +50,13 @@ function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
   console.log(message);
   return (
     <div className="sub post-comment">
-      <span className="author" style={{ color }}>{name}</span>
-      <span className="message" ref={setInnerHtmlSafely(message)}></span>
+      <span className="author" style={{ color }}>
+        {name}
+      </span>
+      <span className="message" ref={setInnerHtmlSafely(message)} />
     </div>
   );
 }
-
 
 type OwnState = {
   posts: Post[];
@@ -78,7 +73,7 @@ export default class PostComment extends React.Component<{}, OwnState> {
     this.setState({
       posts: this.state.posts.concat(newPosts),
     });
-    
+
     setTimeout(() => {
       this.setState({
         posts: this.state.posts.slice(newPosts.length),
@@ -96,8 +91,6 @@ export default class PostComment extends React.Component<{}, OwnState> {
   }
 
   render() {
-    return <div className="posts-container">
-      {this.state.posts.map(renderPost)}
-    </div>;
+    return <div className="posts-container">{this.state.posts.map(renderPost)}</div>;
   }
 }

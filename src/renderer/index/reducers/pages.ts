@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 import { Action } from '../actions';
 import page, { Page } from './page';
 
-
 export interface Pages {
   byId: {
     [id: string]: Page;
@@ -17,7 +16,6 @@ export default combineReducers<Pages>({
   all,
   selectOrder,
 });
-
 
 function byId(state: Pages['byId'] = {}, action: Action): typeof state {
   switch (action.type) {

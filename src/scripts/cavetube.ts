@@ -2,7 +2,6 @@ import { ipcRenderer } from 'electron';
 
 import { collectPostData } from '../clients/cavetube';
 
-
 document.addEventListener('DOMContentLoaded', (e) => {
   const container = document.getElementById('comment_container')!;
 

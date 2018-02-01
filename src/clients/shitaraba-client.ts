@@ -31,7 +31,9 @@ export function canonicalizeUrl(url: string): string | null {
     return null;
   }
 
-  return `http://jbbs.shitaraba.net/bbs/read.cgi/${urlData.dir}/${urlData.board}/${urlData.thread}/`;
+  return `http://jbbs.shitaraba.net/bbs/read.cgi/${urlData.dir}/${urlData.board}/${
+    urlData.thread
+  }/`;
 }
 
 export function parseThreadUrl(url: string) {
@@ -47,13 +49,13 @@ export function parseThreadUrl(url: string) {
   };
 }
 
-function toSettingUrl({ dir, board }: { dir: string, board: string }) {
+function toSettingUrl({ dir, board }: { dir: string; board: string }) {
   return `http://jbbs.shitaraba.net/bbs/api/setting.cgi/${dir}/${board}/`;
 }
 
 export function fetchThread(url: string, range?: PostsRange) {
   let finalUrl = url.replace(/\/read\.cgi\//, '/rawmode.cgi/');
-  
+
   if (range) {
     if (range.last != null) {
       finalUrl += `l${range.last}`;
@@ -93,7 +95,7 @@ export function fetchSettings(url: string) {
 function parseThreadRaw(text: string): Thread {
   let title = '';
   const lines = text.split('\n').slice(0, -1);
-  const posts =  lines.map((line) => {
+  const posts = lines.map((line) => {
     const t = line.split('<>');
     const number = parseInt(t[0], 10);
     if (number === 1) {
@@ -116,22 +118,25 @@ function parseThreadRaw(text: string): Thread {
 
 function sanitizeName(name: string): string {
   const tagsRegex = /<font color=""><\/font>|(<[^<]*>)/g;
-  return name.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
+  return name.replace(tagsRegex, (whole, unknown) => (unknown ? '' : whole));
 }
 
 function sanitizeMessage(message: string): string {
   const tagsRegex = /<a href="[^"]*" target="_blank">[^<]*<\/a>|<br>|(<[^<]*>)/g;
-  return message.replace(tagsRegex, (whole, unknown) => unknown ? '' : whole);
+  return message.replace(tagsRegex, (whole, unknown) => (unknown ? '' : whole));
 }
 
 function parseSettingTxt(text: string): BoardSettings {
-  return text.match(/.+/g)!.reduce((map, line) => {
-    const match = /([^=]+)=(.*)/.exec(line);
-    if (match) {
-      map[match[1]] = match[2];
-    }
-    return map;
-  }, {} as any);
+  return text.match(/.+/g)!.reduce(
+    (map, line) => {
+      const match = /([^=]+)=(.*)/.exec(line);
+      if (match) {
+        map[match[1]] = match[2];
+      }
+      return map;
+    },
+    {} as any,
+  );
 }
 
 function fetchAsText(url: string): Promise<string> {
@@ -148,7 +153,7 @@ function fetchAsText(url: string): Promise<string> {
         const text = encoding.convert(buffer, {
           to: 'UNICODE',
           from: 'EUCJP',
-          type: 'string'
+          type: 'string',
         }) as string;
         resolve(text);
       });

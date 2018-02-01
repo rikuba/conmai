@@ -10,15 +10,7 @@ import { closeThread } from './thread';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
-
-export type Action =
-  PageOpen |
-  PageClose |
-  PageSelect |
-
-  PageTitleUpdated |
-  PageFaviconUpdated;
-
+export type Action = PageOpen | PageClose | PageSelect | PageTitleUpdated | PageFaviconUpdated;
 
 export interface PageOpen {
   type: 'PAGE_OPEN';
@@ -89,7 +81,7 @@ const openCavetubePage = (cavetubeUrl: cavetube.CavetubeUrl): Dispatcher => asyn
 
 const openTwitchPage = (url: string): Dispatcher => async (dispatch) => {
   const chatUrl = `${url}/chat`;
-  
+
   dispatch<PageOpen>({
     type: 'PAGE_OPEN',
     url: chatUrl,
@@ -98,7 +90,6 @@ const openTwitchPage = (url: string): Dispatcher => async (dispatch) => {
     id: uuid(),
   });
 };
-
 
 export interface PageClose {
   type: 'PAGE_CLOSE';
@@ -120,13 +111,12 @@ export const closePage = (id: string): Dispatcher => async (dispatch, getState) 
 };
 
 export const closeAllOtherPages = (id: string): Dispatcher => async (dispatch, getState) => {
-  getState().pages.all
-    .filter((pageId) => pageId !== id)
+  getState()
+    .pages.all.filter((pageId) => pageId !== id)
     .forEach((pageId) => {
       dispatch(closePage(pageId));
     });
 };
-
 
 export interface PageSelect {
   type: 'PAGE_SELECT';
@@ -138,11 +128,10 @@ export const selectPage = (id: string): PageSelect => ({
   id,
 });
 
-
 export interface PageTitleUpdated {
   type: 'PAGE_TITLE_UPDATED';
-  id: string,
-  title: string,
+  id: string;
+  title: string;
 }
 
 export const pageTitleUpdated = (id: string, title: string): PageTitleUpdated => ({
@@ -150,7 +139,6 @@ export const pageTitleUpdated = (id: string, title: string): PageTitleUpdated =>
   id,
   title,
 });
-
 
 export interface PageFaviconUpdated {
   type: 'PAGE_FAVICON_UPDATED';

@@ -7,26 +7,20 @@ import * as pageActions from './page';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
-
 export type Action =
-  ThreadOpen |
-  ThreadClose |
-
-  BoardSettingsFetchRequest |
-  BoardSettingsFetchSuccess |
-  BoardSettingsFetchFailure |
-
-  ThreadFetchRequest |
-  ThreadFetchSuccess |
-  ThreadFetchFailure |
-
-  ThreadUpdateRequest |
-  ThreadUpdateSuccess |
-  ThreadUpdateFailure |
-  
-  ThreadUpdateSchedule |
-  ThreadUpdateScheduleCancel;
-
+  | ThreadOpen
+  | ThreadClose
+  | BoardSettingsFetchRequest
+  | BoardSettingsFetchSuccess
+  | BoardSettingsFetchFailure
+  | ThreadFetchRequest
+  | ThreadFetchSuccess
+  | ThreadFetchFailure
+  | ThreadUpdateRequest
+  | ThreadUpdateSuccess
+  | ThreadUpdateFailure
+  | ThreadUpdateSchedule
+  | ThreadUpdateScheduleCancel;
 
 export interface ThreadOpen {
   type: 'THREAD_OPEN';
@@ -37,7 +31,6 @@ export const openThread = (url: string): ThreadOpen => ({
   type: 'THREAD_OPEN',
   url,
 });
-
 
 export interface ThreadClose {
   type: 'THREAD_CLOSE';
@@ -58,7 +51,6 @@ export function closeThread(url: string): Dispatcher {
     return Promise.resolve();
   };
 }
-
 
 export interface BoardSettingsFetchRequest {
   type: 'BOARD_SETTINGS_FETCH_REQUEST';
@@ -98,11 +90,10 @@ export function fetchBoardSettings(url: string): Dispatcher {
           threadUrl: url,
           error,
         });
-      }
+      },
     );
   };
 }
-
 
 export interface ThreadFetchRequest {
   type: 'THREAD_FETCH_REQUEST';
@@ -128,33 +119,33 @@ export function fetchThread(url: string): Dispatcher {
       url,
     });
 
-    return shitaraba.fetchThread(url, { last: 1000 }).then(
-      (thread) => {
-        dispatch<ThreadFetchSuccess>({
-          type: 'THREAD_FETCH_SUCCESS',
-          url,
-          thread,
-        });
+    return shitaraba
+      .fetchThread(url, { last: 1000 })
+      .then(
+        (thread) => {
+          dispatch<ThreadFetchSuccess>({
+            type: 'THREAD_FETCH_SUCCESS',
+            url,
+            thread,
+          });
 
-        selectors.getPagesByUrl(getState(), url).forEach((page) => {
-          dispatch(pageActions.pageTitleUpdated(page.id, thread.title));
-        });
-      },
-      (error) => {
-        dispatch<ThreadFetchFailure>({
-          type: 'THREAD_FETCH_FAILURE',
-          url,
-          error,
-        });
-      }
-    ).then(
-      () => {
+          selectors.getPagesByUrl(getState(), url).forEach((page) => {
+            dispatch(pageActions.pageTitleUpdated(page.id, thread.title));
+          });
+        },
+        (error) => {
+          dispatch<ThreadFetchFailure>({
+            type: 'THREAD_FETCH_FAILURE',
+            url,
+            error,
+          });
+        },
+      )
+      .then(() => {
         dispatch(scheduleUpdateThread(url));
-      }
-    );
+      });
   };
 }
-
 
 export interface ThreadUpdateRequest {
   type: 'THREAD_UPDATE_REQUEST';
@@ -207,11 +198,10 @@ export function updateThread(url: string): Dispatcher {
           url,
           error,
         });
-      }
+      },
     );
   };
 }
-
 
 export interface ThreadUpdateSchedule {
   type: 'THREAD_UPDATE_SCHEDULE';
@@ -245,7 +235,6 @@ export function scheduleUpdateThread(url: string): Dispatcher {
   };
 }
 
-
 export interface ThreadUpdateScheduleCancel {
   type: 'THREAD_UPDATE_SCHEDULE_CANCEL';
   url: string;
@@ -255,7 +244,7 @@ export function cancelScheduledUpdateThread(url: string): Dispatcher {
   return (dispatch, getState) => {
     const thread = selectors.getThread(getState(), url);
     clearInterval(thread.updateTimerId);
-    
+
     dispatch<ThreadUpdateScheduleCancel>({
       type: 'THREAD_UPDATE_SCHEDULE_CANCEL',
       url,

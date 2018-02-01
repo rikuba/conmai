@@ -12,7 +12,6 @@ export function generatePostId(url: string, postNumber: number): string {
   return `jbbs-post-${urlData.dir}-${urlData.board}-${urlData.thread}-${postNumber}`;
 }
 
-
 export const setInnerHTML = (html: string) => (element: Element | null) => {
   if (element) {
     element.innerHTML = html;
@@ -28,7 +27,11 @@ export const setInnerHtmlSafely = (html: string) => {
   };
 };
 
-export function observeStore<T, U>(store: Store<T>, select: (state: T) => U, onChange: (value: U) => void) {
+export function observeStore<T, U>(
+  store: Store<T>,
+  select: (state: T) => U,
+  onChange: (value: U) => void,
+) {
   let currentState = select(store.getState());
 
   return store.subscribe(() => {

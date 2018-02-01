@@ -6,12 +6,8 @@ import App from './components/app';
 
 import './sub.css';
 
-
 const render = () => {
-  ReactDOM.render(
-    <App />,
-    document.getElementById('root'),
-  );
+  ReactDOM.render(<App />, document.getElementById('root'));
 };
 
 render();
@@ -19,7 +15,6 @@ render();
 if (module.hot) {
   module.hot.accept('./components/app', render);
 }
-
 
 window.addEventListener('focus', (e) => {
   document.documentElement.classList.add('active');

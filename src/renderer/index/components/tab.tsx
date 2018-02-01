@@ -71,12 +71,16 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
   };
 
   render() {
-    const iconNode = this.props.icon ?
-      <img className="tab-icon" src={this.props.icon} /> :
-      <span className="tab-icon empty-icon"></span>;
+    const iconNode = this.props.icon ? (
+      <img className="tab-icon" src={this.props.icon} />
+    ) : (
+      <span className="tab-icon empty-icon" />
+    );
 
     return (
-      <div role="tab" className="tab"
+      <div
+        role="tab"
+        className="tab"
         aria-selected={this.props.isSelected}
         title={this.props.title}
         onClick={this.handleTabClick}
@@ -86,7 +90,9 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
         onContextMenu={this.handleContextMenu}>
         {iconNode}
         <span className="tab-label">{this.props.title}</span>
-        <span className="tab-close-button" aria-label="閉じる">×</span>
+        <span className="tab-close-button" aria-label="閉じる">
+          ×
+        </span>
       </div>
     );
   }

@@ -13,7 +13,6 @@ export interface Post {
 
 export const faviconUrl = 'https://www.cavelis.net/favicon.ico';
 
-
 const chatUrlRegex = /^https:\/\/www\.cavelis\.net\/popup\/[0-9A-Z]+/;
 const viewUrlRegex = /^https:\/\/www\.cavelis\.net\/view\/[0-9A-Z]+/;
 const liveUrlRegex = /^https:\/\/www\.cavelis\.net\/live\/[^/?#]+/;
@@ -79,7 +78,6 @@ function detectStreamName(html: string): string {
   }
   return match[1];
 }
-
 
 export function collectPostData(comment: HTMLElement): Post {
   const number = parseInt(comment.querySelector('.comment_number')!.textContent!, 10);

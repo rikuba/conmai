@@ -9,7 +9,6 @@ import * as actions from '../actions';
 
 import './page.css';
 
-
 type Props = React.Props<any> & OwnProps & DispatchProps;
 
 type OwnProps = {
@@ -33,65 +32,66 @@ const mapDispatchToProps = (dispatch: Dispatch<State>, { id }: OwnProps): Dispat
 });
 
 export default connect<{}, DispatchProps, OwnProps>(null, mapDispatchToProps)(
-class PageComponent extends React.Component<Props, {}> {
-  private webview: Electron.WebviewTag | null = null;
+  class PageComponent extends React.Component<Props, {}> {
+    private webview: Electron.WebviewTag | null = null;
 
-  render() {
-    const { url, preload } = this.props;
+    render() {
+      const { url, preload } = this.props;
 
-    return (
-      <div className="page-container">
-        {
-          preload ?
-            <webview className="page-view" src={url} preload={preload} /> :
+      return (
+        <div className="page-container">
+          {preload ? (
+            <webview className="page-view" src={url} preload={preload} />
+          ) : (
             <webview className="page-view" src={url} />
-        }
-      </div>
-    );
-  }
-
-  componentDidMount() {
-    this.webview = ReactDOM.findDOMNode(this).querySelector('webview') as Electron.WebviewTag;
-    this.webview.addEventListener('dom-ready', this.handleDOMReady);
-    this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
-    this.webview.addEventListener('ipc-message', this.handleIPCMessage);
-    this.webview.addEventListener('new-window', this.handleNewWindow);
-  }
-
-  componentWillUnmount() {
-    if (this.webview) {
-      this.webview.removeEventListener('dom-ready', this.handleDOMReady);
-      this.webview.removeEventListener('page-favicon-updated', this.handleFaviconUpdated);
-      this.webview.removeEventListener('ipc-message', this.handleIPCMessage);
-      this.webview.removeEventListener('new-window', this.handleNewWindow);
-      this.webview = null;
+          )}
+        </div>
+      );
     }
-  }
 
-  handleDOMReady = (e: Electron.Event) => {
-    const { onGetTitle } = this.props;
-
-    const title = this.webview!.getTitle();
-    onGetTitle(title);
-  };
-
-  handleFaviconUpdated = (e: Electron.PageFaviconUpdatedEvent) => {  
-    const { onUpdateFavicon } = this.props;
-
-    const faviconUrl = e.favicons[0];
-    onUpdateFavicon(faviconUrl);
-  };
-
-  handleIPCMessage = (e: Electron.IpcMessageEvent) => {
-    switch (e.channel) {
-      case 'NEW_POSTS':
-        ipcRenderer.send('new-posts', e.args[0]);
-        break;
+    componentDidMount() {
+      this.webview = ReactDOM.findDOMNode(this).querySelector('webview') as Electron.WebviewTag;
+      this.webview.addEventListener('dom-ready', this.handleDOMReady);
+      this.webview.addEventListener('page-favicon-updated', this.handleFaviconUpdated);
+      this.webview.addEventListener('ipc-message', this.handleIPCMessage);
+      this.webview.addEventListener('new-window', this.handleNewWindow);
     }
-  };
 
-  handleNewWindow = (e: Electron.NewWindowEvent) => {
-    e.preventDefault();
-    shell.openExternal(e.url);
-  };
-});
+    componentWillUnmount() {
+      if (this.webview) {
+        this.webview.removeEventListener('dom-ready', this.handleDOMReady);
+        this.webview.removeEventListener('page-favicon-updated', this.handleFaviconUpdated);
+        this.webview.removeEventListener('ipc-message', this.handleIPCMessage);
+        this.webview.removeEventListener('new-window', this.handleNewWindow);
+        this.webview = null;
+      }
+    }
+
+    handleDOMReady = (e: Electron.Event) => {
+      const { onGetTitle } = this.props;
+
+      const title = this.webview!.getTitle();
+      onGetTitle(title);
+    };
+
+    handleFaviconUpdated = (e: Electron.PageFaviconUpdatedEvent) => {
+      const { onUpdateFavicon } = this.props;
+
+      const faviconUrl = e.favicons[0];
+      onUpdateFavicon(faviconUrl);
+    };
+
+    handleIPCMessage = (e: Electron.IpcMessageEvent) => {
+      switch (e.channel) {
+        case 'NEW_POSTS':
+          ipcRenderer.send('new-posts', e.args[0]);
+          break;
+      }
+    };
+
+    handleNewWindow = (e: Electron.NewWindowEvent) => {
+      e.preventDefault();
+      shell.openExternal(e.url);
+    };
+  },
+);

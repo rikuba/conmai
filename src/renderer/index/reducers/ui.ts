@@ -10,7 +10,7 @@ function subWindowIsOpen(state = false, action: Action): typeof state {
   switch (action.type) {
     case 'SUB_WINDOW_OPEN':
       return true;
-  
+
     case 'SUB_WINDOW_CLOSED':
       return false;
 

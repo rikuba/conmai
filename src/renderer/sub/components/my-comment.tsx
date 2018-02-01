@@ -40,11 +40,13 @@ export default class MyComment extends React.Component<{}, OwnState> {
     const { text } = this.state;
 
     return (
-      <p className="sub my-comment"
+      <p
+        className="sub my-comment"
         contentEditable
         onInput={this.handleInput}
-        onContextMenu={this.handleContextMenu}
-      >{text}</p>
+        onContextMenu={this.handleContextMenu}>
+        {text}
+      </p>
     );
   }
 }
