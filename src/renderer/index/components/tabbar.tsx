@@ -32,9 +32,9 @@ class TabbarComponent extends React.PureComponent<Props, {}> {
         icon={page.faviconUrl}
         title={page.title}
         isSelected={page.id === this.props.selectedPageId}
-        onTabSelect={this.props.selectPage}
-        onTabClose={this.props.closePage}
-        onTabCloseOthers={this.props.closeAllOtherPages}
+        onSelect={this.props.selectPage}
+        onClose={this.props.closePage}
+        onCloseOthers={this.props.closeAllOtherPages}
       />
     ));
 

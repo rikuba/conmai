@@ -1,21 +1,19 @@
 import { remote } from 'electron';
 import React from 'react';
 
-import { Page } from '../reducers';
-
 import './tab.css';
 
 type Props = React.Props<any> & OwnProps;
 
 type OwnProps = {
-  id: Page['id'];
-  url: Page['url'];
-  icon: Page['faviconUrl'];
-  title: Page['title'];
+  id: string;
+  url: string;
+  icon: string;
+  title: string;
   isSelected: boolean;
-  onTabSelect: (id: string) => void;
-  onTabClose: (id: string) => void;
-  onTabCloseOthers: (id: string) => void;
+  onSelect: (id: string) => void;
+  onClose: (id: string) => void;
+  onCloseOthers: (id: string) => void;
 };
 
 export default class TabComponent extends React.PureComponent<Props, {}> {
@@ -25,13 +23,13 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
     {
       label: 'タブを閉じる',
       click: (menuItem, browserWindow, event) => {
-        this.props.onTabClose(this.props.id);
+        this.props.onClose(this.props.id);
       },
     },
     {
       label: '他のタブをすべて閉じる',
       click: (menuItem, browserWindow, event) => {
-        this.props.onTabCloseOthers(this.props.id);
+        this.props.onCloseOthers(this.props.id);
       },
     },
   ]);
@@ -40,11 +38,11 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
     const { id } = this.props;
 
     if ((e.target as HTMLElement).matches('.tab-close-button, .tab-close-button *')) {
-      this.props.onTabClose(id);
+      this.props.onClose(id);
       return;
     }
 
-    this.props.onTabSelect(id);
+    this.props.onSelect(id);
   };
 
   handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -59,7 +57,7 @@ export default class TabComponent extends React.PureComponent<Props, {}> {
 
   handleMouseUp: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.button === 1 && this.middleButtonPressed) {
-      this.props.onTabClose(this.props.id);
+      this.props.onClose(this.props.id);
       this.middleButtonPressed = false;
     }
   };
