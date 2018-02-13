@@ -52,7 +52,7 @@ export type State = {
 
 export type PostState = Post & {
   _id: string;
-  isStail: boolean;
+  isStale: boolean;
 };
 
 function posts(state: PostState[] = [], action: Action): typeof state {
@@ -61,7 +61,7 @@ function posts(state: PostState[] = [], action: Action): typeof state {
       const posts = action.posts.map((post) => ({
         ...post,
         _id: uuid(),
-        isStail: false,
+        isStale: false,
       }));
       return state.concat(posts);
 
@@ -72,7 +72,7 @@ function posts(state: PostState[] = [], action: Action): typeof state {
         }
         return {
           ...post,
-          isStail: true,
+          isStale: true,
         };
       });
 

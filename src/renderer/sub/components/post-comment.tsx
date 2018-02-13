@@ -53,7 +53,7 @@ class PostContainer extends React.Component<PostContainer.Props> {
     }
 
     return (
-      <div className="post" data-is-stail={this.props.post}>
+      <div className="post" data-is-stale={this.props.post.isStale}>
         {element}
       </div>
     );

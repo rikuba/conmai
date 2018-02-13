@@ -126,7 +126,7 @@ html:not(.active) .sub.my-comment:empty {
   flex-direction: column-reverse;
 }
 
-.post[data-is-stail="true"] {
+.post[data-is-stale="true"] {
   display: none;
 }
 
