@@ -105,6 +105,10 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
       const from = lastPost.number + 1;
       try {
         const { posts } = await fetchThread(url, { from });
+        if (posts.length === 0) {
+          continue;
+        }
+
         ipcRenderer.send(
           'new-posts',
           posts.map((post) => ({
@@ -112,10 +116,12 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
             ...post,
           })),
         );
+
         this.setState({
           posts: [...this.state.posts, ...posts],
           error: void 0,
         });
+
         this.scrollToPost(from);
       } catch (error) {
         this.setState({ error });
