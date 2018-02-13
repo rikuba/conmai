@@ -50,11 +50,14 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
         className="shitaraba-thread-container"
         ref={(e) => e && (this.element = e)}
         onClick={this.handleClick}
-        onContextMenu={this.handleContextMenu}>
+        onContextMenu={this.handleContextMenu}
+        onScroll={this.handleScroll}>
         <ShitarabaThread posts={posts} alt={alt} />
       </div>
     );
   }
+
+  private autoScroll = false;
 
   private element: HTMLElement | null = null;
 
@@ -84,6 +87,9 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
       const { posts, title } = await fetchThread(url);
       this.props.onPageTitleUpdated(title);
       this.setState({ posts, error: void 0 });
+
+      this.scrollToPost(posts[posts.length - 1].number);
+      this.autoScroll = true;
     } catch (error) {
       this.setState({ error });
     }
@@ -122,7 +128,9 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
           error: void 0,
         });
 
-        this.scrollToPost(from);
+        if (this.autoScroll) {
+          this.scrollToPost(from);
+        }
       } catch (error) {
         this.setState({ error });
       }
@@ -143,6 +151,12 @@ class ShitarabaThreadContainer extends React.Component<Props, State> {
   private handleContextMenu = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     this.contextMenu.popup(remote.getCurrentWindow());
+  };
+
+  private handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const elm = e.currentTarget;
+    const scrollMaxY = elm.scrollHeight - elm.clientHeight;
+    this.autoScroll = elm.scrollTop >= scrollMaxY;
   };
 
   private scrollToPost(number: number | string) {
