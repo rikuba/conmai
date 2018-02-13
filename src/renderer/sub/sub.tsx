@@ -1,13 +1,25 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
 
 import App from './components/app';
+import { configureStore } from './store';
 
 import './sub.css';
 
+const store = configureStore();
+
 const render = () => {
-  ReactDOM.render(<App />, document.getElementById('root'));
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root'),
+  );
 };
 
 render();

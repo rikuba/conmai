@@ -1,26 +1,63 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
+import { connect, Dispatch } from 'react-redux';
 
 import { setInnerHtmlSafely } from '../../../utils';
 import { Post as ShitarabaPost } from '../../../services/shitaraba';
 import { Post as CavetubePost } from '../../../services/cavetube';
 import { Post as TwitchPost } from '../../../services/twitch';
+import { State, PostState, postOutOfDate, subscribePosts, unsubscribePosts } from '../store';
 
-type Post =
+export type Post =
   | { type: 'shitaraba' } & ShitarabaPost
   | { type: 'cavetube' } & CavetubePost
   | { type: 'twitch' } & TwitchPost;
 
-function renderPost(post: Post): JSX.Element {
-  switch (post.type) {
-    case 'shitaraba':
-      return <ShitarabaPostComponent {...post} />;
+namespace PostContainer {
+  export type Props = React.Props<void> & OwnProps;
 
-    case 'cavetube':
-      return <CavetubePostComponent {...post} />;
+  type OwnProps = {
+    post: PostState;
+    onStale: (id: string) => void;
+  };
+}
 
-    case 'twitch':
-      return <TwitchPostComponent {...post} />;
+class PostContainer extends React.Component<PostContainer.Props> {
+  tid: any = null;
+
+  componentDidMount() {
+    this.tid = setTimeout(() => {
+      this.props.onStale(this.props.post._id);
+    }, 30 * 1000);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.tid);
+  }
+
+  render() {
+    const { post } = this.props;
+
+    let element: React.ReactElement<any> | null = null;
+    switch (post.type) {
+      case 'shitaraba':
+        element = <ShitarabaPostComponent {...post} />;
+        break;
+
+      case 'cavetube':
+        element = <CavetubePostComponent {...post} />;
+        break;
+
+      case 'twitch':
+        element = <TwitchPostComponent {...post} />;
+        break;
+    }
+
+    return (
+      <div className="post" data-is-stail={this.props.post}>
+        {element}
+      </div>
+    );
   }
 }
 
@@ -47,7 +84,6 @@ function CavetubePostComponent({ author, message }: CavetubePost) {
 }
 
 function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
-  console.log(message);
   return (
     <div className="sub post-comment">
       <span className="author" style={{ color }}>
@@ -58,39 +94,58 @@ function TwitchPostComponent({ author: { name, color }, message }: TwitchPost) {
   );
 }
 
-type OwnState = {
-  posts: Post[];
-};
+namespace PostsContainer {
+  export type Props = React.Props<any> & StateProps & DispatchProps;
 
-export default class PostComment extends React.Component<{}, OwnState> {
-  private _handleNewPosts: any;
-
-  state: OwnState = {
-    posts: [],
+  type StateProps = {
+    posts: PostState[];
   };
 
-  handleNewPosts(event: any, newPosts: Post[]) {
-    this.setState({
-      posts: this.state.posts.concat(newPosts),
-    });
+  type DispatchProps = {
+    onReady: () => void;
+    onDispose: () => void;
+    onPostStale: (id: string) => void;
+  };
+}
 
-    setTimeout(() => {
-      this.setState({
-        posts: this.state.posts.slice(newPosts.length),
-      });
-    }, 30 * 1000);
-  }
-
+class PostsContainer extends React.Component<PostsContainer.Props> {
   componentDidMount() {
-    this._handleNewPosts = this.handleNewPosts.bind(this);
-    ipcRenderer.on('new-posts', this._handleNewPosts);
+    this.props.onReady();
   }
 
   componentWillUnMount() {
-    ipcRenderer.removeListener('new-posts', this._handleNewPosts);
+    this.props.onDispose();
   }
 
   render() {
-    return <div className="posts-container">{this.state.posts.map(renderPost)}</div>;
+    return (
+      <div className="posts-container">
+        {this.props.posts.map((post) => (
+          <PostContainer key={post._id} post={post} onStale={this.handlePostStale} />
+        ))}
+      </div>
+    );
   }
+
+  handlePostStale = (id: string) => {
+    this.props.onPostStale(id);
+  };
 }
+
+const mapStateToProps = (state: State) => ({
+  posts: state.posts,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<State>) => ({
+  onReady: () => {
+    dispatch(subscribePosts());
+  },
+  onDispose: () => {
+    dispatch(unsubscribePosts());
+  },
+  onPostStale: (id: string) => {
+    dispatch(postOutOfDate(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostsContainer);

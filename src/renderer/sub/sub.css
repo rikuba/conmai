@@ -126,6 +126,10 @@ html:not(.active) .sub.my-comment:empty {
   flex-direction: column-reverse;
 }
 
+.post[data-is-stail="true"] {
+  display: none;
+}
+
 .post-comment {
   animation: show-comment 250ms ease 0s 1 normal;
 }

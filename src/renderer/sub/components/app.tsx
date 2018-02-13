@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MyComment from './my-comment';
-import PostComment from './post-comment';
+import PostContainer from './post-comment';
 
 export default class App extends React.Component<{}, {}> {
   handleClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -16,7 +16,7 @@ export default class App extends React.Component<{}, {}> {
     return (
       <div className="sub-page" onClick={this.handleClick}>
         <MyComment />
-        <PostComment />
+        <PostContainer />
       </div>
     );
   }
