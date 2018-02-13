@@ -20,8 +20,3 @@ declare module 're-reselect' {
 declare module 'redux-electron-store' {
   export const electronEnhancer: any;
 }
-
-declare module 'xss' {
-  const module: any;
-  export default module;
-}
