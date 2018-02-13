@@ -6,7 +6,6 @@ import * as cavetube from '../../../services/cavetube';
 import * as twitch from '../../../services/twitch';
 import { State, Page } from '../reducers';
 import * as selectors from '../selectors';
-import { closeThread } from './thread';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
@@ -98,11 +97,6 @@ export interface PageClose {
 
 export const closePage = (id: string): Dispatcher => async (dispatch, getState) => {
   selectors.clearPageCache(id);
-
-  const page: Page = selectors.getPage(getState(), id);
-  if (page.pageType === 'shitaraba') {
-    dispatch(closeThread(page.url));
-  }
 
   dispatch<PageClose>({
     type: 'PAGE_CLOSE',

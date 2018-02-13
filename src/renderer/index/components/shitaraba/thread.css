@@ -1,0 +1,50 @@
+.shitaraba-thread-container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  overflow: auto;
+  background: #eee;
+  font-size: medium;
+  font-family: 'MS PGothic', sans-serif;
+}
+
+.shitaraba-thread-title {
+  font-size: 150%;
+  font-family: 'Meiryo', sans-serif;
+}
+
+.shitaraba-post[data-is-new='true'] .shitaraba-post-number {
+  font-weight: bold;
+}
+
+.shitaraba-post-number,
+.shitaraba-post-mail,
+.shitaraba-post-date {
+  margin-right: 8px;
+}
+
+.shitaraba-post-name {
+  color: green;
+  font-weight: bold;
+}
+
+.shitaraba-post-mail::before {
+  content: '[';
+}
+
+.shitaraba-post-mail::after {
+  content: ']';
+}
+
+.shitaraba-post-date::before {
+  content: '投稿日：';
+}
+
+.shitaraba-post-id:not(:empty)::before {
+  content: 'ID:';
+}
+
+.shitaraba-post-message {
+  margin-left: 2em;
+}

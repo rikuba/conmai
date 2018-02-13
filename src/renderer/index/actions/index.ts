@@ -3,13 +3,12 @@ import { ipcRenderer } from 'electron';
 
 import { State } from '../reducers';
 import { Action as PageAction } from './page';
-import { Action as ThreadAction } from './thread';
 
 type Dispatcher = ThunkAction<Promise<void>, State, {}>;
 
 export * from './page';
 
-export type Action = PageAction | ThreadAction | MainWindowClosed | SubWindowOpen | SubWindowClosed;
+export type Action = PageAction | MainWindowClosed | SubWindowOpen | SubWindowClosed;
 
 export interface MainWindowClosed {
   type: 'MAIN_WINDOW_CLOSED';
