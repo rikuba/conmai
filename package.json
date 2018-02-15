@@ -4,10 +4,11 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "start": "electron .",
-    "build": "webpack --env production",
-    "dev": "run-p dev:*",
+    "build": "npm run clean && webpack --env production",
+    "dev": "npm run clean && run-p dev:*",
     "dev:main": "webpack --env development --watch",
-    "dev:hmr": "webpack-dev-server --config webpack.hmr.config.js --env development",
+    "dev:hmr": "webpack-dev-server --env development --config webpack.renderer.config.js",
+    "clean": "rimraf dist",
     "prettier": "prettier --write \"{src/**/*.{ts,tsx},*.js{,on}}\""
   },
   "license": "MIT",
@@ -36,6 +37,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "reselect": "^3.0.1",
+    "rimraf": "^2.6.2",
     "style-loader": "^0.19.1",
     "typescript": "^2.7.1",
     "uuid": "^3.2.1",
