@@ -8,6 +8,7 @@
     "outDir": "./dist",
     "strict": true,
     "noUnusedLocals": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "typeRoots": ["./node_modules/@types"]

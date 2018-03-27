@@ -1,7 +1,6 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 
 import App from './components/app';
@@ -13,20 +12,14 @@ const store = configureStore();
 
 const render = () => {
   ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </AppContainer>,
+    <Provider store={store}>
+      <App />
+    </Provider>,
     document.getElementById('root'),
   );
 };
 
 render();
-
-if (module.hot) {
-  module.hot.accept('./components/app', render);
-}
 
 window.addEventListener('focus', (e) => {
   document.documentElement.classList.add('active');

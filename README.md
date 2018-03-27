@@ -12,10 +12,11 @@ $ npm start
 
 ## 開発する
 
-HMRが有効。
-
 ```
 $ npm install
 $ npm run dev
+```
+
+```
 $ npm start
 ```
